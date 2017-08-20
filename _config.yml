@@ -9,13 +9,13 @@
 locale                   : "en"
 title                    : "Unreal Art Optimization"
 title_separator          : "-"
-name                     : "Oskar"
-description              : ""
-url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+name                     : "Oskar Świerad"
+description              : "Guide to graphics performance and profiling in Unreal Engine"
+url                      : "https://unrealartoptimization.github.io/"
 baseurl                  : # the subpath of your site, e.g. "/blog"
-repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+repository               : "UnrealArtOptimization/unrealartoptimization.github.io"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-# breadcrumbs            : false # true, false (default)
+breadcrumbs              : true
 words_per_minute         : 200
 comments:
   provider               : # false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "custom"
@@ -77,12 +77,12 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
+  name             : "Oskar Świerad"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an amazing person."
-  location         : "Somewhere"
-  email            :
-  uri              :
+  bio              : "Technical artist, game developer. Creator of Tech Art Aid tutorials"
+  location         : "Poland"
+  email            : "oskar@oskarswierad.com"
+  uri              : "http://oskarswierad.com/"
   bitbucket        :
   codepen          :
   dribbble         :
@@ -105,7 +105,7 @@ author:
   vine             :
   weibo            :
   xing             :
-  youtube          : # "https://youtube.com/c/MichaelRoseDesign"
+  youtube          : "https://youtube.com/c/TechArtAid"
 
 
 # Reading Files
@@ -242,6 +242,20 @@ defaults:
       layout: single
       author_profile: true
       read_time: true
-      comments: # true
+      comments: false
       share: true
       related: true
+  # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: true
+      author_profile: true
+      read_time: true
+      comments: false
+      share: true
+      related: false
+
+
