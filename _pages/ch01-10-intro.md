@@ -17,7 +17,7 @@ Basically it comes to this: you have to measure and compare your results for exa
 
 So why it is quite useless for us? Well... It comes to how hard it is to express a cost of a certain feature in fps. Let's look at it that way: We have a light, that when we put it on the scene, we drop from 60 to 50 fps, for example. A very heavy, shadowed light. So if you assume that the cost of this certain light was "10 fps" then placing 5 another lights of this kind will leave us with... 0 fps? No. It certainly doesn't work that way.
 
-{% include figure image_path="/assets/images/ch01/temp_LightsCostInFPS.png" alt="" caption="*Fig. 1.1* This is a caption under the image. It's quite long for a caption, but let's test the feature." %
+{% include figure image_path="/assets/images/ch01/temp_LightsCostInFPS.png" alt="" caption="*Fig. 1.1* This is a caption under the image. It's quite long for a caption, but let's test the feature." %}
 
 Time in miliseconds = 1000 ms / frames per second
 For example:
