@@ -70,10 +70,12 @@ So by using `stat unit` or `stat unitgraph`, we can divide this information into
 Stat GPU splits the time of rendering a frame into specific passes. For example, base pass - which gathers information like roughness, base color and stuff into buffers. *Chapter 3* explains the meaning of each pass. Then we have translucency Then post processing is, of course, the... all the screen-space stuff that's happening, like bloom like motion blur but also screen-space reflections. Now we have dynamic lights and shadow projection, which is the shadow component of lighting.
 
 If you're getting empty information from `stat gpu` on an older NVidia card, you'll have to use a workaround. Open `C:\Program Files\Epic Games\your-version\Engine\Config\ConsoleVariables.ini`. Go to the end of the file and add these 2 lines:
+
 ```
 r.NVIDIATimestampWorkaround=0
 r.gpustatsenabled=1
 ```
+
 But probably there's a reason why Epic Games disabled it on older cards. Maybe it can lead to some stability issues. So if you want to do it, please remember that you're doing it at your own risk.
 {: .notice--warning}
 
