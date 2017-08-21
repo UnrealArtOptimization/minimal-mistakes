@@ -269,5 +269,7 @@ defaults:
       comments: false
       share: true
       related: false
+      sidebar:
+        nav: "book"
 
 

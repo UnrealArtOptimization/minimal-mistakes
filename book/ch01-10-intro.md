@@ -95,11 +95,15 @@ You can also achieve the same kind of information by pressing: `Ctrl Shift ,` (c
 
 ## Recording performance metrics
 
-Now, we can record all this. I will disable STAT SceneRendering and go to STAT GPU again and I can tell STAT StartFile As you can see, a message pops up about StatFile duration in the upper left corner. It started recording data. Okay, it'll be enough and... STAT StopFile. Now I exit the game I go to Window → Developer Tools → Session Frontend → and I can load a file from your project, Saved, Profiling, and the latest file.
+We can record all the metrics into a log. `stat startfile` is the command that starts recording the data[^ue4docs]. A message pops up about StatFile duration in the upper left corner. To finish recording, enter `stat stopfile`. Now exit the game, go to Window → Developer Tools → Session Frontend → and load a file from `your project\Saved\Profiling\` and the latest file.
 
-This is a profiling of the GPU and the CPU at the same time. We're interested in graphics profiling now, not gameplay so I will hide this part and this. And from here I enter the GPU and by double-clicking I enable the passes I'm interested in. And here on the graph you can see how the game performs in various moments. The horizontal lines show you targets for 60 fps, 30 fps, 20 fps. We are above the target for 60, unfortunately heading for 30 and these are your basic tools to just enter the game play it for a while and check how it performs in terms of raw fps and miliseconds values.
+This is a profile of the GPU and the CPU at the same time. We're interested in graphics profiling now, not gameplay so I will hide this part and this. And from here I enter the GPU and by double-clicking I enable the passes I'm interested in. And here on the graph you can see how the game performs in various moments. The horizontal lines show you targets for 60 fps, 30 fps, 20 fps. We are above the target for 60, unfortunately heading for 30 and these are your basic tools to just enter the game play it for a while and check how it performs in terms of raw fps and miliseconds values.
 
 ### Quote test
 
 I will start with a quote from UE documentation page:
 > "Lit translucency gets most of its lighting through a series of cascaded volume textures oriented around the view frustum".
+
+## Footnotes
+
+[^ue4docs]: ["GPU Profiling", Unreal Engine documentation](https://docs.unrealengine.com/latest/INT/Engine/Performance/GPU/)
