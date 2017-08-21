@@ -7,6 +7,16 @@ excerpt: ""
 
 In this chapter we'll discover various ways to measure performance, expressed in miliseconds. Then we'll start looking for bottlenecks and other optimization issues.
 
+## Video
+
+If you prefer a video version of this lesson, you can watch it below.
+
+*Note:* Every chapter of this book is extended compared with the original video. It's also regularly updated, while videos stay unchanged since their upload.
+{: .notice--info}
+
+{% capture tutorialvideo %}SXLYy6D1y80?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&amp;showinfo=1{% endcapture %}
+{% include video id=tutorialvideo provider="youtube" %}
+
 ## Importance of miliseconds
 
 So - why miliseconds? This is the most important question for this tutorial.
@@ -15,7 +25,7 @@ Basically it comes to this: you have to measure and compare your results for exa
 
 So why it is quite useless for us? Well... It comes to how hard it is to express a cost of a certain feature in fps. Let's look at it that way: We have a light, that when we put it on the scene, we drop from 60 to 50 fps, for example. A very heavy, shadowed light. So if you assume that the cost of this certain light was "10 fps" then placing 5 another lights of this kind will leave us with... 0 fps? No. It certainly doesn't work that way.
 
-{% include figure image_path="/assets/images/ch01/temp_LightsCostInFPS.png" alt="" caption="*Fig. 1.1* This is a caption under the image. It's quite long for a caption, but let's test the feature." %}
+{% include figure image_path="/assets/images/ch01/lights_cost.png" alt="" caption="*Fig. 1.1* Measuring the increasing cost of lights can't be done by subtracting fps." %}
 
 Time in miliseconds = 1000 ms / frames per second
 For example:
@@ -28,15 +38,15 @@ We can see it leaves us with 33 ms to render a frame. If we exceed this number w
 
 Now here, trying to achieve 30 fps, we have a scene that renders in 30 ms. It has a lot of transparency, a lot of heavy lighting and in the right part of the image you can see that the post process is using 3 miliseconds. It's also shown here, in the GPU Visualizer.
 
-...Scene and GPU Visualizer screenshot...
+{% include figure image_path="/assets/images/ch01/gpuvis_32ms.png" alt="" caption="*Fig. 1.2* GPU Visualizer showing a 32 ms frame." %}
 
 This bar is the time it takes to render the entire scene. The cost of rendering a single frame. Now please look at this graph. This is a scene that has to render in 60 fps.
 
-...Scene and GPU Visualizer screenshot 16ms...
+{% include figure image_path="/assets/images/ch01/gpuvis_16ms.png" alt="" caption="*Fig. 1.3* GPU Visualizer showing a 16 ms frame." %}
 
 The post process time didn't change. We still have a cost of 3 ms here - and here, but the cost of 3 ms is a significantly bigger chunk of the time we have to render the scene at twice the framerate. We have to fit in 15 ms total. So you can easily assume that by disabling the post process entirely we'll have 12 ms per frame, which is not enough to land at the target of 11 ms, that is 90 fps, for example for a VR kit like Oculus or Vive.
 
-...Scene and GPU Visualizer screenshot 11ms...
+{% include figure image_path="/assets/images/ch01/gpuvis_11ms.png" alt="" caption="*Fig. 1.3* GPU Visualizer showing an 11 ms frame." %}
 
 As you can see, even if the cost of post process is static, now when rendering for a VR kit it's much more significant, compared to other things. So we had to disable translucency at all, get rid of all particles and stuff which left us with place to do this post process and to have still a medium number of lights.
 
