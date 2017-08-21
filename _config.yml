@@ -79,7 +79,7 @@ analytics:
 author:
   name             : "Oskar Świerad"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Technical artist, game developer. Creator of Tech Art Aid tutorials"
+  bio              : Technical artist, game developer. Creator of <a href="https://youtube.com/c/TechArtAid">Tech Art Aid</a> video tutorials
   location         : "Poland"
   email            : "oskar@oskarswierad.com"
   uri              : "http://oskarswierad.com/"

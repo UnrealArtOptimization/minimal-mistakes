@@ -1,9 +1,9 @@
 ---
-title: "Chapter 1. Measuring Performance"
+title: "Measuring Performance"
 excerpt: ""
 ---
 
-{% include toc icon="columns" title="elo" %}
+{% include toc icon="columns" title=page.title %}
 
 In this chapter we'll discover various ways to measure performance, expressed in miliseconds. Then we'll start looking for bottlenecks and other optimization issues.
 
