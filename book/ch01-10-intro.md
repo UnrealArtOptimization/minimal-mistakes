@@ -27,12 +27,15 @@ So why it is quite useless for us? Well... It comes to how hard it is to express
 
 {% include figure image_path="/assets/images/ch01/lights_cost.png" alt="" caption="*Fig. 1.1* Measuring the increasing cost of lights can't be done by subtracting fps." %}
 
+<div class="notice--info" markdown="1">
 Time in miliseconds = 1000 ms / frames per second
+
 For example:
+
 * 30 FPS = 1000 / 30 = 33.33 ms
 * 60 FPS = 1000 / 60 = 16.67 ms
 * 90 FPS = 1000 / 90 = 11.11 ms
-{: .notice--info}
+</div>
 
 We can see it leaves us with 33 ms to render a frame. If we exceed this number when doing calculations on the GPU or the CPU, we won't hit the target for 30 fps. In the same manner, 1000 ms / 60 fps leaves us with 16 ms to render a frame.
 
@@ -77,6 +80,7 @@ So by using `stat unit` or `stat unitgraph`, we can divide this information into
 
 Stat GPU splits the time of rendering a frame into specific passes. For example, base pass - which gathers information like roughness, base color and stuff into buffers. *Chapter 3* explains the meaning of each pass. Then we have translucency Then post processing is, of course, the... all the screen-space stuff that's happening, like bloom like motion blur but also screen-space reflections. Now we have dynamic lights and shadow projection, which is the shadow component of lighting.
 
+<div class="notice--warning" markdown="1">
 If you're getting empty information from `stat gpu` on an older NVidia card, you'll have to use a workaround. Open `C:\Program Files\Epic Games\your-version\Engine\Config\ConsoleVariables.ini`. Go to the end of the file and add these 2 lines:
 
 ```
@@ -85,7 +89,7 @@ r.gpustatsenabled=1
 ```
 
 But probably there's a reason why Epic Games disabled it on older cards. Maybe it can lead to some stability issues. So if you want to do it, please remember that you're doing it at your own risk.
-{: .notice--warning}
+</div>
 
 You can also achieve the same kind of information by pressing: `Ctrl Shift ,` (comma). Then the GPU Visualizer pops up and you also have your scene split into passes. The tool is explained in detail in *Chapter 3*. The upside is you don't need to enable realtime GPU statistics in engine settings. It works on older configurations as well.
 
