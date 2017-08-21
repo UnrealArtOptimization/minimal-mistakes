@@ -179,7 +179,7 @@ timezone: # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 
 # Plugins
-gems:
+plugins:
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-gist
@@ -247,7 +247,19 @@ defaults:
       related: true
   # _pages
   - scope:
-      path: ""
+      path: "_pages"
+      type: pages
+    values:
+      layout: single
+      author_profile: true
+      author_profile: true
+      read_time: true
+      comments: false
+      share: true
+      related: false
+  # _pages
+  - scope:
+      path: "book"
       type: pages
     values:
       layout: single
