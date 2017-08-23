@@ -1,7 +1,7 @@
 # main links
 main:
   - title: "Book"
-    url: /book/
+    url: book/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
@@ -17,7 +17,7 @@ book:
       - title: "Introduction"
         url: /
       - title: "Measuring performance"
-        url: /book/
+        url: book/
   - title: "Real-Time Graphics Pipelines"
     children:
       - title: "GPU and rendering pipelines"
@@ -27,7 +27,7 @@ book:
       - title: "Pixel costs"
         url: /
       - title: "Memory costs"
-        url: /book/
+        url: /
   - title: "Profiling"
     children:
       - title: "Introduction to profiling"
