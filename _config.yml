@@ -55,7 +55,7 @@ yandex_site_verification :
 
 # Social Sharing
 twitter:
-  username               :
+  username               : "TechArtAid"
 facebook:
   username               :
   app_id                 :
@@ -78,11 +78,11 @@ analytics:
 # Site Author
 author:
   name             : "Oskar Świerad"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "https://static-2.gumroad.com/res/gumroad/files/6584706443625/cde128bd2e3e41cf9de62e97985efcd1/original/TechArtAid_Logo002_v001_circle1024.png"
   bio              : Technical artist, game developer. Creator of <a href="https://youtube.com/c/TechArtAid">Tech Art Aid</a> video tutorials
-  location         : "Poland"
-  email            : "oskar@oskarswierad.com"
-  uri              : "http://oskarswierad.com/"
+  location         : 
+  email            : 
+  uri              : 
   bitbucket        :
   codepen          :
   dribbble         :
@@ -101,11 +101,11 @@ author:
   stackoverflow    : # "123456/username" (the last part of your profile url, e.g. http://stackoverflow.com/users/123456/username)
   steam            :
   tumblr           :
-  twitter          :
+  twitter          : "TechArtAid"
   vine             :
   weibo            :
   xing             :
-  youtube          : "https://youtube.com/c/TechArtAid"
+  youtube          : 
 
 
 # Reading Files

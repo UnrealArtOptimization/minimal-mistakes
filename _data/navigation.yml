@@ -1,7 +1,7 @@
 # main links
 main:
   - title: "Book"
-    url: /book/ch01-10-intro/
+    url: /book/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
@@ -12,13 +12,41 @@ main:
   #   url: /sitemap/
 
 book:
-  - title: Getting Started
+  - title: "Unreal Art Optimization"
     children:
-      - title: "Quick-Start Guide"
-        url: /docs/quick-start-guide/
-      - title: "Structure"
-        url: /docs/structure/
-      - title: "Installation"
-        url: /docs/installation/
-      - title: "Upgrading"
-        url: /docs/upgrading/
+      - title: "Introduction"
+        url: /
+      - title: "Measuring performance"
+        url: /book/
+  - title: "Real-Time Graphics Pipelines"
+    children:
+      - title: "GPU and rendering pipelines"
+        url: /
+      - title: "Vertex costs"
+        url: /
+      - title: "Pixel costs"
+        url: /
+      - title: "Memory costs"
+        url: /book/
+  - title: "Profiling"
+    children:
+      - title: "Introduction to profiling"
+        url: /
+      - title: "Optimization view modes"
+        url: /
+      - title: "Built-in GPU Visualizer"
+        url: /
+      - title: "Lighting passes"
+        url: /
+      - title: "Geometry passes"
+        url: /
+      - title: "Base pass"
+        url: /
+      - title: "Other passes"
+        url: /
+      - title: "External profilers"
+        url: /
+  - title: "Resources"
+    children:
+      - title: "Learning on your own"
+        url: /

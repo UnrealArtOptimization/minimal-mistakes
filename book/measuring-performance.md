@@ -1,6 +1,7 @@
 ---
 title: "Measuring Performance"
 excerpt: ""
+permalink: "book/"
 ---
 
 {% include toc icon="columns" title=page.title %}
