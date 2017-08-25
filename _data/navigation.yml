@@ -1,7 +1,7 @@
 # main links
 main:
   - title: "Book"
-    url: book/
+    url: /book/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
@@ -15,38 +15,44 @@ book:
   - title: "Unreal Art Optimization"
     children:
       - title: "Introduction"
-        url: /
+        url: /book/
       - title: "Measuring performance"
-        url: book/
+        url: /book/measuring-performance/
   - title: "Real-Time Graphics Pipelines"
     children:
       - title: "GPU and rendering pipelines"
-        url: /
+        url: /book/pipelines/
       - title: "Vertex costs"
-        url: /
+        url: /book/pipelines/vertex/
       - title: "Pixel costs"
-        url: /
+        url: /book/pipelines/pixel/
       - title: "Memory costs"
-        url: /
+        url: /book/pipelines/memory/
   - title: "Profiling"
     children:
       - title: "Introduction to profiling"
-        url: /
+        url: /book/profiling/
       - title: "Optimization view modes"
-        url: /
+        url: /book/profiling/view-modes/
       - title: "Built-in GPU Visualizer"
-        url: /
+        url: /book/profiling/gpu-visualizer/
       - title: "Lighting passes"
-        url: /
-      - title: "Geometry passes"
-        url: /
+        url: /book/profiling/lighting/
       - title: "Base pass"
-        url: /
-      - title: "Other passes"
-        url: /
+        url: /book/profiling/base-pass/
+      - title: "Translucency passes"
+        url: /book/profiling/translucency/
+      - title: "Geometry and post process passes"
+        url: /book/profiling/geom-and-post-process/
       - title: "External profilers"
-        url: /
+        url: /book/profiling/external/
   - title: "Resources"
     children:
       - title: "Learning on your own"
-        url: /
+        url: /book/resources/learning/
+  - title: "About"
+    children:
+      - title: "About the book"
+        url: /book/about/
+      - title: "License"
+        url: /book/about/license/
