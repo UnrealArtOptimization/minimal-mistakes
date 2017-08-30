@@ -4,4 +4,28 @@
 
 @charset "utf-8";
 
+$type-size-6 : 0.85em;
+$type-size-7 : 0.8em;
+$type-size-8 : 0.75em;
+
 @import "minimal-mistakes";
+
+
+html {
+  /* apply a natural box layout model to all elements */
+  box-sizing: border-box;
+  background-color: $background-color;
+  font-size: 17px; // default: 16px
+
+  @include breakpoint($medium) {
+    font-size: 18px; // default: 18px
+  }
+
+  @include breakpoint($large) {
+    font-size: 17px; // default: 20px
+  }
+
+  @include breakpoint($x-large) {
+    font-size: 17px; // default: 22px
+  }
+}
