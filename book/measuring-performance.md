@@ -28,7 +28,7 @@ Here's a quote from an article about NVidia HairWorks:
 
 > As you might expect from a technology that is said to render tens of thousands of tessellated strands of hair, the performance hit to the game is substantial - whether you are running an Nvidia or AMD graphics card. In our test case, the GTX 970 lost 24 per cent of its performance when HairWorks was enabled, dropping from an average of 51.9fps to 39.4fps. However, AMD suffers an even larger hit, losing around 47 per cent of its average frame-rate - its 49.6fps metric slashed to just 26.3fps.
 
-The conclusion we can draw from these numbers is that enabling HairWorks-simulated hair in Witcher 3 can make the game lose up to 23 frames per second, depending on the card. Now let's assume we have another feature, with an identical computational cost, for example Depth of Field. We enable both hair and DoF the same time. Can this information help us calculate final frames per second?
+The conclusion we can draw from these numbers is that enabling HairWorks-simulated hair in Witcher 3 can make the game lose up to 23 frames per second, depending on the card. Now let's assume we have another feature, with an identical computational cost, for example Depth of Field. We enable both hair and DoF at the same time. Can this information help us calculate final frames per second?
 
 Let's try subtracting these costs from the original frame rate.
 
@@ -40,7 +40,9 @@ Now what if there was a third feature of such high requirements, let's say, HBAO
 __49.6__ fps - __23__ fps (HW) - __23__ fps (DoF)- __23__ fps (HBAO) = <span style="color: red;">__-19.4__ fps?</span>
 {: .notice .text-center}
 
-This apparent paradox of negative frame rate arises from the fact that we didn't compare costs here, even if this was our intention. The actual cost of doing calculations for these features was a _period of time_, not some number of frames. Running the game without additional features allowed to complete about 50 frames in a second on average. How do we get the cost of each frame in miliseconds?
+This apparent paradox of negative frame rate arises from the fact that we didn't compare costs here, even if this was our intention. The actual cost of using these features was a _period of time_, not a number of frames. Our calculations were wrong.
+
+Let's try miliseconds. Running the game without additional features allowed to complete about 50 frames in a second on average. How do we get the cost of each frame in miliseconds?
 
 <div class="notice--info" markdown="1">
 There are 1000 miliseconds (ms) in a second. If the game was able to finish 50 frames during 1000 ms, it means that an average frame took 1000/50 = _20 ms_ to render.
@@ -48,13 +50,18 @@ There are 1000 miliseconds (ms) in a second. If the game was able to finish 50 f
 After enabling HairWorks, the game produced 26 frames per second. That shows us that the time cost of a single frame rose to 1000/26 = _38.5_ ms.
 </div>
 
-Now we're working with actual time periods, which can be added to one another. The feature added 18.5 ms to the time it took to produce a frame. Enabling two more features of the same kind will lead to 20 + 3 * 18.5 = _75.5 ms_ per frame. This is about _13 fps_.
+Now we're working with actual time periods, which can be added to one another. The feature added 18.5 ms to the time it took to produce a frame. After enabling three features, we end up with:
+
+__20__ ms + __18.5__ ms (HW) + __18.5__ ms (DoF) + __18.5__ ms (HBAO) = __75.5__ ms
+{: .notice .text-center}
+
+Enabling two more features lead to _75.5 ms_ per frame. This means the game was running at about _13 fps_.
 
 ## Cost of a frame
 
-It's useful to memorize three common frame time values:
+It's useful to memorize these three frame duration values - for 30, 60 and 90 fps:
 
-<div class="notice--info" markdown="1">
+<div class="notice text-center" markdown="1">
 Time in miliseconds = 1000 ms / frames per second
 
 * 30 FPS = 1000 / 30 = __33.33__ ms
