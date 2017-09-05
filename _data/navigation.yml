@@ -36,14 +36,8 @@ book:
         url: /book/profiling/view-modes/
       - title: "Built-in GPU Visualizer"
         url: /book/profiling/gpu-visualizer/
-      - title: "Lighting passes"
-        url: /book/profiling/lighting/
-      - title: "Base pass"
-        url: /book/profiling/base-pass/
-      - title: "Translucency passes"
-        url: /book/profiling/translucency/
-      - title: "Geometry and post process passes"
-        url: /book/profiling/geom-and-post-process/
+      - title: "Unreal's rendering passes"
+        url: /book/profiling/passes/
       - title: "External profilers"
         url: /book/profiling/external/
   - title: "Resources"
