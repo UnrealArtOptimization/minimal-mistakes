@@ -11,7 +11,7 @@ $type-size-6 : 0.85em;
 $type-size-7 : 0.8em;
 $type-size-8 : 0.75em;
 
-$text-color : #222;
+$text-color : #383838;
 
 @import "minimal-mistakes";
 
@@ -37,5 +37,5 @@ html {
 .page__content p
 {
   line-height: 1.6em;
-  font-weight: 300;
+  font-weight: 400;
 }
