@@ -4,9 +4,14 @@
 
 @charset "utf-8";
 
+$sans-serif : -apple-system, "Mallanna", ".SFNSText-Regular", "San Francisco", "Droid Sans", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+$monospace  : Consolas, Monaco, "Lucida Console", monospace;
+
 $type-size-6 : 0.85em;
 $type-size-7 : 0.8em;
 $type-size-8 : 0.75em;
+
+$text-color : #292f33;
 
 @import "minimal-mistakes";
 

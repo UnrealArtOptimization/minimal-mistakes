@@ -19,3 +19,6 @@ There is also a lot of advice for modelling and texturing from optimization poin
 Please don't worry that you can't grasp all the information at once. I tried to divide the book into clear chapters and sub-chapters. You can probably read most of them separately if you're in a hurry. Each chapter's introduction is also a summary, which should make it easier to return to the book, when you're stuck on a specific problem in your project.
 
 Enjoy the book - onwards to [Chapter 1](/book/measuring-performance/)!
+
+---
+Last updated: {{ site.time }}
