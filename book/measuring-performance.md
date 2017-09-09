@@ -163,12 +163,7 @@ We can record all the metrics into a log. We'll be able to analyze it later on a
 
 {% include figure image_path="/assets/images/session-frontend-profiler.png" alt="" caption="__Fig. 1.6__ Profiler tab in Session Frontend window. Panels not related to GPU profiling were minimized." %}{: .align-left}
 
-This is a profile of the GPU and the CPU at the same time. If we're interested in graphics profiling, not gameplay, then we can . And from here I enter the GPU and by double-clicking I enable the passes I'm interested in. And here on the graph you can see how the game performs in various moments. The horizontal lines show you targets for 60 fps, 30 fps, 20 fps. We are above the target for 60, unfortunately heading for 30 and these are your basic tools to just enter the game play it for a while and check how it performs in terms of raw fps and miliseconds values.
-
-### Quote test
-
-I will start with a quote from UE documentation page:
-> "Lit translucency gets most of its lighting through a series of cascaded volume textures oriented around the view frustum".
+This is a profile of the GPU and the CPU at the same time. If we're interested in graphics profiling, not gameplay, we should look for items in the "GPU" category in the sidebar. Double-clicking them will plot their values as new line on the graph. Horizontal lines shows targets for common fps values.
 
 ## Footnotes
 
