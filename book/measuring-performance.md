@@ -8,27 +8,25 @@ permalink: "/book/measuring-performance/"
 
 In this chapter we'll discover various ways to measure performance, expressed in miliseconds. Then we'll start looking for bottlenecks and other optimization issues.
 
-## Video
-
-If you prefer a video version of this lesson, you can watch it below.
-
-_Note:_ Every chapter of this book is extended compared with the original video. It's also regularly updated, while videos stay unchanged since their upload.
-{: .notice--info}
+If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=SXLYy6D1y80).
 
 {% capture tutorialvideo %}SXLYy6D1y80?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&amp;showinfo=1{% endcapture %}
 {% include video id=tutorialvideo provider="youtube" %}
 
-## Importance of miliseconds
+_Note:_ Every chapter of this book is extended compared with the original video. It's also regularly updated, while videos stay unchanged since their upload.
+{: .notice--info}
 
-In hardware reviews, competing products are compared by running benchmarks based on the same games. The results are expressed in frames per second. Graphics card A is supposed to outperform B, because it produces twice as many frames in the same period of time. Game C is more demanding than D, because the same hardware is able to calculate only 40 frames each second compared to 60 in the other title. Frames per second seem to be the most popular metric for performance.
+## Are frames per second the ultimate metric?
 
-So why do game developers measure in miliseconds instead?
+In hardware reviews, competing products are compared by running benchmarks based on the same games. The results are expressed in frames per second. Graphics card A is supposed to outperform B, because it produces twice as many frames in the same period of time. Game C is more demanding than D, because the same hardware is able to calculate only 40 frames each second compared to 60 in the other title.
+
+Frames per second seem to be the most popular metric for performance. So why do game developers measure in _miliseconds_ instead?
 
 Here's a quote from an article about NVidia HairWorks:
 
 > As you might expect from a technology that is said to render tens of thousands of tessellated strands of hair, the performance hit to the game is substantial - whether you are running an Nvidia or AMD graphics card. In our test case, the GTX 970 lost 24 per cent of its performance when HairWorks was enabled, dropping from an average of 51.9fps to 39.4fps. However, AMD suffers an even larger hit, losing around 47 per cent of its average frame-rate - its 49.6fps metric slashed to just 26.3fps.
 
-The conclusion we can draw from these numbers is that enabling HairWorks-simulated hair in Witcher 3 can make the game lose up to 23 frames per second, depending on the card. Now let's assume we have another feature, with an identical computational cost, for example Depth of Field. We enable both hair and DoF at the same time. Can this information help us calculate final frames per second?
+The conclusion we can draw from these numbers is that enabling HairWorks-simulated hair in Witcher 3 can make the game lose up to 23 frames per second, depending on the card. But let's assume we have another feature, with an identical computational cost --  for example Depth of Field. We enable both hair and DoF at the same time. Can we calculate final fps from this information, without using miliseconds?
 
 Let's try subtracting these costs from the original frame rate.
 
@@ -41,6 +39,8 @@ __49.6__ fps - __23__ fps (HW) - __23__ fps (DoF)- __23__ fps (HBAO) = <span sty
 {: .notice .text-center}
 
 This apparent paradox of negative frame rate arises from the fact that we didn't compare costs here, even if this was our intention. The actual cost of using these features was a _period of time_, not a number of frames. Our calculations were wrong.
+
+## Calculating feature costs with miliseconds
 
 Let's try miliseconds. Running the game without additional features allowed to complete about 50 frames in a second on average. How do we get the cost of each frame in miliseconds?
 
@@ -57,7 +57,7 @@ __20__ ms + __18.5__ ms (HW) + __18.5__ ms (DoF) + __18.5__ ms (HBAO) = __75.5__
 
 Enabling two more features lead to _75.5 ms_ per frame. This means the game was running at about _13 fps_.
 
-## Cost of a frame
+## Common fps rates in miliseconds
 
 It's useful to memorize these three frame duration values - for 30, 60 and 90 fps:
 
@@ -69,70 +69,101 @@ Time in miliseconds = 1000 ms / frames per second
 * 90 FPS = 1000 / 90 = __11.11__ ms
 </div>
 
-These represent common expected refresh rates for various game categories: a "cinematic" adventure (30 fps), a fast-paced action game (60 fps) and a VR product (90 fps or more for reducing motion sickness). Each frame rate translates to a maximum time it should take to render a frame. If the software exceeds the value, it falls below the desired refresh rate (or even risks losing a V-Sync window).
+These represent common expected refresh rates for various game categories: a "cinematic" adventure (30 fps), a fast-paced action game (60 fps) and a VR product (90 fps or more for reducing motion sickness). Each frame rate translates to a maximum time it should take to render a frame. If the software exceeds the time limit, it falls below the desired refresh rate (or even risks losing a V-Sync window).
 
+## Breakdown of a frame
 
+The values above show us that every game has a certain limit of time per frame. It should never be exceeded. Otherwise the player will experience fps drops.
 
+Aiming for 30 fps leaves the engine with over 33 ms to complete all gameplay code, audio code and graphics rendering. The work on graphics one is split between CPU and GPU(s). The CPU has a role of a "manager", preparing data and sending commands to the GPU. The latter does the majority of calculations. The exact pipeline is explained in detail in ["GPU and rendering pipelines"]({{ site.baseurl }}{% link book/pipelines/index.md %}). They work (mostly) simultaneously, allowing the CPU to return to the gameplay code, while the GPU begins processing meshes and shaders. This means that the graphics card can use most of this 33 ms time window.
 
-Now here, trying to achieve 30 fps, we have a scene that renders in 30 ms. It has a lot of transparency, a lot of heavy lighting and in the right part of the image you can see that the post process is using 3 miliseconds. It's also shown here, in the GPU Visualizer.
+Following screenshots show the output of a tool built into Unreal, [GPU Visualizer]({{ site.baseurl }}{% link book/profiling/gpu-visualizer.md %}). It breaks down the work done by the GPU on a single frame into specific sections, like shadows or transparency. Several scenes were measured, each optimized for different refresh rates: 30, 60 and 90 fps.
 
-{% include figure image_path="/assets/images/ch01/gpuvis_32ms.png" alt="" caption="__Fig. 1.2__ GPU Visualizer showing a 32 ms frame." %}
+### The richness at 30 fps
 
-This bar is the time it takes to render the entire scene. The cost of rendering a single frame. Now please look at this graph. This is a scene that has to render in 60 fps.
+The 30 fps scene can allow for many costly features to be used at once. It has a lot of transparency, heavy lighting (multiple dynamic light sources with big radius). In the right part of the colored bar, you can also see the post process using 3 ms.
+
+{% include figure image_path="/assets/images/ch01/gpuvis_32ms.png" alt="" caption="__Fig. 1.2__ GPU Visualizer showing a 33 ms frame." %}
+
+### Careful but fine at 60 fps
+
+Now please take look at this graph. This scene has to render at 60 fps.
 
 {% include figure image_path="/assets/images/ch01/gpuvis_16ms.png" alt="" caption="__Fig. 1.3__ GPU Visualizer showing a 16 ms frame." %}
 
-The post process time didn't change. We still have a cost of 3 ms here - and here, but the cost of 3 ms is a significantly bigger chunk of the time we have to render the scene at twice the framerate. We have to fit in 15 ms total. So you can easily assume that by disabling the post process entirely we'll have 12 ms per frame, which is not enough to land at the target of 11 ms, that is 90 fps, for example for a VR kit like Oculus or Vive.
+Now the engine has to fit in half of the time - 16.67 ms. The post process time didn't change (because its cost is [pixel-bound]({{ site.baseurl }}{% link book/pipelines/pixel.md %})). So we still have a cost of 3 ms here -- but now it's a significantly bigger chunk of the time we can spare.
+
+You can easily assume that by disabling the post process entirely we'll end up with 12 ms per frame. But it still won't be enough to land at the target of 11 ms -- the 90 fps recommended for a VR kit like Oculus or Vive.
+
+### The harsh austerity of 90 fps
 
 {% include figure image_path="/assets/images/ch01/gpuvis_11ms.png" alt="" caption="__Fig. 1.4__ GPU Visualizer showing an 11 ms frame." %}
 
-As you can see, even if the cost of post process is static, now when rendering for a VR kit it's much more significant, compared to other things. So we had to disable translucency at all, get rid of all particles and stuff which left us with place to do this post process and to have still a medium number of lights.
+This scene could run with a VR kit. As you can see, even if the cost of post process is static, now at 11 ms it's much more significant (compared to other passes). It was necessary to remove all translucent materials and particle effects. These cuts allowed to do full post processing and still keep a decent number of lights.
 
-Using miliseconds instead of raw fps can allow us to break the entire scene into separate passes and compare their cost not just look at the final result, the final number of fps.
-{: .notice--info}
+Each [rendering pass]({{ site.baseurl }}{% link book/profiling/passes.md %}) has a certain cost that depends on the scene's content. It's up to us to balance the content and settings to reach a desired frame rate. As we've seen in this chapter, measuring in miliseconds allows us to do math pretty easily. The time it takes to render a frame is just a sum of its ingredients.
 
 ## Console commands for diagnostics
 
+Now that we know how miliseconds can be useful, we can proceed to actually measure something. There's a multitude of commands to enter in a game or the editor. They can show frame times, object and texture statistics, memory usage and even record the data into a file for later inspection.
+
 ### Disabling "Smooth Framerate"
 
-Before we begin, to measure all this accurately, we have to stop Unreal from snapping the frame rate to stable values like 30, 45, 60 fps. Enter Project Settings → General Settings → Framerate → and disable Smooth Frame Rate. "Smooth Frame Rate" tries to avoid momentary spikes in frame rate. By disabling it, we'll be getting precise measurements.
+Before we begin, to measure all this accurately, we have to stop Unreal from snapping the frame rate to stable values like 30, 45, 60 fps.
+
+Go to __Project Settings → General Settings → Framerate__ → and disable __Smooth Frame Rate__. The __Smooth Frame Rate__ option tries to avoid momentary spikes in frame rate. It's good for end user's experience, so you can enable it again for the final game. But now let's disable it to get precise measurements.
 
 ### Entering commands
 
-The basic console commands are entered by pressing `[~]` (tilde) in your game. The key `[~]` is located on the left from key `[1]` on keyboard. Use it and then type the command, for example: `stat fps`, `stat unitgraph`. The case of letters doesn't matter. Then press Enter.
+The basic console commands are entered by pressing `[~]` (tilde) in the viewport window or in a standalone development build.
+
+The key `[~]` is located on the left from key `[1]` on keyboard. Use it and then type the command, for example: `stat fps` or `stat unitgraph`. The case of letters doesn't matter. Then press Enter.
+
+To toggle the command (e.g. hide the information it shows), just use the command again.
 
 ### Stat FPS and Stat Unit(Graph)
 
-`Stat fps` shows us both the final number of fps we achieved and the time it takes to render a frame. The total time. But we don't know yet, if the cost is caused by the CPU or the GPU? Because one will have to wait for another. The GPU will have to wait for the CPU, if the CPU needs more time to finish a frame. The gameplay code, drawing code and stuff.
+`Stat fps` shows us both the final number of fps and the time it took to render the last frame. It's the total time. But we still don't know if the cost was caused by the CPU or the GPU. As explained before, one has to wait for the other. Fast rendering on the graphics card won't help, if the CPU needs more time to finish the work on gameplay, drawing (managing the GPU) or physics.
 
-So by using `stat unit` or `stat unitgraph`, we can divide this information into 4 specific parts.
-* "Frame" is the same as "FPS", the final cost.
-* "Game" is the work of the CPU on the gameplay code.
-* "Draw" is the work of the CPU on preparing data for the GPU.
-* "GPU" is the raw time it took to render a frame on the GPU.
+We can get more specific info by using the `stat unit` command. The time of a last frame is shown as 4 numbers.
+
+![image]({{ site.baseurl }}/assets/images/stat-fps.png) ![image]({{ site.baseurl }}/assets/images/stat-unit.png)
+
+* __Frame__ is the same as __FPS__, the final cost.
+* __Game__ is the work of the CPU on the gameplay code.
+* __Draw__ is the work of the CPU on preparing data for the graphics card.
+* __GPU__ is the raw time it took to render a frame on the graphics card.
+
+Work on the next frame can't begin until the current frame is finished and displayed. If one of the components takes more time than others, causing __Frame__ to exceed the desired limit, it becomes a bottleneck[^bottle].
+
+`Stat unitgraph` prints the same information, but also starts displaying a graph. It's useful when moving or flying through the scene, because it makes it easier to locate heaviest places or situations. The drop in frame rate will be clearly visible.
 
 ### Stat GPU
 
-Stat GPU splits the time of rendering a frame into specific passes. For example, base pass - which gathers information like roughness, base color and stuff into buffers. The [chapter about passes]({{ site.baseurl }}{% link book/profiling/passes.md %}) explains the meaning of each one of them. Then we have translucency Then post processing is, of course, the... all the screen-space stuff that's happening, like bloom like motion blur but also screen-space reflections. Now we have dynamic lights and shadow projection, which is the shadow component of lighting.
+`Stat GPU` splits the time of rendering a frame into specific passes. It's like a simplified, text version of [GPU Visualizer]({{ site.baseurl }}{% link book/profiling/gpu-visualizer.md %}) (the graphical tool invoked with  `Ctrl Shift ,`). The [chapter about passes]({{ site.baseurl }}{% link book/profiling/passes.md %}) explains the meaning of each pass, along with tips for optimization.
+
+{% include figure image_path="/assets/images/stat-gpu.png" alt="" caption="__Fig. 1.5__ Output of `stat gpu`, showing the cost of rendering passes." %}
 
 <div class="notice--warning" markdown="1">
-If you're getting empty information from `stat gpu` on an older NVidia card, you'll have to use a workaround. Open `C:\Program Files\Epic Games\your-version\Engine\Config\ConsoleVariables.ini`. Go to the end of the file and add these 2 lines:
+If you're getting an empty window from `stat gpu` on an older NVidia card, you'll have to use a workaround.
+
+Open `C:\Program Files\Epic Games\your-version\Engine\Config\ConsoleVariables.ini`. Then go to the end of the file and add these 2 lines:
 
 ```
 r.NVIDIATimestampWorkaround=0
 r.gpustatsenabled=1
 ```
 
-But probably there's a reason why Epic Games disabled it on older cards. Maybe it can lead to some stability issues. So if you want to do it, please remember that you're doing it at your own risk.
+Probably there's a reason why Epic Games disabled it on older cards. Maybe it can lead to stability issues. If you want to use the workaround, please remember that you're doing it at your own risk.
 </div>
-
-You can also achieve the same kind of information by pressing: `Ctrl Shift ,` (comma). Then the GPU Visualizer pops up and you also have your scene split into passes. The tool is explained in detail in [another section of this book]({{ site.baseurl }}{% link book/profiling/gpu-visualizer.md %}). The upside is you don't need to enable realtime GPU statistics in engine settings. It works on older configurations as well.
 
 ## Recording performance metrics
 
-We can record all the metrics into a log. `stat startfile` is the command that starts recording the data[^ue4docs]. A message pops up about StatFile duration in the upper left corner. To finish recording, enter `stat stopfile`. Now exit the game, go to Window → Developer Tools → Session Frontend → and load a file from `your project\Saved\Profiling\` and the latest file.
+We can record all the metrics into a log. We'll be able to analyze it later on a graph. `Stat startfile` is the command that starts recording the data[^ue4docs]. A message pops up about log's duration in the upper left corner. To finish recording, enter `stat stopfile`. Now exit the game, go to __Window → Developer Tools → Session Frontend__ and load the latest file from `your project\Saved\Profiling\UnrealStats\`.
 
-This is a profile of the GPU and the CPU at the same time. We're interested in graphics profiling now, not gameplay so I will hide this part and this. And from here I enter the GPU and by double-clicking I enable the passes I'm interested in. And here on the graph you can see how the game performs in various moments. The horizontal lines show you targets for 60 fps, 30 fps, 20 fps. We are above the target for 60, unfortunately heading for 30 and these are your basic tools to just enter the game play it for a while and check how it performs in terms of raw fps and miliseconds values.
+{% include figure image_path="/assets/images/session-frontend-profiler.png" alt="" caption="__Fig. 1.6__ Profiler tab in Session Frontend window. Panels not related to GPU profiling were minimized." %}{: .align-left}
+
+This is a profile of the GPU and the CPU at the same time. If we're interested in graphics profiling, not gameplay, then we can . And from here I enter the GPU and by double-clicking I enable the passes I'm interested in. And here on the graph you can see how the game performs in various moments. The horizontal lines show you targets for 60 fps, 30 fps, 20 fps. We are above the target for 60, unfortunately heading for 30 and these are your basic tools to just enter the game play it for a while and check how it performs in terms of raw fps and miliseconds values.
 
 ### Quote test
 
@@ -141,4 +172,5 @@ I will start with a quote from UE documentation page:
 
 ## Footnotes
 
-[^ue4docs]: ["GPU Profiling", Unreal Engine documentation](https://docs.unrealengine.com/latest/INT/Engine/Performance/GPU/)
+[^bottle]: ["High-Performance Games: Addressing Performance Bottlenecks with DirectX*, GPUs, and CPUs", David Conger, intel.com](https://software.intel.com/en-us/articles/high-performance-games-addressing-performance-bottlenecks-with-directx-gpus-and-cpus)
+[^ue4docs]: ["GPU Profiling", Unreal Engine documentation, docs.unrealengine.com](https://docs.unrealengine.com/latest/INT/Engine/Performance/GPU/)

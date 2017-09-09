@@ -39,3 +39,16 @@ html {
   line-height: 1.6em;
   font-weight: 400;
 }
+
+.sidebar li
+{
+  line-height: 1.9em;
+}
+
+.toc
+{
+  @include breakpoint($x-large) {
+    position: fixed;
+    top: 100px;
+  }
+}
