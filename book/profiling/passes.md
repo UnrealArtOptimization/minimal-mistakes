@@ -15,7 +15,7 @@ In this chapter you'll learn about:
 
 ## Video
 
-If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=C3lumWdwHmA). Still, it's recommended to verify the information with this chapter, as it contains some important errata.
+If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=C3lumWdwHmA). Still, please be sure to verify the information by reading this chapter, as it contains some important errata.
 
 {% capture tutorialvideo %}C3lumWdwHmA?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&amp;showinfo=1{% endcapture %}
 {% include video id=tutorialvideo provider="youtube" %}
@@ -25,7 +25,7 @@ _Note:_ Every chapter of this book is extended compared with the original video.
 
 ## What is a rendering pass
 
-Let's begin with explaining what do we call a "pass" in the rendering pipeline. A pass is a set of draw calls (be sure to read [what they are]({{ site.baseurl }}{% link book/profiling/index.md %})) executed on the GPU. They are grouped together by the function they have in the pipeline, like rendering transparent meshes or doing post processing. This organization is done for convenience and to ensure proper order of execution - as some passes may need the output of a particular previous pass.
+Let's begin with explaining what do we call a _pass_ in the rendering pipeline. A pass is a set of draw calls (be sure to read [what they are]({{ site.baseurl }}{% link book/profiling/index.md %})) executed on the GPU. They are grouped together by the function they have in the pipeline, like rendering transparent meshes or doing post processing. This organization is done for convenience and to ensure proper order of execution - as some passes may need the output of a particular previous pass.
 
 Passes render geometry -- a.k.a meshes. This can mean 3D models in your scene or even just a single full-screen quad, as is the case with post processing. The output of most passes looks quite alien when you [extract it]({{ site.baseurl }}{% link book/profiling/external.md %}). Depth calculation or shadow projection don't look like your familiar textured scenes. Actually, only the base pass and translucency use the full materials we set up in the editor. Most other passes perform their tasks without them, using their own specialized shaders instead.
 
@@ -66,6 +66,9 @@ The __LightCompositionTasks_PreLighting__ pass has also to work on decals. The g
 
 ### CompositionAfterLighting
 
+Note: In `stat gpu` it's called __CompositionPostLighting__.
+{: .notice--info}
+
 Responsible for:
 * Subsurface scattering (SSS) of __Subsurface Profile__ type.
 
@@ -73,7 +76,6 @@ Cost affected by:
 * Rendering resolution
 * Screen area covered by materials with SSS
 
-In `stat gpu` it's called __CompositionPostLighting__.
 
 ### ComputeLightGrid
 

@@ -6,7 +6,13 @@ permalink: "/book/measuring-performance/"
 
 {% include toc icon="columns" title=page.title %}
 
-In this chapter we'll discover various ways to measure performance, expressed in milliseconds. Then we'll start looking for bottlenecks and other optimization issues.
+In this chapter you'll learn about:
+
+* The importance of using milliseconds in game development
+* Converting ms to frames per second
+* Basic tools for measuring performance
+* Displaying statistics for each subsystem, like occlusion culling or particles
+* Recording performance metrics and reading them with a profiler
 
 If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=SXLYy6D1y80).
 
