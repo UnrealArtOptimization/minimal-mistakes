@@ -80,12 +80,13 @@ Cost affected by:
 ### ComputeLightGrid
 
 Responsible for:
-* ???
+* Optimizing lighting in forward shading 
 
 Cost affected by:
 * Number of lights
+* Number of reflection capture actors
 
-Description TODO.
+According to the comment in Unreal's source code[^lightgrid], this pass "culls local lights to a grid in frustum space". In other words: it assigns lights to cells in a grid (shaped like a pyramid along camera view). This operation has a cost of its own but it pays off later, making it faster to determine which lights affect which meshes[^clustered].
 
 ### Lights → NonShadowedLights
 
@@ -111,16 +112,6 @@ Cost affected by:
 * Triangle count of shadow-casting meshes
 
 Description TODO.
-
-### FilterTranslucentVolume
-
-Responsible for:
-* Filtering (smoothing out) the global volumetric texture that stores lighting for translucent objects[^filtertranslucent]
-
-Cost affected by:
-* Translucency lighting volume resolution
-
-The resolution can be controlled with `r.TranslucencyLightingVolumeDim xx`. Reasonable values seem to fit between 16 and 128, with 64 being a default (as of UE 4.17). The volume can be also disabled entirely with `r.TranslucentLightingVolume 0`
 
 ### ShadowDepths
 
@@ -148,13 +139,15 @@ Cost affected by:
 
 In GPU Visualizer it's shown per light, in __Light__ category. In `stat gpu` it's a separate total number.
 
+## Reflections
+
 ### ReflectionEnvironment
 
 Responsible for:
-* Reading and blending __Reflection Captures'__ results into a full-screen reflection buffer
+* Reading and blending reflection capture actor's results into a full-screen reflection buffer
 
 Cost affected by:
-* Number and radius of __Reflection Capture__ actors
+* Number and radius of reflection capture actors
 * Rendering resolution
 
 Description TODO.
@@ -192,33 +185,43 @@ Cost affected by:
 
 Description TODO.
 
-## Translucency
+## Translucency and its lighting
 
-In  `stat gpu` __Translucency__ and __TranslucentLighting__ are separate categories. In GPU Visualizer they are grouped into a single category.
+Note: In  `stat gpu` there are only two categories: __Translucency__ and __Translucent Lighting__. In GPU Visualizer (and in text logs) the work on translucency is split into more fine-grained statistics.
+{: .notice--info}
 
 ### Translucency
 
 Responsible for:
 * Rendering translucent materials (like the base pass)
+* Lighting of translucent materials of __Surface ForwardShading__ type.
 
 Cost affected by:
 * Rendering resolution
 * Total pixel area of translucent polygons
 * Overdraw
-* If __Surface ForwardShading__ enabled in material: Number of lights
+* If __Surface ForwardShading__ enabled in material: Number and radius of lights
 
 Description TODO.
 
-### TranslucentLighting
+### Translucent Lighting
 
 Responsible for:
-* a
+* Creating a global volumetric texture used to simplify lighting of translucent meshes
 
 Cost affected by:
-* b
+* Translucency lighting volume resolution
+* Number of lights with __Affect Translucent Lighting__ enabled
 
-Description TODO.
+Lighting of translucent objects is not computed directly. Instead, a pyramid-shaped grid is calculated from the view of the camera. It's done to speed up rendering of lit translucency. This kind of caching makes use of the assumption that translucent materials are usually used for particles, volumetric effects -- and as such don't require precise lighting.
 
+You can see the effect when changing a material's __Blend Mode__ to __Translucent__. The object will now have more simplified lighting. Much more simplified, actually, compared to opaque materials. The volumetric cache can be avoided by using a more costly shading mode, __Surface ForwardShading__.
+
+The resolution of the volume can be controlled with `r.TranslucencyLightingVolumeDim xx`. Reasonable values seem to fit between 16 and 128, with 64 being a default (as of UE 4.17). It can be also disabled entirely with `r.TranslucentLightingVolume 0`
+
+In GPU Visualizer, the statistic is split into __ClearTranslucentVolumeLighting__ and __FilterTranslucentVolume__. The latter performs filtering (smoothing out) of volume[^filtertranslucent], probably to prevent potential aliasing issues. The behavior can be disabled for performance with `r.TranslucencyVolumeBlur 0` (default is 1).
+
+You can also exclude individual lights from being rendered into the volume. It's done by disabling __Affect Translucent Lighting__ setting in light's properties. The actual cost of a single light can be found in GPU Visualizer's __Light__ pass, in every light's drop-down list, under names like __InjectNonShadowedTranslucentLighting__.
 
 ### Fog, ExponentialHeightFog
 
@@ -255,10 +258,11 @@ Cost affected by:
 
 The HZB is used by an occlusion culling method[^hzbocclusion] and by screen-space techniques for ambient occlusion and reflections[^hzbuse].
 
-Time may be extreme in editor. It's usually a false alarm, due to an bug in Unreal, marked as fixed in UE 4.18[^hzbbug]. Don't worry and check in an actual build.
+Warning: Time may be extreme in editor, but don't worry. It's usually a false alarm, due to an bug in Unreal. Just check the value in an actual build. The bug is hopefully fixed since UE 4.18[^hzbbug].
 {: .notice--warning}
 
 ### ParticleSimulation, ParticleInjection
+
 Responsible for:
 * Particle simulation on the GPU (only of __GPU Sprites__ particle type)
 
@@ -301,6 +305,8 @@ Description TODO.
 
 ## Sources
 
+[^lightgrid]: [Unreal Engine source code, DeferredShadingRenderer.h, line 74](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/DeferredShadingRenderer.h#L74)
+[^clustered]: [Slides from "Practical Clustered Shading", p. 34, Ola Olsson, Emil Persson, efficientshading.com](http://efficientshading.com/2013/08/01/practical-clustered-deferred-and-forward-shading/)
 [^filtertranslucent]: [Unreal Engine source code, TranslucentLightingShaders.usf, line 108](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Shaders/Private/TranslucentLightingShaders.usf#L108)
 [^shadowproj]: [Unreal Engine source code, ShadowRendering.cpp, line 1440](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/ShadowRendering.cpp#L1440)
 [^fog]: [Unreal Engine source code, FogRendering.cpp, line 431](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/FogRendering.cpp#L431)
