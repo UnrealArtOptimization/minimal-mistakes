@@ -6,7 +6,7 @@ permalink: "/book/measuring-performance/"
 
 {% include toc icon="columns" title=page.title %}
 
-In this chapter we'll discover various ways to measure performance, expressed in miliseconds. Then we'll start looking for bottlenecks and other optimization issues.
+In this chapter we'll discover various ways to measure performance, expressed in milliseconds. Then we'll start looking for bottlenecks and other optimization issues.
 
 If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=SXLYy6D1y80).
 
@@ -20,13 +20,13 @@ _Note:_ Every chapter of this book is extended compared with the original video.
 
 In hardware reviews, competing products are compared by running benchmarks based on the same games. The results are expressed in frames per second. Graphics card A is supposed to outperform B, because it produces twice as many frames in the same period of time. Game C is more demanding than D, because the same hardware is able to calculate only 40 frames each second compared to 60 in the other title.
 
-Frames per second seem to be the most popular metric for performance. So why do game developers measure in _miliseconds_ instead?
+Frames per second seem to be the most popular metric for performance. So why do game developers measure in _milliseconds_ instead?
 
 Here's a quote from an article about NVidia HairWorks[^eurogamer]:
 
 > As you might expect from a technology that is said to render tens of thousands of tessellated strands of hair, the performance hit to the game is substantial - whether you are running an Nvidia or AMD graphics card. In our test case, the GTX 970 lost 24 per cent of its performance when HairWorks was enabled, dropping from an average of 51.9fps to 39.4fps. However, AMD suffers an even larger hit, losing around 47 per cent of its average frame-rate - its 49.6fps metric slashed to just 26.3fps.
 
-The conclusion we can draw from these numbers is that enabling HairWorks-simulated hair in Witcher 3 can make the game lose up to 23 frames per second, depending on the card. But let's assume we have another feature, with an identical computational cost --  for example Depth of Field. We enable both hair and DoF at the same time. Can we calculate final fps from this information, without using miliseconds?
+The conclusion we can draw from these numbers is that enabling HairWorks-simulated hair in Witcher 3 can make the game lose up to 23 frames per second, depending on the card. But let's assume we have another feature, with an identical computational cost --  for example Depth of Field. We enable both hair and DoF at the same time. Can we calculate final fps from this information, without using milliseconds?
 
 Let's try subtracting these costs from the original frame rate.
 
@@ -40,12 +40,12 @@ __49.6__ fps - __23__ fps (HW) - __23__ fps (DoF)- __23__ fps (HBAO) = <span sty
 
 This apparent paradox of negative frame rate arises from the fact that we didn't compare costs here, even if this was our intention. The actual cost of using these features was a _period of time_, not a number of frames. Our calculations were wrong.
 
-## Calculating feature costs with miliseconds
+## Calculating feature costs with milliseconds
 
-Let's try miliseconds. Running the game without additional features allowed to complete about 50 frames in a second on average. How do we get the cost of each frame in miliseconds?
+Let's try milliseconds. Running the game without additional features allowed to complete about 50 frames in a second on average. How do we get the cost of each frame in milliseconds?
 
 <div class="notice--info" markdown="1">
-There are 1000 miliseconds (ms) in a second. If the game was able to finish 50 frames during 1000 ms, it means that an average frame took 1000/50 = _20 ms_ to render.
+There are 1000 milliseconds (ms) in a second. If the game was able to finish 50 frames during 1000 ms, it means that an average frame took 1000/50 = _20 ms_ to render.
 
 After enabling HairWorks, the game produced 26 frames per second. That shows us that the time cost of a single frame rose to 1000/26 = _38.5_ ms.
 </div>
@@ -57,12 +57,12 @@ __20__ ms + __18.5__ ms (HW) + __18.5__ ms (DoF) + __18.5__ ms (HBAO) = __75.5__
 
 Enabling two more features lead to _75.5 ms_ per frame. This means the game was running at about _13 fps_.
 
-## Common fps rates in miliseconds
+## Common fps rates in milliseconds
 
 It's useful to memorize these three frame duration values - for 30, 60 and 90 fps:
 
 <div class="notice text-center" markdown="1">
-Time in miliseconds = 1000 ms / frames per second
+Time in milliseconds = 1000 ms / frames per second
 
 * 30 FPS = 1000 / 30 = __33.33__ ms
 * 60 FPS = 1000 / 60 = __16.67__ ms
@@ -101,11 +101,11 @@ You can easily assume that by disabling the post process entirely we'll end up w
 
 This scene could run with a VR kit. As you can see, even if the cost of post process is static, now at 11 ms it's much more significant (compared to other passes). It was necessary to remove all translucent materials and particle effects. These cuts allowed to do full post processing and still keep a decent number of lights.
 
-Each [rendering pass]({{ site.baseurl }}{% link book/profiling/passes.md %}) has a certain cost that depends on the scene's content. It's up to us to balance the content and settings to reach a desired frame rate. As we've seen in this chapter, measuring in miliseconds allows us to do math pretty easily. The time it takes to render a frame is just a sum of its ingredients.
+Each [rendering pass]({{ site.baseurl }}{% link book/profiling/passes.md %}) has a certain cost that depends on the scene's content. It's up to us to balance the content and settings to reach a desired frame rate. As we've seen in this chapter, measuring in milliseconds allows us to do math pretty easily. The time it takes to render a frame is just a sum of its ingredients.
 
 ## Console commands for diagnostics
 
-Now that we know how miliseconds can be useful, we can proceed to actually measure something. There's a multitude of commands to enter in a game or the editor. They can show frame times, object and texture statistics, memory usage and even record the data into a file for later inspection.
+Now that we know how milliseconds can be useful, we can proceed to actually measure something. There's a multitude of commands to enter in a game or the editor. They can show frame times, object and texture statistics, memory usage and even record the data into a file for later inspection.
 
 ### Disabling "Smooth Framerate"
 
@@ -147,7 +147,7 @@ Work on the next frame can't begin until the current frame is finished and displ
 {% include figure image_path="/assets/images/stat-gpu.png" alt="" caption="__Figure:__ Output of `stat gpu`, showing the cost of rendering passes." %}
 
 <div class="notice--warning" markdown="1">
-If you're getting an empty window from `stat gpu` on an older NVidia card, you'll have to use a workaround.
+_Warning:_ If you're getting an empty window from `stat gpu` on an older NVidia card, you'll have to use a workaround.
 
 Open `C:\Program Files\Epic Games\your-version\Engine\Config\ConsoleVariables.ini`. Then go to the end of the file and add these 2 lines:
 
@@ -180,7 +180,7 @@ RHI in `stat RHI` stands for Rendering Hardware Interface[^rhi]. This command di
 
 These stat commands can also be very useful:
 
-* `stat Foliage`. Stats related to all instanced static meshes (not only foliage). Shows number of instances and total triangle count.
+* `stat Foliage`. Stats related to _all instanced static meshes_ (not only foliage). Shows number of instances and total triangle count.
 * `stat Landscape`. Number of triangles and draw calls used to render all landscape actors.
 * `stat Particles`. Number of particle sprites, among other info.
 * `stat LightRendering`. Cost of lighting, number of lights affecting translucency lighting grid, shadow-casting and unshadowed lights.
