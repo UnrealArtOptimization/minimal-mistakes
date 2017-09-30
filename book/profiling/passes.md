@@ -39,9 +39,29 @@ The base pass is an example of a pass affected by all three factors. It takes vi
 
 If some passes take in just the GBuffer, but not any 3D meshes - like post process effects do - then obviously they will be only pixel-bound. An increase in game's rendering resolution will directly affect their cost. On the other hand, it means that the changes in the amount of 3D meshes mean nothing to post process passes. For example, Unreal's ambient occlusion is a post process operation. It uses the hierarhical Z-buffer and some content from the GBuffer, for example normals. By understanding what this pass requires, we know where to look for optimization opportunities -- in AO's settings and resolution adjustments, not in the scene's content.
 
-This chapter provides information about dependencies of each pass. It was derived from reading the engine's source code and from practical tests. Be aware of potential mistakes here -- there are sources provided in the footnotes, so you can fact-check it yourself.
+## Using information from this chapter
 
-There's also a lot of optimization advice here, to help you fix a bottleneck once you locate it.
+The major part of this chapter is a guide to every significant rendering pass in Unreal. You don't have to read the entire thing. Treat it more as a handbook, which you use to understand the output of the ["Stat GPU" command]({{ site.baseurl }}{% link book/measuring-performance.md %}) or with [GPU Visualizer]({{ site.baseurl }}{% link book/profiling/gpu-visualizer.md %}). Both of them show you the cost of each rendering pass. This allows you to precisely locate issues in a scene, like too many shadowed lights or too many translucent materials.
+
+This chapter also provides extensive information about dependencies of each pass. It allows you to address the most probable sources of trouble first. Much of this information was gathered by reading the engine's source code and from practical tests. Be aware of potential mistakes here. Sources are provided in the footnotes, so you can fact-check it yourself.
+
+### Optimizing
+
+This chapter contains also a lot of optimization advice, to help you fix a bottleneck once you locate it. How would you approach optimization? In general, it's a good practice to _hide or disable_ the suspected cause of a problem. It will allow you to instantly check if your predictions were right, by looking at the change in miliseconds per frame.
+
+There are several ways of doing this. You can hide a whole category of objects or effects. Press `[~]` in the viewport when __Playing in Editor__ and type `show`. This should propose a list of auto-completions, which you can browse with up and down arrows. Select a command and press `[Enter]`. Frequently used `show` commands include:
+* `show DirectionalLights`
+* `show DirectLighting`
+* `show InstancedGrass`, `InstancedFoliage`
+* `show InstancedStaticMeshes`,
+* `show Landscape`
+* `show PostProcessing`
+* `show ScreenSpaceReflections`
+* `show StaticMeshes`
+* `show Translucency`
+* `show VolumetricLightmap` (since UE 4.18)
+
+Another way is to prevent individual objects from being displayed in game. Select one or multiple objects, then go to __Properties → Rendering__ and check __Actor Hidden in Game__. You can do it also when playing the game in editor. Press `[F8]` to __Eject__ from a running game, select objects in __Outliner__ instead of the viewport and change the setting. Then return to the game by pressing `F8` in the viewport again.
 
 ## Lighting
 
@@ -91,7 +111,7 @@ According to the comment in Unreal's source code[^lightgrid], this pass "culls l
 ### Lights → NonShadowedLights
 
 Responsible for:
-* Lights in deferred rendering which don't cast shadows
+* Lights in deferred rendering that don't cast shadows
 
 Cost affected by:
 * Rendering resolution
@@ -100,10 +120,12 @@ Cost affected by:
 
 Description TODO.
 
+## Shadows
+
 ### Lights → ShadowedLights
 
 Responsible for:
-* Lights which cast dynamic shadows
+* Lights that cast dynamic shadows
 
 Cost affected by:
 * Rendering resolution
@@ -193,8 +215,8 @@ Note: In  `stat gpu` there are only two categories: __Translucency__ and __Trans
 ### Translucency
 
 Responsible for:
-* Rendering translucent materials (like the base pass)
-* Lighting of translucent materials of __Surface ForwardShading__ type.
+* Rendering materials (like the base pass for translucency)
+* Lighting of translucent materials that use __Surface ForwardShading__.
 
 Cost affected by:
 * Rendering resolution
@@ -303,13 +325,11 @@ Description TODO.
 
 ## Footnotes
 
-## Sources
-
-[^lightgrid]: [Unreal Engine source code, DeferredShadingRenderer.h, line 74](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/DeferredShadingRenderer.h#L74)
 [^clustered]: [Slides from "Practical Clustered Shading", p. 34, Ola Olsson, Emil Persson, efficientshading.com](http://efficientshading.com/2013/08/01/practical-clustered-deferred-and-forward-shading/)
+[^hzbuse]: ["Screen Space Reflections in Killing Floor 2", Sakib Saikia, sakibsaikia.github.io](https://sakibsaikia.github.io/graphics/2016/12/25/Screen-Space-Reflection-in-Killing-Floor-2.html)
+[^hzbocclusion]: [Accepted answer to "How does object occlusion and culling work in UE4?", Tim Hobson, answers.unrealengine.com](https://answers.unrealengine.com/questions/312646/how-does-object-occlusion-and-culling-work-in-ue4.html)
+[^lightgrid]: [Unreal Engine source code, DeferredShadingRenderer.h, line 74](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/DeferredShadingRenderer.h#L74)
 [^filtertranslucent]: [Unreal Engine source code, TranslucentLightingShaders.usf, line 108](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Shaders/Private/TranslucentLightingShaders.usf#L108)
 [^shadowproj]: [Unreal Engine source code, ShadowRendering.cpp, line 1440](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/ShadowRendering.cpp#L1440)
 [^fog]: [Unreal Engine source code, FogRendering.cpp, line 431](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/FogRendering.cpp#L431)
-[^hzbocclusion]: [Accepted answer to "How does object occlusion and culling work in UE4?", Tim Hobson, answers.unrealengine.com](https://answers.unrealengine.com/questions/312646/how-does-object-occlusion-and-culling-work-in-ue4.html)
-[^hzbuse]: ["Screen Space Reflections in Killing Floor 2", Sakib Saikia, sakibsaikia.github.io](https://sakibsaikia.github.io/graphics/2016/12/25/Screen-Space-Reflection-in-Killing-Floor-2.html)
 [^hzbbug]: [Bug UE-3448HZB, "Setup Mips taking considerable time in GPU Visualizer", issues.unrealengine.com](https://issues.unrealengine.com/issue/UE-33448)
