@@ -4,6 +4,14 @@ excerpt: ""
 permalink: "/book/profiling/passes/"
 ---
 
+{% capture icon_settings %}<i class="fa fa-sliders fa-fw" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_resolution %}<i class="fa fa-television fa-fw" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_number %}<i class="fa fa-tags fa-fw" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_triangles %}<i class="fa fa-cube fa-fw" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_area %}<i class="fa fa-dot-circle-o fa-fw" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_overdraw %}<i class="fa fa-database fa-fw" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_complexity %}<i class="fa fa-gears fa-fw" aria-hidden="true"></i>{% endcapture %}
+
 {% include toc icon="columns" title=page.title %}
 
 In this chapter you'll learn about:
@@ -63,134 +71,29 @@ There are several ways of doing this. You can hide a whole category of objects o
 
 Another way is to prevent individual objects from being displayed in game. Select one or multiple objects, then go to __Properties → Rendering__ and check __Actor Hidden in Game__. You can do it also when playing the game in editor. Press `[F8]` to __Eject__ from a running game, select objects in __Outliner__ instead of the viewport and change the setting. Then return to the game by pressing `F8` in the viewport again.
 
-## Lighting
+# Guide to passes and performance categories
 
-Let us begin with lighting passes. They often can be the heaviest part of the frame if your project relies on dynamic, shadowed light sources.
+Below begins an extensive description of almost all rendering passes that you can find in a profiler. Every position in the list is laid out in the following format:
 
-### LightCompositionTasks_PreLighting
+* Responsible for ...
+* Cost affected by ...
+* Role of the pass, optimization advice
 
-Responsible for:
-* Screen-space ambient occlusion
-* Decals (non-DBuffer type)
+Icons legend:
 
-Cost affected by:
-* Rendering resolution
-* Ambient occlusion radius and fade out distance
-* Number of decals (excluding DBuffer decals)
+* {{ icon_settings }} Settings
+* {{ icon_resolution }} Resolution
+* {{ icon_number }} Number of objects
+* {{ icon_triangles }} Triangles
+* {{ icon_area }} Area/pixels/radius
+* {{ icon_overdraw }} Overdraw
 
-You may think that ambient occlusion is a post process operation. Yes, it is -- but it's not listed in the __PostProcessing__ category. Instead, you can find it in __LightCompositionTasks__. The full names of its sub-passes in the profiler -- something similar to `AmbientOcclusionPS (2880x1620)` -- reveal additional information, for example the resolution ambient occlusion was rendered in. There's also the half-resolution (`1440x810`), which is how ambient occlusion is usually done for performance reasons.
-
-The cost of this pass is mostly affected by rendering resolution. You can also control ambient occlusion radius and fade out distance. The radius can be overriden by using a __Postprocess Volume__ and changing its settings. Ambient occlusion's intensity doesn't have any influence on performance, but the radius does. And in the volume's __Advanced__ drop-down category you can also set __Fade Out Distance__, changing its maximum range from the camera. Keeping it short matters for performance of __LightCompositionTasks__.
-
-The __LightCompositionTasks_PreLighting__ pass has also to work on decals. The greater the number of decals (of standard type, so not DBuffer decals), the longer it takes to compute it.
-
-### CompositionAfterLighting
-
-Note: In `stat gpu` it's called __CompositionPostLighting__.
-{: .notice--info}
-
-Responsible for:
-* Subsurface scattering (SSS) of __Subsurface Profile__ type.
-
-Cost affected by:
-* Rendering resolution
-* Screen area covered by materials with SSS
-
-
-### ComputeLightGrid
-
-Responsible for:
-* Optimizing lighting in forward shading 
-
-Cost affected by:
-* Number of lights
-* Number of reflection capture actors
-
-According to the comment in Unreal's source code[^lightgrid], this pass "culls local lights to a grid in frustum space". In other words: it assigns lights to cells in a grid (shaped like a pyramid along camera view). This operation has a cost of its own but it pays off later, making it faster to determine which lights affect which meshes[^clustered].
-
-### Lights → NonShadowedLights
-
-Responsible for:
-* Lights in deferred rendering that don't cast shadows
-
-Cost affected by:
-* Rendering resolution
-* Number of movable and stationary lights
-* Radius of lights
-
-Description TODO.
-
-## Shadows
-
-### Lights → ShadowedLights
-
-Responsible for:
-* Lights that cast dynamic shadows
-
-Cost affected by:
-* Rendering resolution
-* Number of movable and stationary lights
-* Radius of lights
-* Triangle count of shadow-casting meshes
-
-Description TODO.
-
-### ShadowDepths
-
-Responsible for:
-* Generating depth maps for shadow-casting lights
-
-Cost affected by:
-* Number and range of shadow-casting lights
-* Number and triangle count of movable shadow-casting meshes
-* Shadow quality settings
-
-It's like rendering scene's depth from the light's point of view.
-
-To control the resolution of shadows, which directly affects the cost, use `sg.ShadowQuality x`, where `x` is a number between 0 and 4.
-
-### ShadowProjection
-
-Responsible for:
-* Final rendering of shadows[^shadowproj]
-
-Cost affected by:
-* Rendering resolution
-* Number and range of shadow-casting lights (movable and stationary)
-* Translucency lighting volume resolution
-
-In GPU Visualizer it's shown per light, in __Light__ category. In `stat gpu` it's a separate total number.
-
-## Reflections
-
-### ReflectionEnvironment
-
-Responsible for:
-* Reading and blending reflection capture actor's results into a full-screen reflection buffer
-
-Cost affected by:
-* Number and radius of reflection capture actors
-* Rendering resolution
-
-Description TODO.
-
-### ScreenSpaceReflections
-
-Responsible for:
-* Real-time dynamic reflections
-* Done in post process using a screen-space ray tracing technique
-
-Cost affected by:
-* Rendering resolution
-* Quality settings
-
-The general quality setting is `r.SSR.Quality n`, where `n` is a number between 0 and 4.
-
-Their use can be limited to surfaces having roughness below certain threshold. This helps with performance, because big roughness causes the rays to spread over wider angle, increasing the cost. To set the threshold, use `r.SSR.MaxRoughness x`, with `x` being a float number between 0.0 and 1.0.
+Don't bother with reading the entire chapter at once. Skip straight to the pass you're interested in :)
 
 ## Base pass
 
-Responsible for:
+**Responsible for:**
+
 * Rendering final attributes of __Opaque__ or __Masked__ materials to the GBuffer
 * Reading static lighting and saving it to the GBuffer
 * Applying DBuffer decals
@@ -198,14 +101,126 @@ Responsible for:
 * Calculating final velocity (from packed 3D velocity)
 * In forward renderer: dynamic lighting
 
-Cost affected by:
-* Rendering resolution
-* Number of objects
-* Shader complexity
-* Number of decals
-* Triangle count
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_number }} Number of objects
+* {{ icon_complexity }} Shader complexity
+* {{ icon_number }} Number of decals
+* {{ icon_triangles }} Triangle count
 
 Description TODO.
+
+## Lighting
+
+Lighting can often be the heaviest part of the frame. This is especially likely if your project relies on dynamic, shadowed light sources.
+
+### LightCompositionTasks_PreLighting
+
+**Responsible for:**
+
+* Screen-space ambient occlusion
+* Decals (non-DBuffer type)
+
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_settings }} Ambient occlusion radius and fade out distance
+* {{ icon_number }} Number of decals (excluding DBuffer decals)
+
+You may think that ambient occlusion is a post process operation. Yes, it is -- but it's not listed in the __PostProcessing__ category. Instead, you can find it in __LightCompositionTasks__. The full names of its sub-passes in the profiler -- something similar to `AmbientOcclusionPS (2880x1620)` -- reveal additional information, for example the resolution ambient occlusion was rendered in. There's also the half-resolution (`1440x810`), which is how ambient occlusion is usually done for performance reasons.
+
+The cost of this pass is mostly affected by rendering resolution. You can also control ambient occlusion radius and fade out distance. The radius can be overriden by using a __Postprocess Volume__ and changing its settings. Ambient occlusion's intensity doesn't have any influence on performance, but the radius does. And in the volume's __Advanced__ drop-down category you can also set __Fade Out Distance__, changing its maximum range from the camera. Keeping it short matters for performance of __LightCompositionTasks__.
+
+The __LightCompositionTasks_PreLighting__ pass has also to work on decals. The greater the number of decals (of standard type, not DBuffer decals), the longer it takes to compute it.
+
+### CompositionAfterLighting
+
+Note: In `stat gpu` it's called __CompositionPostLighting__.
+{: .notice--info}
+
+**Responsible for:**
+
+* Subsurface scattering (SSS) of __Subsurface Profile__ type.
+
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_area }}Screen area covered by materials with SSS
+
+### ComputeLightGrid
+
+**Responsible for:**
+
+* Optimizing lighting in forward shading 
+
+**Cost affected by:**
+
+* {{ icon_number }} Number of lights
+* {{ icon_number }} Number of reflection capture actors
+
+According to the comment in Unreal's source code[^lightgrid], this pass "culls local lights to a grid in frustum space". In other words: it assigns lights to cells in a grid (shaped like a pyramid along camera view). This operation has a cost of its own but it pays off later, making it faster to determine which lights affect which meshes[^clustered].
+
+### Lights → NonShadowedLights
+
+**Responsible for:**
+
+* Lights in deferred rendering that don't cast shadows
+
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_number }} Number of movable and stationary lights
+* {{ icon_area }} Radius of lights
+
+Description TODO.
+
+## Shadows
+
+### Lights → ShadowedLights
+
+**Responsible for:**
+
+* Lights that cast dynamic shadows
+
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_number }} Number of movable and stationary lights
+* {{ icon_area }} Radius of lights
+* {{ icon_triangles }} Triangle count of shadow-casting meshes
+
+Description TODO.
+
+### ShadowDepths
+
+**Responsible for:**
+
+* Generating depth maps for shadow-casting lights
+
+**Cost affected by:**
+
+* {{ icon_area }} Number and range of shadow-casting lights
+* {{ icon_triangles }} Number and triangle count of movable shadow-casting meshes
+* {{ icon_settings }} Shadow quality settings
+
+It's like rendering scene's depth from the light's point of view.
+
+To control the resolution of shadows, which directly affects the cost, use `sg.ShadowQuality x`, where `x` is a number between 0 and 4.
+
+### ShadowProjection
+
+**Responsible for:**
+
+* Final rendering of shadows[^shadowproj]
+
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_area }} Number and range of shadow-casting lights (movable and stationary)
+* {{ icon_settings }} Translucency lighting volume resolution
+
+In GPU Visualizer it's shown per light, in __Light__ category. In `stat gpu` it's a separate total number.
 
 ## Translucency and its lighting
 
@@ -214,26 +229,30 @@ Note: In  `stat gpu` there are only two categories: __Translucency__ and __Trans
 
 ### Translucency
 
-Responsible for:
+**Responsible for:**
+
 * Rendering materials (like the base pass for translucency)
 * Lighting of translucent materials that use __Surface ForwardShading__.
 
-Cost affected by:
-* Rendering resolution
-* Total pixel area of translucent polygons
-* Overdraw
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_area }} Total pixel area of translucent polygons
+* {{ icon_overdraw }} Overdraw
 * If __Surface ForwardShading__ enabled in material: Number and radius of lights
 
 Description TODO.
 
 ### Translucent Lighting
 
-Responsible for:
+**Responsible for:**
+
 * Creating a global volumetric texture used to simplify lighting of translucent meshes
 
-Cost affected by:
-* Translucency lighting volume resolution
-* Number of lights with __Affect Translucent Lighting__ enabled
+**Cost affected by:**
+
+* {{ icon_settings }} Translucency lighting volume resolution
+* {{ icon_number }} Number of lights with __Affect Translucent Lighting__ enabled
 
 Lighting of translucent objects is not computed directly. Instead, a pyramid-shaped grid is calculated from the view of the camera. It's done to speed up rendering of lit translucency. This kind of caching makes use of the assumption that translucent materials are usually used for particles, volumetric effects -- and as such don't require precise lighting.
 
@@ -247,24 +266,59 @@ You can also exclude individual lights from being rendered into the volume. It's
 
 ### Fog, ExponentialHeightFog
 
-Responsible for:
+**Responsible for:**
+
 * Rendering the fog of Exponential Height Fog type[^fog]
 
-Cost affected by:
-* Rendering resolution
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
 
 Description TODO.
+
+## Reflections
+
+### ReflectionEnvironment
+
+**Responsible for:**
+
+* Reading and blending reflection capture actor's results into a full-screen reflection buffer
+
+**Cost affected by:**
+
+* {{ icon_area }} Number and radius of reflection capture actors
+* {{ icon_resolution }} Rendering resolution
+
+Description TODO.
+
+### ScreenSpaceReflections
+
+**Responsible for:**
+
+* Real-time dynamic reflections
+* Done in post process using a screen-space ray tracing technique
+
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_settings }} Quality settings
+
+The general quality setting is `r.SSR.Quality n`, where `n` is a number between 0 and 4.
+
+Their use can be limited to surfaces having roughness below certain threshold. This helps with performance, because big roughness causes the rays to spread over wider angle, increasing the cost. To set the threshold, use `r.SSR.MaxRoughness x`, with `x` being a float number between 0.0 and 1.0.
 
 ## Geometry
 
 ### PrePass DDM_...
 
-Responsible for:
+**Responsible for:**
+
 * Early rendering of depth (Z) from non-translucent meshes
 
-Cost affected by:
-* Triangle count of meshes with __Opaque__ materials
-* Depending on __Early Z__ setting: Overdraw, triangle count and complexity of __Masked__ materials
+**Cost affected by:**
+
+* {{ icon_triangles }} Triangle count of meshes with __Opaque__ materials
+* {{ icon_overdraw }} Depending on __Early Z__ setting: Triangle count and complexity of __Masked__ materials
 
 Its results are required by DBuffer decals. They may also be used by occlusion culling.
 
@@ -272,11 +326,13 @@ __Engine → Rendering → Optimizations → Early Z-pass__
 
 ### HZB (Setup Mips)
 
-Responsible for:
+**Responsible for:**
+
 * Generating the Hierarchical Z-Buffer
 
-Cost affected by:
-* Rendering resolution
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
 
 The HZB is used by an occlusion culling method[^hzbocclusion] and by screen-space techniques for ambient occlusion and reflections[^hzbuse].
 
@@ -285,29 +341,34 @@ Warning: Time may be extreme in editor, but don't worry. It's usually a false al
 
 ### ParticleSimulation, ParticleInjection
 
-Responsible for:
+**Responsible for:**
+
 * Particle simulation on the GPU (only of __GPU Sprites__ particle type)
 
-Cost affected by:
-* Number of particles spawned by __GPU Sprites__ emitters
-* __Collision (Scene Depth)__ module
+**Cost affected by:**
+
+* {{ icon_number }} Number of particles spawned by __GPU Sprites__ emitters
+* {{ icon_settings }} __Collision (Scene Depth)__ module
 
 Description TODO.
 
 ### RenderVelocities
 
-Responsible for:
+**Responsible for:**
+
 * Saving velocity of each vertex (used later by motion blur and temporal anti-aliasing)
 
-Cost affected by:
-* Number of moving objects
-* Triangle count of moving objects
+**Cost affected by:**
+
+* {{ icon_number }} Number of moving objects
+* {{ icon_triangles }} Triangle count of moving objects
 
 Description TODO.
 
 ## PostProcessing
 
-Responsible for:
+**Responsible for:**
+
 * Depth of Field (__BokehDOFRecombine__)
 * Temporal anti-aliasing (__TemporalAA__)
 * Reading velocity values (__VelocityFlatten__)
@@ -316,10 +377,11 @@ Responsible for:
 * Tone mapping (__Tonemapper__)
 * Upscaling from rendering resolution to display's resolution (__PostProcessUpscale__)
 
-Cost affected by:
-* Rendering resolution
-* Number and quality of post processing features
-* Number and complexity of __blendables__ (post process materials)
+**Cost affected by:**
+
+* {{ icon_resolution }} Rendering resolution
+* {{ icon_settings }} Number and quality of post processing features
+* {{ icon_overdraw }} Number and complexity of __blendables__ (post process materials)
 
 Description TODO.
 
