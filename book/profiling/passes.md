@@ -4,13 +4,13 @@ excerpt: ""
 permalink: "/book/profiling/passes/"
 ---
 
-{% capture icon_settings %}<i class="fa fa-sliders fa-fw" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_resolution %}<i class="fa fa-television fa-fw" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_number %}<i class="fa fa-tags fa-fw" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_triangles %}<i class="fa fa-cube fa-fw" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_area %}<i class="fa fa-dot-circle-o fa-fw" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_overdraw %}<i class="fa fa-database fa-fw" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_complexity %}<i class="fa fa-gears fa-fw" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_settings %}<i class="fa fa-sliders fa-fw" style="color: #bb72d6" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_resolution %}<i class="fa fa-television fa-fw" style="color: #ab131c" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_number %}<i class="fa fa-tags fa-fw" style="color: #485cbe" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_triangles %}<i class="fa fa-cube fa-fw" style="color: #72b4e6" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_area %}<i class="fa fa-dot-circle-o fa-fw" style="color: #42ad82" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_overdraw %}<i class="fa fa-database fa-fw" style="color: #ddbd3b" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_complexity %}<i class="fa fa-gears fa-fw" style="color: #bb72d6" aria-hidden="true"></i>{% endcapture %}
 
 {% include toc icon="columns" title=page.title %}
 
@@ -104,8 +104,8 @@ Don't bother with reading the entire chapter at once. Skip straight to the pass 
 **Cost affected by:**
 
 * {{ icon_resolution }} Rendering resolution
-* {{ icon_number }} Number of objects
 * {{ icon_complexity }} Shader complexity
+* {{ icon_number }} Number of objects
 * {{ icon_number }} Number of decals
 * {{ icon_triangles }} Triangle count
 
