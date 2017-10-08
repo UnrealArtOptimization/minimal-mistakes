@@ -75,18 +75,9 @@ Another way is to prevent individual objects from being displayed in game. Selec
 
 Below begins an extensive description of almost all rendering passes that you can find in a profiler. Every position in the list is laid out in the following format:
 
-* Responsible for ...
-* Cost affected by ...
+* _Responsible for_ ...
+* _Cost affected by_ ...
 * Role of the pass, optimization advice
-
-Icons legend:
-
-* {{ icon_settings }} Settings
-* {{ icon_resolution }} Resolution
-* {{ icon_number }} Number of objects
-* {{ icon_triangles }} Triangles
-* {{ icon_area }} Area/pixels/radius
-* {{ icon_overdraw }} Overdraw
 
 Don't bother with reading the entire chapter at once. Skip straight to the pass you're interested in :)
 
