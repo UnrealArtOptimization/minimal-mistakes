@@ -23,7 +23,7 @@ In this chapter you'll learn about:
 
 ## Video
 
-If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=C3lumWdwHmA). Still, please be sure to verify the information by reading this chapter, as it contains some important errata.
+If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=C3lumWdwHmA). Still, please verify the information by reading this chapter, as it contains some important errata.
 
 {% capture tutorialvideo %}C3lumWdwHmA?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&amp;showinfo=1{% endcapture %}
 {% include video id=tutorialvideo provider="youtube" %}
@@ -71,7 +71,7 @@ There are several ways of doing this. You can hide a whole category of objects o
 
 Another way is to prevent individual objects from being displayed in game. Select one or multiple objects, then go to __Properties → Rendering__ and check __Actor Hidden in Game__. You can do it also when playing the game in editor. Press `[F8]` to __Eject__ from a running game, select objects in __Outliner__ instead of the viewport and change the setting. Then return to the game by pressing `F8` in the viewport again.
 
-# Guide to passes and performance categories
+# Guide to passes and categories
 
 Below begins an extensive description of almost all rendering passes that you can find in a profiler. Every position in the list is laid out in the following format:
 
@@ -81,7 +81,7 @@ Below begins an extensive description of almost all rendering passes that you ca
 
 Don't bother with reading the entire chapter at once. Skip straight to the pass you're interested in :)
 
-## Base pass
+# Base pass
 
 **Responsible for:**
 
@@ -102,11 +102,11 @@ Don't bother with reading the entire chapter at once. Skip straight to the pass 
 
 Description TODO.
 
-## Lighting
+# Lighting
 
 Lighting can often be the heaviest part of the frame. This is especially likely if your project relies on dynamic, shadowed light sources.
 
-### LightCompositionTasks_PreLighting
+## LightCompositionTasks_PreLighting
 
 **Responsible for:**
 
@@ -125,7 +125,7 @@ The cost of this pass is mostly affected by the rendering resolution. You can al
 
 The __LightCompositionTasks_PreLighting__ pass has also to work on decals. The greater the number of decals (of standard type, not DBuffer decals), the longer it takes to compute it.
 
-### CompositionAfterLighting
+## CompositionAfterLighting
 
 Note: In `stat gpu` it's called __CompositionPostLighting__.
 {: .notice--info}
@@ -143,7 +143,7 @@ There are two types of subsurface scattering in Unreal's materials. The older on
 
 To reduce the cost, you have to limit the amount of objects using the new SSS and keep their total screen-space area in check. You can also use the fake method or disable SSS in lower levels of detail (LOD).
 
-### ComputeLightGrid
+## ComputeLightGrid
 
 **Responsible for:**
 
@@ -156,7 +156,7 @@ To reduce the cost, you have to limit the amount of objects using the new SSS an
 
 According to the comment in Unreal's source code[^lightgrid], this pass "culls local lights to a grid in frustum space". In other words: it assigns lights to cells in a grid (shaped like a pyramid along camera view). This operation has a cost of its own but it pays off later, making it faster to determine which lights affect which meshes[^clustered].
 
-### Lights → NonShadowedLights
+## Lights → NonShadowedLights
 
 **Responsible for:**
 
@@ -174,13 +174,13 @@ This approach reduces the performance hit of having multiple overlapping light s
 
 To control the cost of non-shadowed lights, use each light's __Attenuation Distance__ and keep their total number in check. The time it takes to calculate all lighting can be simply derived from the number of pixels affected by each light. Occluded areas (as well as off-screen) do not count, as they're not visible to the camera. When lights' radii overlap, some pixels will be processed more than once. It's called __overdraw__ and can be visualized in the viewport with __Optimization Viewmodes → Light Complexity__.
 
-Spot lights are usually the cheapest type to render, because their screen-space area comes from a cone, not a full sphere. Point lights are often unecessarily used by artists in interiors, where a spot light would be enough. Still, what matters the most is the radius. Deferred rendering is great at dealing with a multitude of small lights. Some artists even attach light sources to particles like sparks when the overall performance allows for that.
+Spot lights are usually the cheapest type to render, because their screen-space area comes from a cone, not a full sphere. Point lights are often unecessarily used by artists in interiors, where a spot light would be enough. Still, what matters the most is the radius. Deferred rendering is great at dealing with a multitude of small lights. Some artists even attach light sources to particles like sparks, if the overall performance allows for that.
 
-Static lights don't count to the overdraw, because they're stored as baked (aka _precomputed_) lightmaps. They are not considered being "lights" anymore. This pass renders movable and stationary lights only. Sources that can cast dynamic shadows have their own pass, __ShadowedLights__.
+Static lights don't count to the overdraw, because they're stored as precomputed (aka _baked_) lightmaps. They are not considered being "lights" anymore. This pass renders movable and stationary lights only. Sources that can cast dynamic shadows have their own pass, __ShadowedLights__.
 
-## Shadows
+# Shadows
 
-### Lights → ShadowedLights
+## Lights → ShadowedLights
 
 **Responsible for:**
 
@@ -195,7 +195,7 @@ Static lights don't count to the overdraw, because they're stored as baked (aka 
 
 Description TODO.
 
-### ShadowDepths
+## ShadowDepths
 
 **Responsible for:**
 
@@ -211,7 +211,7 @@ It's like rendering scene's depth from the light's point of view.
 
 To control the resolution of shadows, which directly affects the cost, use `sg.ShadowQuality x`, where `x` is a number between 0 and 4.
 
-### ShadowProjection
+## ShadowProjection
 
 **Responsible for:**
 
@@ -225,12 +225,12 @@ To control the resolution of shadows, which directly affects the cost, use `sg.S
 
 In GPU Visualizer it's shown per light, in __Light__ category. In `stat gpu` it's a separate total number.
 
-## Translucency and its lighting
+# Translucency and its lighting
 
 Note: In  `stat gpu` there are only two categories: __Translucency__ and __Translucent Lighting__. In GPU Visualizer (and in text logs) the work on translucency is split into more fine-grained statistics.
 {: .notice--info}
 
-### Translucency
+## Translucency
 
 **Responsible for:**
 
@@ -246,7 +246,7 @@ Note: In  `stat gpu` there are only two categories: __Translucency__ and __Trans
 
 Description TODO.
 
-### Translucent Lighting
+## Translucent Lighting
 
 **Responsible for:**
 
@@ -267,7 +267,7 @@ In GPU Visualizer, the statistic is split into __ClearTranslucentVolumeLighting_
 
 You can also exclude individual lights from being rendered into the volume. It's done by disabling __Affect Translucent Lighting__ setting in light's properties. The actual cost of a single light can be found in GPU Visualizer's __Light__ pass, in every light's drop-down list, under names like __InjectNonShadowedTranslucentLighting__.
 
-### Fog, ExponentialHeightFog
+## Fog, ExponentialHeightFog
 
 **Responsible for:**
 
@@ -279,9 +279,9 @@ You can also exclude individual lights from being rendered into the volume. It's
 
 Description TODO.
 
-## Reflections
+# Reflections
 
-### ReflectionEnvironment
+## ReflectionEnvironment
 
 **Responsible for:**
 
@@ -294,7 +294,7 @@ Description TODO.
 
 Description TODO.
 
-### ScreenSpaceReflections
+## ScreenSpaceReflections
 
 **Responsible for:**
 
@@ -310,9 +310,9 @@ The general quality setting is `r.SSR.Quality n`, where `n` is a number between 
 
 Their use can be limited to surfaces having roughness below certain threshold. This helps with performance, because big roughness causes the rays to spread over wider angle, increasing the cost. To set the threshold, use `r.SSR.MaxRoughness x`, with `x` being a float number between 0.0 and 1.0.
 
-## Geometry
+# Geometry
 
-### PrePass DDM_...
+## PrePass DDM_...
 
 **Responsible for:**
 
@@ -327,7 +327,7 @@ Its results are required by DBuffer decals. They may also be used by occlusion c
 
 __Engine → Rendering → Optimizations → Early Z-pass__
 
-### HZB (Setup Mips)
+## HZB (Setup Mips)
 
 **Responsible for:**
 
@@ -342,7 +342,7 @@ The HZB is used by an occlusion culling method[^hzbocclusion] and by screen-spac
 Warning: Time may be extreme in editor, but don't worry. It's usually a false alarm, due to an bug in Unreal. Just check the value in an actual build. The bug is hopefully fixed since UE 4.18[^hzbbug].
 {: .notice--warning}
 
-### ParticleSimulation, ParticleInjection
+## ParticleSimulation, ParticleInjection
 
 **Responsible for:**
 
@@ -355,7 +355,7 @@ Warning: Time may be extreme in editor, but don't worry. It's usually a false al
 
 Description TODO.
 
-### RenderVelocities
+## RenderVelocities
 
 **Responsible for:**
 
@@ -368,7 +368,7 @@ Description TODO.
 
 Description TODO.
 
-## PostProcessing
+# PostProcessing
 
 **Responsible for:**
 
@@ -388,7 +388,7 @@ Description TODO.
 
 Description TODO.
 
-## Footnotes
+# Footnotes
 
 [^clustered]: [Slides from "Practical Clustered Shading", p. 34, Ola Olsson, Emil Persson, efficientshading.com](http://efficientshading.com/2013/08/01/practical-clustered-deferred-and-forward-shading/)
 [^hzbuse]: ["Screen Space Reflections in Killing Floor 2", Sakib Saikia, sakibsaikia.github.io](https://sakibsaikia.github.io/graphics/2016/12/25/Screen-Space-Reflection-in-Killing-Floor-2.html)
