@@ -4,6 +4,7 @@
 
 @charset "utf-8";
 
+<<<<<<< HEAD
 $sans-serif : -apple-system, "Nunito Sans", ".SFNSText-Regular", "San Francisco", "Droid Sans", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 $monospace  : Consolas, Monaco, "Lucida Console", monospace;
 
@@ -53,3 +54,7 @@ html {
     top: 100px;
   }
 }*/
+=======
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+>>>>>>> d464128e65cc4a4c1fb4967d5790872d9e085533
