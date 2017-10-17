@@ -43,9 +43,9 @@ To intuitively understand what can affect the cost of a pass, it's useful to loo
 
 A huge complexity of fragment (pixel) shaders used by a pass, combined with a big number of pixels to process, makes the cost of the pass pixel-bound. The total polygon count of meshes it works on decides if the pass is geometry-bound. There's also a dependency on memory amount and bandwith.
 
-The base pass is an example of a pass affected by all three factors. It takes visible 3D models (geometry) and renders them with full materials (pixel count), including textures (memory). Then it writes the final information into a resolution-dependent GBuffer (so it's memory bandwith again).
+The base pass is an example of a pass affected by all three factors. It takes visible 3D models (geometry) and renders them with full materials (pixel count), including textures (memory). Then it writes the final information into a resolution-dependent G-Buffer (so it's memory bandwith again).
 
-If some passes take in just the GBuffer, but not any 3D meshes - like post process effects do - then obviously they will be only pixel-bound. An increase in game's rendering resolution will directly affect their cost. On the other hand, it means that the changes in the amount of 3D meshes mean nothing to post process passes. For example, Unreal's ambient occlusion is a post process operation. It uses the hierarhical Z-buffer and some content from the GBuffer, for example normals. By understanding what this pass requires, we know where to look for optimization opportunities -- in AO's settings and resolution adjustments, not in the scene's content.
+If some passes take in just the G-Buffer, but not any 3D meshes - like post process effects do - then obviously they will be only pixel-bound. An increase in game's rendering resolution will directly affect their cost. On the other hand, it means that the changes in the amount of 3D meshes mean nothing to post process passes. For example, Unreal's ambient occlusion is a post process operation. It uses the hierarhical Z-buffer and some content from the G-Buffer, for example normals. By understanding what this pass requires, we know where to look for optimization opportunities -- in AO's settings and resolution adjustments, not in the scene's content.
 
 ## Using information from this chapter
 
@@ -85,8 +85,8 @@ Don't bother with reading the entire chapter at once. Skip straight to the pass 
 
 **Responsible for:**
 
-* Rendering final attributes of __Opaque__ or __Masked__ materials to the GBuffer
-* Reading static lighting and saving it to the GBuffer
+* Rendering final attributes of __Opaque__ or __Masked__ materials to the G-Buffer
+* Reading static lighting and saving it to the G-Buffer
 * Applying DBuffer decals
 * Applying fog
 * Calculating final velocity (from packed 3D velocity)
@@ -119,9 +119,9 @@ Lighting can often be the heaviest part of the frame. This is especially likely 
 * {{ icon_settings }} Ambient occlusion radius and fade out distance
 * {{ icon_number }} Number of decals (excluding DBuffer decals)
 
-You may think that ambient occlusion is a post process operation. Yes, it is -- but it's not listed in the __PostProcessing__ category. Instead, you can find it in __LightCompositionTasks__. The full names of its sub-passes in the profiler -- something similar to `AmbientOcclusionPS (2880x1620)` -- reveal additional information, for example the resolution ambient occlusion was rendered in. There's also the half-resolution (`1440x810`), which is how ambient occlusion is usually done for performance reasons.
+Ambient occlusion is a post process operation (with optional static, precomputed part). It takes the information about the scene from the G-Buffer and the hierarchical Z-Buffer. Thanks to that, it can perform all calculations in screen space, avoiding the need for querying any 3D geometry. However, it's not listed in the __PostProcessing__ category. Instead, you can find it in __LightCompositionTasks__. The full names of its sub-passes in the profiler -- something similar to `AmbientOcclusionPS (2880x1620) Upsample=1` -- reveal additional information. The half-resolution (`1440x810 Upsample=0`) is used for doing all the math, for performance reasons. Then the result is simply upscaled to the full resolution.
 
-The cost of this pass is mostly affected by rendering resolution. You can also control ambient occlusion radius and fade out distance. The radius can be overriden by using a __Postprocess Volume__ and changing its settings. Ambient occlusion's intensity doesn't have any influence on performance, but the radius does. And in the volume's __Advanced__ drop-down category you can also set __Fade Out Distance__, changing its maximum range from the camera. Keeping it short matters for performance of __LightCompositionTasks__.
+The cost of this pass is mostly affected by the rendering resolution. You can also control ambient occlusion radius and fade out distance. The radius can be overriden by using a __Postprocess Volume__ and changing its settings. Ambient occlusion's intensity doesn't have any influence on performance, but the radius does. And in the volume's __Advanced__ drop-down category you can also set __Fade Out Distance__, changing its maximum range from the camera. Keeping it short matters for performance of __LightCompositionTasks__.
 
 The __LightCompositionTasks_PreLighting__ pass has also to work on decals. The greater the number of decals (of standard type, not DBuffer decals), the longer it takes to compute it.
 
@@ -138,6 +138,10 @@ Note: In `stat gpu` it's called __CompositionPostLighting__.
 
 * {{ icon_resolution }} Rendering resolution
 * {{ icon_area }}Screen area covered by materials with SSS
+
+There are two types of subsurface scattering in Unreal's materials. The older one is a very simple trick of softening the diffuse part of lighting. The newer one, called __Subsurface Profile__, is much more sophisticated. The time shown in __CompositionAfterLighting__ refers to the latter. This kind of SSS accounts for the thickness of objects using a separate buffer. It comes with a cost of approximating the thickness of geometry in real-time, then of using the buffer in shaders.
+
+To reduce the cost, you have to limit the amount of objects using the new SSS and keep their total screen-space area in check. You can also use the fake method or disable SSS in lower levels of detail (LOD).
 
 ### ComputeLightGrid
 
@@ -164,7 +168,15 @@ According to the comment in Unreal's source code[^lightgrid], this pass "culls l
 * {{ icon_number }} Number of movable and stationary lights
 * {{ icon_area }} Radius of lights
 
-Description TODO.
+Deferred shading is the default method of rendering lights and materials in Unreal (the other being forward rendering). "Deferred" means that the work is moved to a separate pass, instead of being done in every object's shaders. This kind of lighting waits for the base pass to accumulate the information about opaque objects and their materials into a G-Buffer. Then it resolves the lighting in screen space, in a single pass.
+
+This approach reduces the performance hit of having multiple overlapping light sources, which is typical to forward rendering (though things are better in the "clustered" method, used for UE4's forward renderer). However, this doesn't mean that lights are free in deferred. Their contribution is just easier to predict and doesn't depend on the number of objects in the scene. The cost of a single light is directly dependent on the area the light covers in screen space.
+
+To control the cost of non-shadowed lights, use each light's __Attenuation Distance__ and keep their total number in check. The time it takes to calculate all lighting can be simply derived from the number of pixels affected by each light. Occluded areas (as well as off-screen) do not count, as they're not visible to the camera. When lights' radii overlap, some pixels will be processed more than once. It's called __overdraw__ and can be visualized in the viewport with __Optimization Viewmodes → Light Complexity__.
+
+Spot lights are usually the cheapest type to render, because their screen-space area comes from a cone, not a full sphere. Point lights are often unecessarily used by artists in interiors, where a spot light would be enough. Still, what matters the most is the radius. Deferred rendering is great at dealing with a multitude of small lights. Some artists even attach light sources to particles like sparks when the overall performance allows for that.
+
+Static lights don't count to the overdraw, because they're stored as baked (aka _precomputed_) lightmaps. They are not considered being "lights" anymore. This pass renders movable and stationary lights only. Sources that can cast dynamic shadows have their own pass, __ShadowedLights__.
 
 ## Shadows
 
