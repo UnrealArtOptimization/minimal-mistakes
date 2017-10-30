@@ -275,9 +275,6 @@ Unlike __ShadowDepths__, __ShadowProjection__'s performance is also dependent on
 
 # Translucency and its lighting
 
-Note: In  `stat gpu` there are only two categories: __Translucency__ and __Translucent Lighting__. In GPU Visualizer (and in text logs) the work on translucency is split into more fine-grained statistics.
-{: .notice--info}
-
 ## Translucency
 
 **Responsible for:**
@@ -291,6 +288,9 @@ Note: In  `stat gpu` there are only two categories: __Translucency__ and __Trans
 * {{ icon_area }} Total pixel area of translucent polygons
 * {{ icon_overdraw }} Overdraw
 * If __Surface ForwardShading__ enabled in material: Number and radius of lights
+
+Note: In  `stat gpu` there are only two categories: __Translucency__ and __Translucent Lighting__. In GPU Visualizer (and in text logs) the work on translucency is split into more fine-grained statistics.
+{: .notice--info}
 
 Description TODO. This is basically [the base pass](#base-pass) for translucent materials. Most of the advice applies here as well.
 
