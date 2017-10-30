@@ -43,7 +43,7 @@ To intuitively understand what can affect the cost of a pass, it's useful to loo
 
 A huge complexity of fragment (pixel) shaders used by a pass, combined with a big number of pixels to process, makes the cost of the pass pixel-bound. The total polygon count of meshes it works on decides if the pass is geometry-bound. There's also a dependency on memory amount and bandwith.
 
-The base pass is an example of a pass affected by all three factors. It takes visible 3D models (geometry) and renders them with full materials (pixel count), including textures (memory). Then it writes the final information into a resolution-dependent G-Buffer (so it's memory bandwith again).
+The __base pass__ is an example of a pass affected by all three factors. It takes visible 3D models (geometry) and renders them with full materials (pixel count), including textures (memory). Then it writes the final information into a resolution-dependent G-Buffer (so it's memory bandwith again).
 
 If some passes take in just the G-Buffer, but not any 3D meshes - like post process effects do - then obviously they will be only pixel-bound. An increase in game's rendering resolution will directly affect their cost. On the other hand, it means that the changes in the amount of 3D meshes mean nothing to post process passes. For example, Unreal's ambient occlusion is a post process operation. It uses the hierarhical Z-buffer and some content from the G-Buffer, for example normals. By understanding what this pass requires, we know where to look for optimization opportunities -- in AO's settings and resolution adjustments, not in the scene's content.
 
@@ -77,9 +77,12 @@ Below begins an extensive description of almost all rendering passes that you ca
 
 * _Responsible for_ ...
 * _Cost affected by_ ...
-* Role of the pass, optimization advice
+* Role of the pass
+* Optimization advice
 
-Don't bother with reading the entire chapter at once. Skip straight to the pass you're interested in :)
+Some passes are much more important or customizable than others. Many of them react to changes in the scene, while others -- most notably post processes -- stay dependent on the resolution only. That's why the amount of information dedicated to each category varies greatly.
+
+Don't feel forced to read the entire chapter at once. Jump straight to the pass you're interested in :)
 
 # Base pass
 
@@ -100,13 +103,13 @@ Don't bother with reading the entire chapter at once. Skip straight to the pass 
 * {{ icon_number }} Number of decals
 * {{ icon_triangles }} Triangle count
 
-The base pass is one of the most important ones. It takes your shaders -- the part that you created in the material editor -- then runs their code. In deferred rendering (the default mode), it also saves the resulting values: final roughness, base color, metalness and so on into the GBuffer ("geometry buffer"). It actually is a container for multiple full-screen images, though [channel packing](#) helps to reduce the number. This data is used later by various passes, most notably by screen-space techniques: [deferred lighting](#lights--nonshadowedlights), dynamic reflections and ambient occlusion.
+The base pass is one of the most important ones. It takes your shaders -- the part that you created in the material editor -- then runs their code. In deferred rendering (the default mode), it also saves the resulting values: final roughness, base color, metalness and so on into the G-Buffer ("geometry buffer"). It actually is a container for multiple full-screen images, though [channel packing](#) helps to reduce the number. This data is used later by various passes, most notably by screen-space techniques: [deferred lighting](#lights--nonshadowedlights), dynamic reflections and ambient occlusion.
 
-But that's just a part of this pass' responsibilities. It reads static lighting -- from lightmaps, indirect lighting caches -- and adds them into the GBuffer too (blending it immediately with the base color).
+But that's just a part of this pass' responsibilities. It reads static lighting -- from lightmaps, indirect lighting caches -- and adds them into the G-Buffer too (blending it immediately with the base color).
 
-The base pass also applies DBuffer decals. The decals in view are projected onto objects, their shaders are run and the results blended with the contents of the GBuffer. Fog is also mixed in during this pass.
+The base pass also applies DBuffer decals. The decals in view are projected onto objects, their shaders are run and the results blended with the contents of the G-Buffer. Fog is also mixed in during this pass.
 
-When using a forward renderer, the work on all dynamic lighting is also done here (instead of a separate __Lights__ pass). That's because the lighting is no longer _deferred_ until later. It's done on a shader level of every object, immediately after the material's atributes are calculated. This approach gets rid of the GBuffer, saving memory and making several thing easier (especially anti-aliasing). Don't be suprised, though, that the cost of the base pass is significantly higher with forward.
+When using a forward renderer, the work on all dynamic lighting is also done here (instead of a separate __Lights__ pass). That's because the lighting is no longer _deferred_ until later. It's done on a shader level of every object, immediately after the material's atributes are calculated. This approach gets rid of the G-Buffer, saving memory and making several thing easier (especially anti-aliasing). Don't be suprised, though, that the cost of the base pass is significantly higher with forward.
 
 **Optimization**
 
@@ -114,11 +117,11 @@ Shader complexity is obviously the most important factor here. You can check it 
 
 Watch out for memory bandwith. Textures used by materials, as well as lightmaps, need to be read every frame. Even if you re-use textures a lot (which is a good thing), it only helps to save on the GPU memory and on reading from the CPU RAM. The data still needs to be transferred to the local cache and then to shader cores. A dedicated chapter explains the [memory-related costs]({{ site.baseurl }}{% link book/pipelines/memory.md %}).
 
-Increasing rendering resolution directly affects the weight of the GBuffer and other full-screen textures. The size of the GBuffer can be read with the command `stat RHI`. Scale the rendering resolution by typing e.g. `r.ScreenPercentage 20` or `r.ScreenPercentage 150`. This will allow you to see how much additional VRAM is needed for a given resolution.
+Increasing rendering resolution directly affects the weight of the G-Buffer and other full-screen textures. The memory size of the G-Buffer can be read with the command `stat RHI`. You can temporarily scale the rendering resolution with `r.ScreenPercentage XX`, e.g. `20` or `150`. This will allow you to see how much additional VRAM is needed for a given resolution.
 
 Decals are an oft-overlooked source of trouble. This pass can take a serious hit when there are too many decals in view. Keep their material complexity low as well, though this is rarely an issue with decals.
 
-The costs (and optimization advice) which you'll normally see in **Lights** passes apply here instead when using forward rendering. In addition to the general rules, keep light overlap in check (aka overdraw). Forward renderers are genetically allergic to multiple lights hitting the same object.
+The costs (and optimization advice) which you'll normally see in **Lights** passes apply here instead when using forward rendering. In addition to the general rules, keep light overlap (aka overdraw) in check. Forward renderers are genetically allergic to multiple lights hitting the same object.
 
 # Lighting
 
@@ -139,9 +142,11 @@ Lighting can often be the heaviest part of the frame. This is especially likely 
 
 Ambient occlusion is a post process operation (with optional static, precomputed part). It takes the information about the scene from the G-Buffer and the hierarchical Z-Buffer. Thanks to that, it can perform all calculations in screen space, avoiding the need for querying any 3D geometry. However, it's not listed in the __PostProcessing__ category. Instead, you can find it in __LightCompositionTasks__. The full names of its sub-passes in the profiler -- something similar to `AmbientOcclusionPS (2880x1620) Upsample=1` -- reveal additional information. The half-resolution (`1440x810 Upsample=0`) is used for doing all the math, for performance reasons. Then the result is simply upscaled to the full resolution.
 
-The cost of this pass is mostly affected by the rendering resolution. You can also control ambient occlusion radius and fade out distance. The radius can be overriden by using a __Postprocess Volume__ and changing its settings. Ambient occlusion's intensity doesn't have any influence on performance, but the radius does. And in the volume's __Advanced__ drop-down category you can also set __Fade Out Distance__, changing its maximum range from the camera. Keeping it short matters for performance of __LightCompositionTasks__.
-
 The __LightCompositionTasks_PreLighting__ pass has also to work on decals. The greater the number of decals (of standard type, not DBuffer decals), the longer it takes to compute it.
+
+**Optimization**
+
+The cost of this pass is mostly affected by the rendering resolution. You can also control ambient occlusion radius and fade out distance. The radius can be overriden by using a __Postprocess Volume__ and changing its settings. Ambient occlusion's intensity doesn't have any influence on performance, but the radius does. And in the volume's __Advanced__ drop-down category you can also set __Fade Out Distance__, changing its maximum range from the camera. Keeping it short matters for performance of __LightCompositionTasks__.
 
 ## CompositionAfterLighting
 
@@ -158,6 +163,8 @@ Note: In `stat gpu` it's called __CompositionPostLighting__.
 * {{ icon_area }}Screen area covered by materials with SSS
 
 There are two types of subsurface scattering in Unreal's materials. The older one is a very simple trick of softening the diffuse part of lighting. The newer one, called __Subsurface Profile__, is much more sophisticated. The time shown in __CompositionAfterLighting__ refers to the latter. This kind of SSS accounts for the thickness of objects using a separate buffer. It comes with a cost of approximating the thickness of geometry in real-time, then of using the buffer in shaders.
+
+**Optimization**
 
 To reduce the cost, you have to limit the amount of objects using the new SSS and keep their total screen-space area in check. You can also use the fake method or disable SSS in lower levels of detail (LOD).
 
@@ -186,15 +193,19 @@ According to the comment in Unreal's source code[^lightgrid], this pass "culls l
 * {{ icon_number }} Number of movable and stationary lights
 * {{ icon_area }} Radius of lights
 
-Deferred shading is the default method of rendering lights and materials in Unreal (the other being forward rendering). "Deferred" means that the work is moved to a separate pass, instead of being done in every object's shaders. This kind of lighting waits for the base pass to accumulate the information about opaque objects and their materials into a G-Buffer. Then it resolves the lighting in screen space, in a single pass.
+Deferred shading is the default method of rendering lights and materials in Unreal (the other being forward rendering). _Deferred_ means that the work is moved to a separate pass, instead of being done in each object's shaders. This kind of lighting waits for the [base pass](#base-pass) to accumulate the information about opaque objects and their materials into a G-Buffer. Then it resolves the lighting in screen space, in a single pass.
 
-This approach reduces the performance hit of having multiple overlapping light sources, which is typical to forward rendering (though things are better in the "clustered" method, used for UE4's forward renderer). However, this doesn't mean that lights are free in deferred. Their contribution is just easier to predict and doesn't depend on the number of objects in the scene. The cost of a single light is directly dependent on the area the light covers in screen space.
-
-To control the cost of non-shadowed lights, use each light's __Attenuation Distance__ and keep their total number in check. The time it takes to calculate all lighting can be simply derived from the number of pixels affected by each light. Occluded areas (as well as off-screen) do not count, as they're not visible to the camera. When lights' radii overlap, some pixels will be processed more than once. It's called __overdraw__ and can be visualized in the viewport with __Optimization Viewmodes → Light Complexity__.
+This approach reduces the performance hit of having multiple overlapping light sources, which is a typical issue in forward rendering (though things are better in the "clustered" method, used for UE4's forward renderer). However, this doesn't mean that lights are free in deferred. Their contribution is just easier to predict and doesn't depend on the number of objects in the scene. The cost of a single light is directly dependent on the area the light covers in screen space.
 
 Spot lights are usually the cheapest type to render, because their screen-space area comes from a cone, not a full sphere. Point lights are often unecessarily used by artists in interiors, where a spot light would be enough. Still, what matters the most is the radius. Deferred rendering is great at dealing with a multitude of small lights. Some artists even attach light sources to particles like sparks, if the overall performance allows for that.
 
-Static lights don't count to the overdraw, because they're stored as precomputed (aka _baked_) lightmaps. They are not considered being "lights" anymore. This pass renders movable and stationary lights only. Sources that can cast dynamic shadows have their own pass, __ShadowedLights__.
+This pass deals with movable and stationary lights only. Sources that can cast dynamic shadows have their own pass, __ShadowedLights__.
+
+**Optimization**
+
+To control the cost of non-shadowed lights, use each light's __Attenuation Distance__ and keep their total number in check. The time it takes to calculate all lighting can be simply derived from the number of pixels affected by each light. Occluded areas (as well as off-screen) do not count, as they're not visible to the camera. When lights' radii overlap, some pixels will be processed more than once. It's called __overdraw__ and can be visualized in the viewport with __Optimization Viewmodes → Light Complexity__.
+
+Static lights don't count to the overdraw, because they're stored as precomputed (aka _baked_) lightmaps. They are not considered being "lights" anymore. If you're using baked lighting in your project (and most probably you do), set the mobility of all lights to __Static__, except for some most important ones.
 
 # Shadows
 
@@ -225,9 +236,21 @@ Description TODO.
 * {{ icon_triangles }} Number and triangle count of movable shadow-casting meshes
 * {{ icon_settings }} Shadow quality settings
 
-It's like rendering scene's depth from the light's point of view.
+The __ShadowDepths__ pass generates depth information for shadow-casting lights. It's like rendering the scene's depth from each light's point of view. The result is a texture, aka _depth map_.[^shadowtheory]
 
-To control the resolution of shadows, which directly affects the cost, use `sg.ShadowQuality x`, where `x` is a number between 0 and 4.
+Then the engine calculates the distance of each pixel to the light source from the camera point of view -- but still in light's coordinate space. By comparing this value with the depth map, during the __ShadowProjection__ pass, it can test whether a pixel is lit by the given light or is in shadow.
+
+The cost of it is mostly affected by the number and the range of shadow-casting lights. What also matters is the number and triangle count of movable shadow-casting objects. Depending on the combination, you can have static meshes and static lights -- then the cost is zero, because static lights [are just textures](#lights--nonshadowedlights): they're precomputed. But you can also have, for example, stationary or movable lights and static or movable objects in their range. Both of these combinations require the engine to generate shadows from such meshes, separately for each light.
+
+**Optimization**
+
+Shadows are usually one of the most heavy parts of rendering, if care is not taken. The easiest way to control their performance hit is to disable shadows for every light source that doesn't need them. Very often you'll find that you can get away with the lack of shadows, without the player noticing it, especially for sources that stay far away from the area of player's movement. It can be also a good workaround to enable shadow-casting just for a single lamp in a bigger group of lights.
+
+For shadowed lights, the biggest factor is the amount of polygons that will have to be rendered into a depth map. Light source's __Attenuation Radius__ sets the hard limit for the drawing range. Shadowed spot lights are typically less heavy than point lights, because their volume is a cone, not a full sphere. Their additional setting is __Outer Cone Angle__ -- the smaller, the better for rendering speed, because probably less object will fall into this lamp's volume.
+
+Directional light features a multi-resolution method of rendering shadows, called _cascaded shadow maps_. It's needed because of the huge area a directional light (usually the sun) has to cover. Epic's wiki provides [tips for using CSMs](https://wiki.unrealengine.com/LightingTroubleshootingGuide#Directional_Light_ONLY:_Cascaded_Shadow_Maps_Settings:). The most significant gains come from __Dynamic Shadow Distance__ parameter. The quality in close distance to the camera can be adujsted with __Cascade Distribution Exponent__, at the expense of farther planes.
+
+To control the resolution of shadows, use `sg.ShadowQuality X` in the INI files, where `X` is a number between 0 and 4. High resolution shadows can reduce visible jagging (aliasing), at the cost of rendering, storing and reading back bigger depth maps.
 
 ## ShadowProjection
 
@@ -241,7 +264,14 @@ To control the resolution of shadows, which directly affects the cost, use `sg.S
 * {{ icon_area }} Number and range of shadow-casting lights (movable and stationary)
 * {{ icon_settings }} Translucency lighting volume resolution
 
-In GPU Visualizer it's shown per light, in __Light__ category. In `stat gpu` it's a separate total number.
+Note: In GPU Visualizer it's shown per light, in __Light__ category. In `stat gpu` it's a separate total number.
+{: .notice--info}
+
+Shadow projection is the final rendering of shadows. This process reads the [depth map](#shadowdepths) and compares it with the scene, to detect which areas lie in shadow.
+
+**Optimization**
+
+Unlike __ShadowDepths__, __ShadowProjection__'s performance is also dependent on the final rendering resolution of the game. All the advice from other shadow passes applies here as well.
 
 # Translucency and its lighting
 
@@ -252,8 +282,8 @@ Note: In  `stat gpu` there are only two categories: __Translucency__ and __Trans
 
 **Responsible for:**
 
-* Rendering materials (like the base pass for translucency)
-* Lighting of translucent materials that use __Surface ForwardShading__.
+* Rendering translucent materials
+* Lighting of materials that use __Surface ForwardShading__.
 
 **Cost affected by:**
 
@@ -262,7 +292,7 @@ Note: In  `stat gpu` there are only two categories: __Translucency__ and __Trans
 * {{ icon_overdraw }} Overdraw
 * If __Surface ForwardShading__ enabled in material: Number and radius of lights
 
-Description TODO.
+Description TODO. This is basically [the base pass](#base-pass) for translucent materials. Most of the advice applies here as well.
 
 ## Translucent Lighting
 
@@ -303,14 +333,18 @@ Description TODO.
 
 **Responsible for:**
 
-* Reading and blending reflection capture actor's results into a full-screen reflection buffer
+* Reading and blending reflection capture actors' results into a full-screen reflection buffer
 
 **Cost affected by:**
 
 * {{ icon_area }} Number and radius of reflection capture actors
 * {{ icon_resolution }} Rendering resolution
 
-Description TODO.
+Description TODO. Reads reflection maps from __Sphere and Box Reflection Capture__ actors and blends them into a full-screen reflection buffer.
+
+All reflection capture probes are 128x128 pixel images. You can change this dimension in __Project Settings__. They are stored as a single big array of textures. That's the reason you can have only 341 such probes loaded in the world at once[^reflectiondocs].
+{: .notice--info}
+
 
 ## ScreenSpaceReflections
 
@@ -323,6 +357,10 @@ Description TODO.
 
 * {{ icon_resolution }} Rendering resolution
 * {{ icon_settings }} Quality settings
+
+Description TODO.
+
+**Optimization**
 
 The general quality setting is `r.SSR.Quality n`, where `n` is a number between 0 and 4.
 
@@ -341,7 +379,7 @@ Their use can be limited to surfaces having roughness below certain threshold. T
 * {{ icon_triangles }} Triangle count of meshes with __Opaque__ materials
 * {{ icon_overdraw }} Depending on __Early Z__ setting: Triangle count and complexity of __Masked__ materials
 
-Its results are required by DBuffer decals. They may also be used by occlusion culling.
+Description TODO. Its results are required by DBuffer decals. The pre-pass may also be used by occlusion culling.
 
 __Engine → Rendering → Optimizations → Early Z-pass__
 
@@ -404,7 +442,7 @@ Description TODO.
 * {{ icon_settings }} Number and quality of post processing features
 * {{ icon_overdraw }} Number and complexity of __blendables__ (post process materials)
 
-Description TODO.
+Description TODO. The final pass in the rendering pipeline.
 
 # Footnotes
 
@@ -416,3 +454,5 @@ Description TODO.
 [^shadowproj]: [Unreal Engine source code, ShadowRendering.cpp, line 1440](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/ShadowRendering.cpp#L1440)
 [^fog]: [Unreal Engine source code, FogRendering.cpp, line 431](https://github.com/EpicGames/UnrealEngine/blob/1d2c1e48bf49836a4fee1465be87ab3f27d5ae3a/Engine/Source/Runtime/Renderer/Private/FogRendering.cpp#L431)
 [^hzbbug]: [Bug UE-3448HZB, "Setup Mips taking considerable time in GPU Visualizer", issues.unrealengine.com](https://issues.unrealengine.com/issue/UE-33448)
+[^reflectiondocs]: ["Limitations", in "Reflection Environment", Unreal Engine documentation, docs.unrealengine.com](https://docs.unrealengine.com/latest/INT/Engine/Rendering/LightingAndShadows/ReflectionEnvironment/index.html#limitations)
+[^shadowtheory]: ["Tutorial 16 : Shadow mapping", OpenGL-Tutorial, http://www.opengl-tutorial.org](http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/)
