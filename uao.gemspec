@@ -1,13 +1,13 @@
 # coding: utf-8
 
 Gem::Specification.new do |spec|
-  spec.name                    = "minimal-mistakes-jekyll"
-  spec.version                 = "4.6.0"
-  spec.authors                 = ["Michael Rose"]
+  spec.name                    = "unreal-art-optimization"
+  spec.version                 = "0.1.0"
+  spec.authors                 = ["Oskar Swierad"]
 
-  spec.summary                 = %q{A flexible two-column Jekyll theme.}
-  spec.homepage                = "https://github.com/mmistakes/minimal-mistakes"
-  spec.license                 = "MIT"
+  spec.summary                 = %q{A guide to measuring and optimizing graphics performance in Unreal Engine.}
+  spec.homepage                = "https://unrealartoptimization.github.io/"
+  spec.license                 = "CC-BY-SA 4.0"
 
   spec.metadata["plugin_type"] = "theme"
 

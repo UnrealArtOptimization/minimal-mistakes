@@ -292,7 +292,7 @@ Unlike __ShadowDepths__, __ShadowProjection__'s performance is also dependent on
 Note: In  `stat gpu` there are only two categories: __Translucency__ and __Translucent Lighting__. In GPU Visualizer (and in text logs) the work on translucency is split into more fine-grained statistics.
 {: .notice--info}
 
-Description TODO. This is basically [the base pass](#base-pass) for translucent materials. Most of the advice applies here as well.
+Description TODO. This is basically [the base pass](#base-pass) for translucent materials. Most of the advice regaring the base pass applies here as well.
 
 ## Translucent Lighting
 
