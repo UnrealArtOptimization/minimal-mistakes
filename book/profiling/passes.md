@@ -409,7 +409,11 @@ Warning: Time may be extreme in editor, but don't worry. It's usually a false al
 * {{ icon_number }} Number of particles spawned by __GPU Sprites__ emitters
 * {{ icon_settings }} __Collision (Scene Depth)__ module
 
-Description TODO.
+If you enabled __GPU Sprites__ in a particle emitter, then their physics simulation is done here. The cost depends on the number of particles spawned by such emitters. Enabling the __Collision__ module increases the complexity of the simulation. The collision of GPU sprites with the rest of the scene is tested against screen-space data (for example the Z-depth). This makes it faster than the traditional, CPU-based collision of particles against actual 3D meshes. Still, it's not entirely free -- and the cost is moved to the GPU.
+
+**Optimization**
+
+The bigger the number of particles that have to be simulated (especially collide), the bigger the cost. Remember that you can use particle level of detail (__LOD__) to limit the number of particles being spawned. You may get away with much smaller numbers if the emitter is viewed from far distance.
 
 ## RenderVelocities
 
@@ -422,7 +426,7 @@ Description TODO.
 * {{ icon_number }} Number of moving objects
 * {{ icon_triangles }} Triangle count of moving objects
 
-Description TODO.
+Description TODO. Takes the velocity of every moving vertex and saves it into the motion blur velocity buffer.
 
 # PostProcessing
 
