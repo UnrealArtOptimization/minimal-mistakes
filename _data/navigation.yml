@@ -38,7 +38,15 @@ book:
         url: /book/profiling/gpu-visualizer/
       - title: "Unreal's rendering passes"
         url: /book/profiling/passes/
-      - title: "External profilers"
+      - title: "Base pass"
+        url: /book/profiling/passes-base/
+      - title: "Geometry passes"
+        url: /book/profiling/passes-geometry/
+      - title: "Lighting passes"
+        url: /book/profiling/passes-lighting/
+      - title: "Post process pass"
+        url: /book/profiling/passes-postprocess/
+      - title: "External profiling tools"
         url: /book/profiling/external/
   - title: "Resources"
     children:
