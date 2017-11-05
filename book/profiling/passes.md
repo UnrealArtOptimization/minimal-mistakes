@@ -21,7 +21,7 @@ In this chapter you'll learn about:
 * What affects their cost (as seen in [GPU Visualizer]({{ site.baseurl }}{% link book/profiling/gpu-visualizer.md %}) or `stat gpu`)
 * What are the opportunities for optimization
 
-## Video
+# Video
 
 If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=C3lumWdwHmA). Still, please verify the information by reading this chapter, as it contains some important errata.
 
@@ -31,13 +31,13 @@ If you prefer a video version of this lesson, you can [watch it on YouTube](http
 _Note:_ Every chapter of this book is extended compared with the original video. It's also regularly updated, while videos stay unchanged since their upload.
 {: .notice--info}
 
-## What is a rendering pass
+# What is a rendering pass
 
 Let's begin with explaining what do we call a _pass_ in the rendering pipeline. A pass is a set of draw calls (be sure to read [what they are]({{ site.baseurl }}{% link book/profiling/index.md %})) executed on the GPU. They are grouped together by the function they have in the pipeline, like rendering transparent meshes or doing post processing. This organization is done for convenience and to ensure proper order of execution - as some passes may need the output of a particular previous pass.
 
 Passes render geometry -- a.k.a meshes. This can mean 3D models in your scene or even just a single full-screen quad, as is the case with post processing. The output of most passes looks quite alien when you [extract it]({{ site.baseurl }}{% link book/profiling/external.md %}). Depth calculation or shadow projection don't look like your familiar textured scenes. Actually, only the base pass and translucency use the full materials we set up in the editor. Most other passes perform their tasks without them, using their own specialized shaders instead.
 
-### Cost of a pass
+## Cost of a pass
 
 To intuitively understand what can affect the cost of a pass, it's useful to look at its inputs and its output.
 
@@ -47,13 +47,13 @@ The __base pass__ is an example of a pass affected by all three factors. It take
 
 If some passes take in just the G-Buffer, but not any 3D meshes - like post process effects do - then obviously they will be only pixel-bound. An increase in game's rendering resolution will directly affect their cost. On the other hand, it means that the changes in the amount of 3D meshes mean nothing to post process passes. For example, Unreal's ambient occlusion is a post process operation. It uses the hierarhical Z-buffer and some content from the G-Buffer, for example normals. By understanding what this pass requires, we know where to look for optimization opportunities -- in AO's settings and resolution adjustments, not in the scene's content.
 
-## Using information from this chapter
+# Using information from this chapter
 
 The major part of this chapter is a guide to every significant rendering pass in Unreal. You don't have to read the entire thing. Treat it more as a handbook, which you use to understand the output of the ["Stat GPU" command]({{ site.baseurl }}{% link book/measuring-performance.md %}) or with [GPU Visualizer]({{ site.baseurl }}{% link book/profiling/gpu-visualizer.md %}). Both of them show you the cost of each rendering pass. This allows you to precisely locate issues in a scene, like too many shadowed lights or too many translucent materials.
 
 This chapter also provides extensive information about dependencies of each pass. It allows you to address the most probable sources of trouble first. Much of this information was gathered by reading the engine's source code and from practical tests. Be aware of potential mistakes here. Sources are provided in the footnotes, so you can fact-check it yourself.
 
-### Optimizing
+## Optimizing
 
 This chapter contains also a lot of optimization advice, to help you fix a bottleneck once you locate it. How would you approach optimization? In general, it's a good practice to _hide or disable_ the suspected cause of a problem. It will allow you to instantly check if your predictions were right, by looking at the change in miliseconds per frame.
 
