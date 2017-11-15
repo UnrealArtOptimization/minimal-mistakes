@@ -16,4 +16,6 @@ Now, this it a nice thing to keep in mind, but don't think about it too much - i
 
 # Shadows
 
+{% include figure image_path="/assets/images/passes_shadow.jpg" alt="" caption="__Figure:__ Shadow-casting spot light" %}
+
 So as said before, dynamic shadows can be a vertex-bound source of trouble. The heavier meshes the light has on its way, the bigger the performance cost. So to avoid it it's best to disable dynamic shadow wherever you can. Probably, for many of your lights you don't need dynamic shadows or you can change them to static. Then it's also a very good practice to keep the attenuation radius as small as you can. This will not only limit the cost of shadowing but also the cost to render the light in pixel shaders.

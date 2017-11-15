@@ -16,6 +16,8 @@ permalink: "/book/profiling/passes-base/"
 
 # Base pass
 
+{% include figure image_path="/assets/images/passes_gbuffer_all.jpg" alt="" caption="__Figure:__ _Top left:_ Final look of the scene, after lighting and post processes. _Top right:_ World-space normals in G-Buffer. _Bottom left:_ Base color (aka albedo) in G-Buffer. _Bottom right:_ Roughness in G-Buffer." %}
+
 **Responsible for:**
 
 * Rendering final attributes of __Opaque__ or __Masked__ materials to the G-Buffer

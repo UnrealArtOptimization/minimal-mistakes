@@ -16,6 +16,8 @@ The biggest common problem with shading pixels is translucency. Opaque is very c
 
 # Quad overdraw
 
+{% include figure image_path="/assets/images/viewmode_quad_overdraw.jpg" alt="" caption="__Figure:__ Quad Overdraw view mode" %}
+
 An unexpected source of performance issues that I thinks is not so well known among artists, while it should be, is the so called _quad overdraw_. This is the reason why small polygons waste GPU time. In this case, a "quad" means a block of 4 pixels (2 by 2). And most of the operations on the GPU when it comes to pixel shading are done on full quads or even bigger tiles, like 8x8. Not on single inpidual pixels. It's easier for the GPU, or sometimes necessary, to perform operations on bigger tiles and only then discard unnecessary pixels. So the discared pixels are basically wasted. As you can imagine, the smaller the triangle, or more thin the triangle, the bigger the problem.
 
 So the triangle count itself is actually not a problem very often. Quite contrary to the popular opinion, the triangle count by itself doesn't matter It's much more important to avoid small and thin and long triangles. Use level of detail for that to control this. Try to keep polygons big and even in screen space. So watch from your camera, from your game, not just in the 3D package. And empty pixels in foliage are extra-waste. Because you have translucency or some overdraw. So clip like crazy. Spend more polygons, but keep closer to the actual shape of the plant to be drawn.

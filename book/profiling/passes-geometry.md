@@ -16,6 +16,8 @@ permalink: "/book/profiling/passes-geometry/"
 
 ## PrePass
 
+{% include figure image_path="/assets/images/passes_prepass.jpg" alt="" caption="__Figure:__ Depth buffer (aka z-buffer) - the result of pre-pass" %}
+
 **Responsible for:**
 
 * Early rendering of depth (Z) from non-translucent meshes
@@ -45,6 +47,8 @@ Warning: Time may be extreme in editor, but don't worry. It's usually a false al
 {: .notice--warning}
 
 ## ParticleSimulation, ParticleInjection
+
+{% include figure image_path="/assets/images/passes_particles.jpg" alt="" caption="__Figure:__ GPU-simulated particles with screen-space collision enabled" %}
 
 **Responsible for:**
 

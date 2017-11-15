@@ -133,7 +133,7 @@ To toggle the command (e.g. hide the information it shows), just use the command
 
 We can get more specific info by using the `stat unit` command. The time of a last frame is shown as 4 numbers.
 
-![image]({{ site.baseurl }}/assets/images/stat-fps.png) ![image]({{ site.baseurl }}/assets/images/stat-unit.png)
+![image]({{ site.baseurl }}/assets/images/stat_fps.png) ![image]({{ site.baseurl }}/assets/images/stat_unit.png)
 
 * __Frame__ is the same as __FPS__, the final cost.
 * __Game__ is the work of the CPU on the gameplay code.
@@ -150,7 +150,7 @@ Work on the next frame can't begin until the current frame is finished and displ
 
 `Stat GPU` splits the time of rendering a frame into specific passes. It's like a simplified, text version of [GPU Visualizer]({{ site.baseurl }}{% link book/profiling/gpu-visualizer.md %}) (the graphical tool invoked with  `Ctrl Shift ,`). The [chapter about passes]({{ site.baseurl }}{% link book/profiling/passes.md %}) explains the meaning of each pass, along with tips for optimization.
 
-{% include figure image_path="/assets/images/stat-gpu.png" alt="" caption="__Figure:__ Output of `stat gpu`, showing the cost of rendering passes." %}
+{% include figure image_path="/assets/images/stat_gpu.png" alt="" caption="__Figure:__ Output of `stat gpu`, showing the cost of rendering passes." %}
 
 <div class="notice--warning" markdown="1">
 _Warning:_ If you're getting an empty window from `stat gpu` on an older NVidia card, you'll have to use a workaround.
@@ -196,7 +196,7 @@ These stat commands can also be very useful:
 
 We can record all the metrics into a log. We'll be able to analyze it later on a graph. `Stat startfile` is the command that starts recording the data[^ue4docs]. A message pops up about log's duration in the upper left corner. To finish recording, enter `stat stopfile`. Now exit the game, go to __Window → Developer Tools → Session Frontend__ and load the latest file from `your project\Saved\Profiling\UnrealStats\`.
 
-{% include figure image_path="/assets/images/session-frontend-profiler.png" alt="" caption="__Figure:__ Profiler tab in Session Frontend window. Panels not related to GPU profiling were minimized." %}{: .align-left}
+{% include figure image_path="/assets/images/session_frontend_profiler.png" alt="" caption="__Figure:__ Profiler tab in Session Frontend window. Panels not related to GPU profiling were minimized." %}{: .align-left}
 
 This is a profile of the GPU and the CPU at the same time. If we're interested in graphics profiling, not gameplay, we should look for items in the "GPU" category in the sidebar. Double-clicking them will plot their values as new line on the graph. Horizontal lines shows targets for common fps values.
 

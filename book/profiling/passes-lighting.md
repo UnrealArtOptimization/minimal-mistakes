@@ -18,6 +18,8 @@ Lighting can often be the heaviest part of the frame. This is especially likely 
 
 ## LightCompositionTasks_PreLighting
 
+{% include figure image_path="/assets/images/passes_ao.jpg" alt="" caption="__Figure:__ Screen-space ambient occlusion" %}
+
 **Responsible for:**
 
 * Screen-space ambient occlusion
@@ -115,6 +117,8 @@ Description TODO.
 
 ## ShadowDepths
 
+{% include figure image_path="/assets/images/passes_shadow.jpg" alt="" caption="__Figure:__ Shadow-casting spot light" %}
+
 **Responsible for:**
 
 * Generating depth maps for shadow-casting lights
@@ -128,6 +132,8 @@ Description TODO.
 The __ShadowDepths__ pass generates depth information for shadow-casting lights. It's like rendering the scene's depth from each light's point of view. The result is a texture, aka _depth map_.[^shadowtheory]
 
 Then the engine calculates the distance of each pixel to the light source from the camera point of view -- but still in light's coordinate space. By comparing this value with the depth map, during the __ShadowProjection__ pass, it can test whether a pixel is lit by the given light or is in shadow.
+
+{% include figure image_path="/assets/images/passes_shadow_depths.jpg" alt="" caption="__Figure:__ _Left:_ the scene from light's point of view. _Right:_ Approximate frustums of spot lights" %}
 
 The cost of it is mostly affected by the number and the range of shadow-casting lights. What also matters is the number and triangle count of movable shadow-casting objects. Depending on the combination, you can have static meshes and static lights -- then the cost is zero, because static lights [are just textures](#lights--nonshadowedlights): they're precomputed. But you can also have, for example, stationary or movable lights and static or movable objects in their range. Both of these combinations require the engine to generate shadows from such meshes, separately for each light.
 
@@ -206,6 +212,8 @@ You can also exclude individual lights from being rendered into the volume. It's
 
 ## Fog, ExponentialHeightFog
 
+{% include figure image_path="/assets/images/passes_fog_comparison.jpg" alt="" caption="__Figure:__ _Bottom to top:_ __1.__ Fog with volumetric lighting enabled. __2.__ Standard exponential fog. __3.__ No fog." %}
+
 **Responsible for:**
 
 * Rendering the fog of Exponential Height Fog type[^fog]
@@ -217,6 +225,8 @@ You can also exclude individual lights from being rendered into the volume. It's
 Description TODO.
 
 # Reflections
+
+{% include figure image_path="/assets/images/passes_reflections.jpg" alt="" caption="__Figure:__ Results of __ReflectionEnvironment__ and __ScreenSpaceReflections__ passes, combined" %}
 
 ## ReflectionEnvironment
 

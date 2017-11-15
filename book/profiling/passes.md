@@ -35,6 +35,8 @@ _Note:_ Every chapter of this book is extended compared with the original video.
 
 Let's begin with explaining what do we call a _pass_ in the rendering pipeline. A pass is a set of draw calls (be sure to read [what they are]({{ site.baseurl }}{% link book/profiling/index.md %})) executed on the GPU. They are grouped together by the function they have in the pipeline, like rendering transparent meshes or doing post processing. This organization is done for convenience and to ensure proper order of execution - as some passes may need the output of a particular previous pass.
 
+{% include figure image_path="/assets/images/passes_reflections.jpg" alt="" caption="__Figure:__ The result of reflection passes" %}
+
 Passes render geometry -- a.k.a meshes. This can mean 3D models in your scene or even just a single full-screen quad, as is the case with post processing. The output of most passes looks quite alien when you [extract it]({{ site.baseurl }}{% link book/profiling/external.md %}). Depth calculation or shadow projection don't look like your familiar textured scenes. Actually, only the base pass and translucency use the full materials we set up in the editor. Most other passes perform their tasks without them, using their own specialized shaders instead.
 
 ## Cost of a pass
@@ -46,6 +48,8 @@ A huge complexity of fragment (pixel) shaders used by a pass, combined with a bi
 The __base pass__ is an example of a pass affected by all three factors. It takes visible 3D models (geometry) and renders them with full materials (pixel count), including textures (memory). Then it writes the final information into a resolution-dependent G-Buffer (so it's memory bandwith again).
 
 If some passes take in just the G-Buffer, but not any 3D meshes - like post process effects do - then obviously they will be only pixel-bound. An increase in game's rendering resolution will directly affect their cost. On the other hand, it means that the changes in the amount of 3D meshes mean nothing to post process passes. For example, Unreal's ambient occlusion is a post process operation. It uses the hierarhical Z-buffer and some content from the G-Buffer, for example normals. By understanding what this pass requires, we know where to look for optimization opportunities -- in AO's settings and resolution adjustments, not in the scene's content.
+
+{% include figure image_path="/assets/images/passes_gbuffer_all.jpg" alt="" caption="__Figure:__ The final image and various components of the G-Buffer which were used to render it" %}
 
 # Using information from this chapter
 
@@ -68,6 +72,8 @@ There are several ways of doing this. You can hide a whole category of objects o
 * `show StaticMeshes`
 * `show Translucency`
 * `show VolumetricLightmap` (since UE 4.18)
+
+{% include figure image_path="/assets/images/cmd_show.jpg" alt="" caption="__Figure:__ Entering a command in Unreal Engine" %}
 
 Another way is to prevent individual objects from being displayed in game. Select one or multiple objects, then go to __Properties → Rendering__ and check __Actor Hidden in Game__. You can do it also when playing the game in editor. Press `[F8]` to __Eject__ from a running game, select objects in __Outliner__ instead of the viewport and change the setting. Then return to the game by pressing `F8` in the viewport again.
 
