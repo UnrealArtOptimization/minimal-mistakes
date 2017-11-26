@@ -35,7 +35,7 @@ permalink: "/book/profiling/passes-base/"
 * {{ icon_number }} Number of decals
 * {{ icon_triangles }} Triangle count
 
-The base pass is one of the most important ones. It takes your shaders -- the part that you created in the material editor -- then runs their code. In deferred rendering (the default mode), it also saves the resulting values: final roughness, base color, metalness and so on into the G-Buffer ("geometry buffer"). It actually is a container for multiple full-screen images, through [channel packing]({{ site.baseurl }}{% link book/pipelines/memory.md %}) helps to reduce the number. This data is used later by various passes, most notably by screen-space techniques: [deferred lighting](#lights--nonshadowedlights), dynamic reflections and ambient occlusion.
+The base pass is one of the most important ones. It takes your shaders -- the part that you created in the material editor -- then runs their code. In deferred rendering (the default mode), it also saves the resulting values: final roughness, base color, metalness and so on into the G-Buffer ("geometry buffer"). It actually is a container for multiple full-screen images, through [channel packing]({{ site.baseurl }}{% link book/pipelines/memory.md %}) helps to reduce the number. This data is used later by various passes, most notably by screen-space techniques: [deferred lighting]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#lights--nonshadowedlights), dynamic reflections and ambient occlusion.
 
 But that's just a part of this pass' responsibilities. It reads static lighting -- from lightmaps, indirect lighting caches -- and adds them into the G-Buffer too (blending it immediately with the base color).
 

@@ -8,9 +8,9 @@ permalink: "/book/pipelines/"
 
 In this chapter you'll learn about:
 
-* Inner workings of the GPU
-* Unreal's rendering code
-* Draw calls and other bottlenecks
+* How to become best buddies with the GPU, working arm-in-arm towards a common goal
+* How to stop pushing the content through a bottleneck and try alternative approaches
+* Why you won't (likely) become best buddies with the graphics card driver
 
 # Video
 
@@ -22,15 +22,13 @@ If you prefer a video version of this lesson, you can [watch it on YouTube](http
 _Note:_ Every chapter of this book is extended compared with the original video. It's also regularly updated, while videos stay unchanged since their upload.
 {: .notice--info}
 
-# Take a scientific approach
 
-Before we begin we should be able to define the problem. Is our framedrop happening in a certain area? In some specific game scenario? For example, some barrels exploding or some enemies entering the area? Or maybe on a hardware from a certain vendor? Then, as we proceed, we should isolate what we are testing. To come with a meaningful test we have to be able to make assumptions. So that's why it's very important that you learn about the rendering pipeline both in general on the GPU and in Unreal itself, because it's engine has its own path, it's own potential problems.
 
-I encourage you to approach it like a scientist. Make observations what's happening in your scene, which areas cause the trouble, then formulate some hypotheses, like: "I think that translucency is the biggest problem in this scene". Then you should be able to develop testable predictions. As an example of such test: put your camera in a fixed place, insert a translucent, heavy object, measure performance, delete the object, measure performance again. And with this approach you'll be able to gather data to validate your predictions.
+
 
 # Anatomy of a frame
 
-Now let me proceed to the anatomy of a frame. To display a frame, both calculations on the CPU and the GPU have to be finished. So all the game code has to be computed, all the pixels have to be shaded and so on, and only then we can dispatch a frame to the screen. That's why the cost of a frame, the time it takes to show a frame, is the bigger number of either CPU or the GPU. If the GPU finished first, then it would wait for the CPU to dispatch new commands for the GPU. While, if the GPU is taking too long, the CPU has to wait for it. If you press [~] and enter: STAT UNIT you'll be shown these values you can see here.
+To display a frame, both calculations on the CPU and the GPU have to be finished. So all the game code has to be computed, all the pixels have to be shaded and so on, and only then we can dispatch a frame to the screen. That's why the cost of a frame, the time it takes to show a frame, is the bigger number of either CPU or the GPU. If the GPU finished first, then it would wait for the CPU to dispatch new commands for the GPU. While, if the GPU is taking too long, the CPU has to wait for it. If you press [~] and enter: STAT UNIT you'll be shown these values you can see here.
 
 # Parallelism and pipeline
 

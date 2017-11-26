@@ -16,9 +16,6 @@ Please don't worry that you can't grasp all the information at once. The content
 
 Please enjoy the book.
 
-Onwards to [Chapter 1](/book/measuring-performance/)!
-
 Oskar Świerad
 
----
-Last updated: {{ site.time }}
+[Onwards to next chapter! →]({{ site.baseurl }}{% link book/process/measuring-performance.md %}){: .btn .btn--primary}

@@ -2,26 +2,24 @@
 main:
   - title: "Book"
     url: /book/
-  # - title: "About"
-  #   url: https://mmistakes.github.io/minimal-mistakes/about/
-  # - title: "Sample Posts"
-  #   url: /year-archive/
-  # - title: "Sample Collections"
-  #   url: /collection-archive/
-  # - title: "Sitemap"
-  #   url: /sitemap/
 
 book:
   - title: "Unreal Art Optimization"
     children:
       - title: "Introduction"
         url: /book/
+  - title: "The process"
+    children:
       - title: "Measuring performance"
-        url: /book/measuring-performance/
+        url: /book/process/measuring-performance/
+      - title: "The diagnostic process"
+        url: /book/process/diagnosis/
   - title: "Real-Time Graphics Pipelines"
     children:
       - title: "GPU and rendering pipelines"
         url: /book/pipelines/
+      - title: "Forward vs Deferred"
+        url: /book/pipelines/forward-vs-deferred
       - title: "Vertex costs"
         url: /book/pipelines/vertex/
       - title: "Pixel costs"

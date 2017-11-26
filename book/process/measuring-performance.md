@@ -1,7 +1,7 @@
 ---
 title: "Measuring Performance"
 excerpt: ""
-permalink: "/book/measuring-performance/"
+permalink: "/book/process/measuring-performance/"
 ---
 
 {% include toc icon="columns" title=page.title %}
@@ -199,6 +199,8 @@ We can record all the metrics into a log. We'll be able to analyze it later on a
 {% include figure image_path="/assets/images/session_frontend_profiler.png" alt="" caption="__Figure:__ Profiler tab in Session Frontend window. Panels not related to GPU profiling were minimized." %}{: .align-left}
 
 This is a profile of the GPU and the CPU at the same time. If we're interested in graphics profiling, not gameplay, we should look for items in the "GPU" category in the sidebar. Double-clicking them will plot their values as new line on the graph. Horizontal lines shows targets for common fps values.
+
+[Next chapter →]({{ site.baseurl }}{% link book/process/diagnosis.md %}){: .btn .btn--primary}
 
 ## Footnotes
 
