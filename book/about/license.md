@@ -10,4 +10,4 @@ The original code from "Minimal Mistakes" web layout (forked from [minimal-mista
 
 If you intend to modify the book or its fragments, please read the full license below.
 
-{% include license.md %}
+{% include custom/license-text.md %}

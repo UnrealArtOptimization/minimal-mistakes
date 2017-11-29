@@ -4,6 +4,7 @@ excerpt: ""
 permalink: "/book/pipelines/"
 ---
 
+{% include custom/inline-icons.md %}
 {% include toc icon="columns" title=page.title %}
 
 In this chapter you'll learn about:
@@ -14,7 +15,7 @@ In this chapter you'll learn about:
 
 # Video
 
-If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=C3lumWdwHmA).
+If you prefer a video version of this lesson, you can [{{ icon_link }} watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=C3lumWdwHmA).
 
 {% capture tutorialvideo %}UZH4vZ0NDAw?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&amp;showinfo=1{% endcapture %}
 {% include video id=tutorialvideo provider="youtube" %}

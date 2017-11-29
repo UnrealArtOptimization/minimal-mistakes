@@ -4,6 +4,7 @@ excerpt: ""
 permalink: "/book/pipelines/memory/"
 ---
 
+{% include custom/inline-icons.md %}
 {% include toc icon="columns" title=page.title %}
 
 # Bandwidth
@@ -20,5 +21,5 @@ There is also the streaming cache. It's not related to the the cache on the GPU.
 
 # Texture Statistics window
 
-Another way to check how well you're going with the amount of textures used is to go to "Window" → "Statistics" and this window pops up. This windows pops up, where you can see all the textures - and you can sort them by the amount of memory used. For example, this material is 2k x 2k [2048 px] but the current usage - the usage that was really loaded into the streaming pool - is just 64 x 64. Probably it's used only by some small object I don't know which, so I can check it here. Okay, some asteroid is using this texture in a very low resolution. Now, if I want to suppress the resolution anyway I can click on the texture name. It shows up in the content browser. And open it. Then in the "Compression" tab, I can expand this setting and say, for example, "Maximum Texture Size": 256. As you can see, the resolution lowered and this is a very good method to control your resolution without going to the actual texture editor. You can change it anytime. "Max In-Game" is shown as 512.
+Another way to check how well you're going with the amount of textures used is to go to "Window" → "Statistics" and this window pops up. This windows pops up, where you can see all the textures - and you can sort them by the amount of memory used. For example, this material is 2k x 2k (2048 px) but the current usage - the usage that was really loaded into the streaming pool - is just 64 x 64. Probably it's used only by some small object I don't know which, so I can check it here. Okay, some asteroid is using this texture in a very low resolution. Now, if I want to suppress the resolution anyway I can click on the texture name. It shows up in the content browser. And open it. Then in the "Compression" tab, I can expand this setting and say, for example, "Maximum Texture Size": 256. As you can see, the resolution lowered and this is a very good method to control your resolution without going to the actual texture editor. You can change it anytime. "Max In-Game" is shown as 512.
 

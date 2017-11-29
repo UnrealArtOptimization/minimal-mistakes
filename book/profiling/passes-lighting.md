@@ -4,14 +4,7 @@ excerpt: ""
 permalink: "/book/profiling/passes-lighting/"
 ---
 
-{% capture icon_settings %}<i class="fa fa-sliders fa-fw" style="color: #bb72d6" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_resolution %}<i class="fa fa-television fa-fw" style="color: #ab131c" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_number %}<i class="fa fa-tags fa-fw" style="color: #485cbe" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_triangles %}<i class="fa fa-cube fa-fw" style="color: #72b4e6" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_area %}<i class="fa fa-dot-circle-o fa-fw" style="color: #42ad82" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_overdraw %}<i class="fa fa-database fa-fw" style="color: #ddbd3b" aria-hidden="true"></i>{% endcapture %}
-{% capture icon_complexity %}<i class="fa fa-gears fa-fw" style="color: #bb72d6" aria-hidden="true"></i>{% endcapture %}
-
+{% include custom/inline-icons.md %}
 {% include toc icon="columns" title=page.title %}
 
 Lighting can often be the heaviest part of the frame. This is especially likely if your project relies on dynamic, shadowed light sources.
@@ -51,7 +44,7 @@ Note: In `stat gpu` it's called __CompositionPostLighting__.
 **Cost affected by:**
 
 * {{ icon_resolution }} Rendering resolution
-* {{ icon_area }}Screen area covered by materials with SSS
+* {{ icon_area }} Screen area covered by materials with SSS
 
 There are two types of subsurface scattering in Unreal's materials. The older one is a very simple trick of softening the diffuse part of lighting. The newer one, called __Subsurface Profile__, is much more sophisticated. The time shown in __CompositionAfterLighting__ refers to the latter. This kind of SSS accounts for the thickness of objects using a separate buffer. It comes with a cost of approximating the thickness of geometry in real-time, then of using the buffer in shaders.
 
@@ -137,7 +130,7 @@ Shadows are usually one of the most heavy parts of rendering, if care is not tak
 
 For shadowed lights, the biggest factor is the amount of polygons that will have to be rendered into a depth map. Light source's __Attenuation Radius__ sets the hard limit for the drawing range. Shadowed spot lights are typically less heavy than point lights, because their volume is a cone, not a full sphere. Their additional setting is __Outer Cone Angle__ -- the smaller, the better for rendering speed, because probably less object will fall into this lamp's volume.
 
-Directional light features a multi-resolution method of rendering shadows, called _cascaded shadow maps_. It's needed because of the huge area a directional light (usually the sun) has to cover. Epic's wiki provides [tips for using CSMs](https://wiki.unrealengine.com/LightingTroubleshootingGuide#Directional_Light_ONLY:_Cascaded_Shadow_Maps_Settings:). The most significant gains come from __Dynamic Shadow Distance__ parameter. The quality in close distance to the camera can be adujsted with __Cascade Distribution Exponent__, at the expense of farther planes.
+Directional light features a multi-resolution method of rendering shadows, called _cascaded shadow maps_. It's needed because of the huge area a directional light (usually the sun) has to cover. Epic's wiki provides [{{ icon_link }} tips for using CSMs](https://wiki.unrealengine.com/LightingTroubleshootingGuide#Directional_Light_ONLY:_Cascaded_Shadow_Maps_Settings:). The most significant gains come from __Dynamic Shadow Distance__ parameter. The quality in close distance to the camera can be adujsted with __Cascade Distribution Exponent__, at the expense of farther planes.
 
 To control the resolution of shadows, use `sg.ShadowQuality X` in the INI files, where `X` is a number between 0 and 4. High resolution shadows can reduce visible jagging (aliasing), at the cost of rendering, storing and reading back bigger depth maps.
 
@@ -181,7 +174,7 @@ Unlike __ShadowDepths__, __ShadowProjection__'s performance is also dependent on
 Note: In  `stat gpu` there are only two categories: __Translucency__ and __Translucent Lighting__. In GPU Visualizer (and in text logs) the work on translucency is split into more fine-grained statistics.
 {: .notice--info}
 
-Description TODO. This is basically [the base pass](#base-pass) for translucent materials. Most of the advice regaring the base pass applies here as well.
+Description TODO. This is basically [the base pass]({{ site.baseurl }}{% link book/profiling/passes-base.md %}) for translucent materials. Most of the advice regaring the base pass applies here as well.
 
 ## Translucent Lighting
 

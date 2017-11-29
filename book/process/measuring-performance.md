@@ -4,6 +4,7 @@ excerpt: ""
 permalink: "/book/process/measuring-performance/"
 ---
 
+{% include custom/inline-icons.md %}
 {% include toc icon="columns" title=page.title %}
 
 In this chapter you'll learn about:
@@ -14,7 +15,7 @@ In this chapter you'll learn about:
 * Displaying statistics for each subsystem, like occlusion culling or particles
 * Recording performance metrics and reading them with a profiler
 
-If you prefer a video version of this lesson, you can [watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=SXLYy6D1y80).
+If you prefer a video version of this lesson, you can [{{ icon_link }} watch it on YouTube](https://www.youtube.com/watch?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&v=SXLYy6D1y80).
 
 {% capture tutorialvideo %}SXLYy6D1y80?list=PLF8ktr3i-U4A7vuQ6TXPr3f-bhmy6xM3S&amp;showinfo=1{% endcapture %}
 {% include video id=tutorialvideo provider="youtube" %}
@@ -167,7 +168,7 @@ Probably there's a reason why Epic Games disabled it on older cards. Maybe it ca
 
 ### Stat InitViews
 
-It helps with measuring the cost and effectiveness of occlusion and frustum culling. Both of them are techniques used by game engines to improve performance. They dynamically hide meshes that would be invisible from the camera's position anyway. Contents of this stat output, as well as the culling itself, are discussed thoroughly in [an article by Tim Hobson](http://timhobsonue4.snappages.com/culling-visibilityculling.htm).
+It helps with measuring the cost and effectiveness of occlusion and frustum culling. Both of them are techniques used by game engines to improve performance. They dynamically hide meshes that would be invisible from the camera's position anyway. Contents of this stat output, as well as the culling itself, are discussed thoroughly in [{{ icon_link }} an article by Tim Hobson](http://timhobsonue4.snappages.com/culling-visibilityculling.htm).
 
 * __View Visibility__, __Occlusion Cull__. Cost of performing culling. 
 * __Processed primitives__. All objects that were considered, before culling.
