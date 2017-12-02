@@ -6,6 +6,8 @@
 * Specific examples with diagnosis and fixes. Ie high draw calls. Heavy foliage, problematic lighting / shadows.
 * Comparison between different textures size (polycount, etc.) and their impact on performance
 
+* Unbound changed name to Infinite Extent (Unbound)
+
 ##Measuring Performance
 
 * Add an example or 2. Maybe mention the hardware that the tests were captured on.

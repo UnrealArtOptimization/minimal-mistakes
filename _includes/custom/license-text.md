@@ -1,7 +1,7 @@
 
 # Full license text
 
-Book content (except for original files from "Minimal Mistakes" layout) is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License. ([http://creativecommons.org/licenses/by-sa/4.0/](http://creativecommons.org/licenses/by-sa/4.0/)). Copyright (c) 2017 Oskar Świerad
+Book content (except for original files from "Minimal Mistakes" layout) is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. ([https://creativecommons.org/licenses/by-nc-sa/4.0/](https://creativecommons.org/licenses/by-nc-sa/4.0/)). Copyright (c) 2017 Oskar Świerad
 
 The original code from "Minimal Mistakes" web layout (forked from [https://github.com/mmistakes/minimal-mistakes](https://github.com/mmistakes/minimal-mistakes)) is licensed under The MIT License. Copyright (c) 2017 Michael Rose
 
