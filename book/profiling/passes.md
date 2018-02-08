@@ -24,6 +24,37 @@ If you prefer a video version of this lesson, you can [{{ icon_link }} watch it 
 _Note:_ Every chapter of this book is extended compared with the original video. It's also regularly updated, while videos stay unchanged since their upload.
 {: .notice--info}
 
+# Table of contents
+
+* [__1. Base pass__]({{ site.baseurl }}{% link book/profiling/passes-base.md %})
+* [__2. Geometry__]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %})
+    * [PrePass DDM_*]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#prepass)
+    * [HZB (Setup Mips)]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#hzb-setup-mips)
+    * [ParticleSimulation]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#particlesimulation-particleinjection)
+    * [ParticleInjection]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#particlesimulation-particleinjection)
+    * [RenderVelocities]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#rendervelocities)
+* [__3. Lighting__]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %})
+    * [LightCompositionTasks_PreLighting]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#lightcompositiontasks_prelighting)
+    * [CompositionAfterLighting]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#compositionafterlighting)
+    * [ComputeLightGrid]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#computelightgrid)
+    * [Lights → NonShadowedLights]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#lights--nonshadowedlights)
+    * [Lights → ShadowedLights]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#lights--shadowedlights)
+    * [ShadowDepths]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#shadowdepths)
+    * [ShadowProjection]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#shadowprojection)
+    * [Translucency]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#translucency)
+    * [Translucent Lighting]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#translucentlighting)
+    * [Fog, ExponentialHeightFog]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#fog-exponentialheightfog)
+    * [ReflectionEnvironment]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#reflectionenvironment)
+    * [ScreenSpaceReflections]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#screenspacereflections)
+* [__4. Post processing__]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+    * [BokehDOFRecombine]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+    * [TemporalAA]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+    * [VelocityFlatten]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+    * [MotionBlur]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+    * [PostProcessEyeAdaptation]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+    * [Tonemapper]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+    * [PostProcessUpscale]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+
 # What is a rendering pass
 
 Let's begin with explaining what do we call a _pass_ in the rendering pipeline. A pass is a set of draw calls (be sure to read [what they are]({{ site.baseurl }}{% link book/profiling/index.md %})) executed on the GPU. They are grouped together by the function they have in the pipeline, like rendering transparent meshes or doing post processing. This organization is done for convenience and to ensure proper order of execution - as some passes may need the output of a particular previous pass.
@@ -61,33 +92,9 @@ Below begins an extensive description of almost all rendering passes that you ca
 
 Some passes are much more important or customizable than others. Many of them react to changes in the scene, while others -- most notably post processes -- stay dependent on the resolution only. That's why the amount of information dedicated to each category varies greatly.
 
-Don't feel forced to read the entire chapter at once. Jump straight to the pass you're interested in :)
+Don't feel forced to read the entire chapter at once. Jump straight to the pass you want read about from the [table of contents](#table-of-contents).
 
-* [Base pass]({{ site.baseurl }}{% link book/profiling/passes-base.md %})
-* Geometry passes
-    * [PrePass DDM_*]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#prepass)
-    * [HZB (Setup Mips)]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#hzb-setup-mips)
-    * [ParticleSimulation]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#particlesimulation-particleinjection)
-    * [ParticleInjection]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#particlesimulation-particleinjection)
-    * [RenderVelocities]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %}#rendervelocities)
-* Lighting passes
-    * [LightCompositionTasks_PreLighting]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#lightcompositiontasks_prelighting)
-    * [CompositionAfterLighting]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#compositionafterlighting)
-    * [ComputeLightGrid]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#computelightgrid)
-    * [Lights → NonShadowedLights]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#lights--nonshadowedlights)
-    * [Lights → ShadowedLights]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#lights--shadowedlights)
-    * [ShadowDepths]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#shadowdepths)
-    * [ShadowProjection]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#shadowprojection)
-    * [Translucency]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#translucency)
-    * [Translucent Lighting]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#translucentlighting)
-    * [Fog, ExponentialHeightFog]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#fog-exponentialheightfog)
-    * [ReflectionEnvironment]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#reflectionenvironment)
-    * [ScreenSpaceReflections]({{ site.baseurl }}{% link book/profiling/passes-lighting.md %}#screenspacereflections)
-* Post processing pass
-    * [BokehDOFRecombine]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
-    * [TemporalAA]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
-    * [VelocityFlatten]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
-    * [MotionBlur]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
-    * [PostProcessEyeAdaptation]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
-    * [Tonemapper]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
-    * [PostProcessUpscale]({{ site.baseurl }}{% link book/profiling/passes-postprocess.md %})
+[↑ Back to table of contents](#table-of-contents){: .btn .btn--next}
+
+
+

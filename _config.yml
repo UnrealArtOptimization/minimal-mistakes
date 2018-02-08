@@ -84,7 +84,7 @@ analytics:
 # Site Author
 author:
   name             : "Oskar Świerad"
-  avatar           : "https://static-2.gumroad.com/res/gumroad/files/6584706443625/cde128bd2e3e41cf9de62e97985efcd1/original/TechArtAid_Logo002_v001_circle1024.png"
+  avatar           : "assets/images/taa_logo.png"
   bio              : Technical artist, game developer. Creator of <a href="https://youtube.com/c/TechArtAid">Tech Art Aid</a> video tutorials
   location         : 
   email            : 
@@ -101,7 +101,7 @@ author:
   keybase          :
   instagram        :
   lastfm           :
-  linkedin         : # "john-doe-12345678" (the last part of your profile url, e.g. https://www.linkedin.com/in/john-doe-12345678)
+  linkedin         : "oswierad"
   pinterest        :
   soundcloud       :
   stackoverflow    : # "123456/username" (the last part of your profile url, e.g. https://stackoverflow.com/users/123456/username)
@@ -111,7 +111,7 @@ author:
   vine             :
   weibo            :
   xing             :
-  youtube          : 
+  youtube          : "https://youtube.com/c/TechArtAid"
 
 
 # Reading Files
@@ -254,7 +254,6 @@ defaults:
     values:
       layout: single
       author_profile: true
-      author_profile: true
       read_time: true
       comments: false
       share: true
@@ -265,8 +264,7 @@ defaults:
       type: pages
     values:
       layout: single
-      author_profile: true
-      author_profile: true
+      author_profile: false
       read_time: true
       comments: false
       share: true

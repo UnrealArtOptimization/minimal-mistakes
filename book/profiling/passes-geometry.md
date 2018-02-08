@@ -7,32 +7,38 @@ permalink: "/book/profiling/passes-geometry/"
 {% include custom/inline-icons.md %}
 {% include toc icon="columns" title=page.title %}
 
+[← Back to all passes]({{ site.baseurl }}{% link book/profiling/passes.md %}){: .btn .btn--prev}
+
 ## PrePass
 
-{% include figure image_path="/assets/images/passes_prepass.jpg" alt="" caption="__Figure:__ Depth buffer (aka z-buffer) - the result of pre-pass" %}
-
-**Responsible for:**
+<div class="notice" markdown="1">
+__Responsible for:__
 
 * Early rendering of depth (Z) from non-translucent meshes
 
-**Cost affected by:**
+__Cost affected by:__
 
 * {{ icon_triangles }} Triangle count of meshes with __Opaque__ materials
 * {{ icon_overdraw }} Depending on __Early Z__ setting: Triangle count and complexity of __Masked__ materials
+</div>
+
+{% include figure image_path="/assets/images/passes_prepass.jpg" alt="" caption="__Figure:__ Depth buffer (aka z-buffer) - the result of pre-pass" %}
 
 Description TODO. Its results are required by DBuffer decals. The pre-pass may also be used by occlusion culling.
 
-__Engine → Rendering → Optimizations → Early Z-pass__
+Optimization: __Engine → Rendering → Optimizations → Early Z-pass__
 
 ## HZB (Setup Mips)
 
-**Responsible for:**
+<div class="notice" markdown="1">
+__Responsible for:__
 
 * Generating the Hierarchical Z-Buffer
 
-**Cost affected by:**
+__Cost affected by:__
 
 * {{ icon_resolution }} Rendering resolution
+</div>
 
 The HZB is used by an occlusion culling method[^hzbocclusion] and by screen-space techniques for ambient occlusion and reflections[^hzbuse].
 
@@ -41,35 +47,39 @@ Warning: Time may be extreme in editor, but don't worry. It's usually a false al
 
 ## ParticleSimulation, ParticleInjection
 
-{% include figure image_path="/assets/images/passes_particles.jpg" alt="" caption="__Figure:__ GPU-simulated particles with screen-space collision enabled" %}
-
-**Responsible for:**
+<div class="notice" markdown="1">
+__Responsible for:__
 
 * Particle simulation on the GPU (only of __GPU Sprites__ particle type)
 
-**Cost affected by:**
+__Cost affected by:__
 
 * {{ icon_number }} Number of particles spawned by __GPU Sprites__ emitters
 * {{ icon_settings }} __Collision (Scene Depth)__ module
+</div>
+
+{% include figure image_path="/assets/images/passes_particles.jpg" alt="" caption="__Figure:__ GPU-simulated particles with screen-space collision enabled" %}
 
 If you enabled __GPU Sprites__ in a particle emitter, then their physics simulation is done here. The cost depends on the number of particles spawned by such emitters. Enabling the __Collision__ module increases the complexity of the simulation. The collision of GPU sprites with the rest of the scene is tested against screen-space data (for example the Z-depth). This makes it faster than the traditional, CPU-based collision of particles against actual 3D meshes. Still, it's not entirely free -- and the cost is moved to the GPU.
 
-**Optimization**
+__Optimization__
 
 The bigger the number of particles that have to be simulated (especially collide), the bigger the cost. Remember that you can use particle level of detail (__LOD__) to limit the number of particles being spawned. You may get away with much smaller numbers if the emitter is viewed from far distance.
 
 ## RenderVelocities
 
-**Responsible for:**
+<div class="notice" markdown="1">
+__Responsible for:__
 
 * Saving velocity of each vertex (used later by motion blur and temporal anti-aliasing)
 
-**Cost affected by:**
+__Cost affected by:__
 
 * {{ icon_number }} Number of moving objects
 * {{ icon_triangles }} Triangle count of moving objects
+</div>
 
-Description TODO. Takes the velocity of every moving vertex and saves it into the motion blur velocity buffer.
+Takes the velocity of every moving vertex and saves it into the motion blur velocity buffer.
 
 # Footnotes
 

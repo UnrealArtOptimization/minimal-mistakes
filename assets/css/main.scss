@@ -46,6 +46,14 @@ html {
   line-height: 1.9em;
 }
 
+.toc
+{
+  @include breakpoint($x-large) {
+    top: 100px;
+  }
+}
+
+/* MOVING TABLE OF CONTENTS */
 /*.toc
 {
   @include breakpoint($x-large) {

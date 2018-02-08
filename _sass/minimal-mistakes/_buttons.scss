@@ -31,6 +31,8 @@
   /* button colors */
   $buttoncolors:
   (primary, $primary-color),
+  (prev, $taa-gray),
+  (next, $taa-main),
   (inverse, #fff),
   (light-outline, transparent),
   (success, $success-color),

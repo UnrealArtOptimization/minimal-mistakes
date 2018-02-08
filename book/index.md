@@ -14,8 +14,8 @@ There's no the need to dive into the code to understand any fragment. However, i
 
 Please don't worry that you can't grasp all the information at once. The content is divided into independent chapters and sub-chapters. You can read most of them separately if you're in a hurry. Each chapter's introduction is also a brief summary. It should make it easier to return to the book when you're working on a specific area of a project.
 
-Please enjoy the book.
+Enjoy the book,
 
 Oskar Świerad
 
-[Onwards to next chapter! →]({{ site.baseurl }}{% link book/process/measuring-performance.md %}){: .btn .btn--primary}
+[Onwards to next chapter! →]({{ site.baseurl }}{% link book/process/measuring-performance.md %}){: .btn .btn--next}

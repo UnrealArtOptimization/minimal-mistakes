@@ -47,6 +47,17 @@ $type-size-8                  : 0.625em !default;  // ~10px
    Colors
    ========================================================================== */
 
+$taa-main                     : #ab131c !default;
+$taa-dark                     : #790002 !default;
+$taa-light                    : #da5656 !default;
+$taa-bright                   : #ef7a7a !default;
+$taa-purple                   : #bb72d6 !default;
+$taa-blue                     : #485cbe !default;
+$taa-lightblue                : #72b4e6 !default;
+$taa-green                    : #42ad82 !default;
+$taa-yellow                   : #ddbd3b !default;
+$taa-gray                     : #999999 !default;
+
 $gray                         : #7a8288 !default;
 $dark-gray                    : mix(#000, $gray, 40%) !default;
 $darker-gray                  : mix(#000, $gray, 60%) !default;

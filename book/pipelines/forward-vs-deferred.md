@@ -22,4 +22,5 @@ Spot lights are usually the cheapest type to render, because their screen-space 
 
 # Forward
 
-TODO.
+When using a forward renderer, all work on dynamic lighting is done in the [base pass]({{ site.baseurl }}{% link book/profiling/passes-base.md %}), instead of a separate __Lights__ pass. That's because the lighting is no longer _deferred_ until later. It's done immediately on a shader level of every object, right after final material's atributes are calculated. This approach gets rid of the G-Buffer, saving memory and making several thing easier (especially anti-aliasing). Don't be suprised, though, that the cost of the base pass is significantly higher with forward.
+

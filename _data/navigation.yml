@@ -1,23 +1,29 @@
 # main links
 main:
-  - title: "Book"
+  - title: "Intro"
     url: /book/
+  - title: "Diagnostics"
+    url: /book/process/
+  - title: "Pipelines"
+    url: /book/pipelines/
+  - title: "Profiling"
+    url: /book/profiling/
+  - title: "About"
+    url: /book/about/
 
 book:
-  - title: "Unreal Art Optimization"
+  - title: "Introduction"
+    url: /book/
+  - title: "Diagnostics"
+    url: /book/process/
     children:
-      - title: "Introduction"
-        url: /book/
-  - title: "The process"
-    children:
-      - title: "Measuring performance"
-        url: /book/process/measuring-performance/
       - title: "The diagnostic process"
         url: /book/process/diagnosis/
-  - title: "Real-Time Graphics Pipelines"
+      - title: "Measuring performance"
+        url: /book/process/measuring-performance/
+  - title: "Graphics Pipelines"
+    url: /book/pipelines/
     children:
-      - title: "GPU and rendering pipelines"
-        url: /book/pipelines/
       - title: "Forward vs Deferred"
         url: /book/pipelines/forward-vs-deferred
       - title: "Vertex costs"
@@ -27,32 +33,31 @@ book:
       - title: "Memory costs"
         url: /book/pipelines/memory/
   - title: "Profiling"
+    url: /book/profiling/
     children:
-      - title: "Introduction to profiling"
-        url: /book/profiling/
       - title: "Optimization view modes"
         url: /book/profiling/view-modes/
       - title: "Built-in GPU Visualizer"
         url: /book/profiling/gpu-visualizer/
       - title: "Unreal's rendering passes"
         url: /book/profiling/passes/
-      - title: "Base pass"
-        url: /book/profiling/passes-base/
-      - title: "Geometry passes"
-        url: /book/profiling/passes-geometry/
-      - title: "Lighting passes"
-        url: /book/profiling/passes-lighting/
-      - title: "Post process pass"
-        url: /book/profiling/passes-postprocess/
-      - title: "External profiling tools"
+        children:
+        - title: "Base pass"
+          url: /book/profiling/passes-base/
+        - title: "Geometry passes"
+          url: /book/profiling/passes-geometry/
+        - title: "Lighting passes"
+          url: /book/profiling/passes-lighting/
+        - title: "Post process pass"
+          url: /book/profiling/passes-postprocess/
+      - title: "External profilers"
         url: /book/profiling/external/
   - title: "Resources"
     children:
       - title: "Learning on your own"
         url: /book/resources/learning/
   - title: "About"
+    url: /book/about/
     children:
-      - title: "About the book"
-        url: /book/about/
       - title: "License"
         url: /book/about/license/

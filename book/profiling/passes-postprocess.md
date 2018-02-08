@@ -7,9 +7,12 @@ permalink: "/book/profiling/passes-postprocess/"
 {% include custom/inline-icons.md %}
 {% include toc icon="columns" title=page.title %}
 
+[← Back to all passes]({{ site.baseurl }}{% link book/profiling/passes.md %}){: .btn .btn--prev}
+
 # PostProcessing
 
-**Responsible for:**
+<div class="notice" markdown="1">
+__Responsible for:__
 
 * Depth of Field (__BokehDOFRecombine__)
 * Temporal anti-aliasing (__TemporalAA__)
@@ -19,10 +22,11 @@ permalink: "/book/profiling/passes-postprocess/"
 * Tone mapping (__Tonemapper__)
 * Upscaling from rendering resolution to display's resolution (__PostProcessUpscale__)
 
-**Cost affected by:**
+__Cost affected by:__
 
 * {{ icon_resolution }} Rendering resolution
 * {{ icon_settings }} Number and quality of post processing features
 * {{ icon_overdraw }} Number and complexity of __blendables__ (post process materials)
+</div>
 
 Description TODO. The final pass in the rendering pipeline.
