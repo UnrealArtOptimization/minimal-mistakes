@@ -158,7 +158,7 @@ _Warning:_ If you're getting an empty window from `stat gpu` on an older NVidia 
 
 Open `C:\Program Files\Epic Games\your-version\Engine\Config\ConsoleVariables.ini`. Then go to the end of the file and add these 2 lines:
 
-```
+```text
 r.NVIDIATimestampWorkaround=0
 r.gpustatsenabled=1
 ```

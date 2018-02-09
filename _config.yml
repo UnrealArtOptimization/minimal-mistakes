@@ -155,7 +155,7 @@ markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
 # Conversion
 markdown: kramdown
-highlighter: rouge
+highlighter: none
 lsi: false
 excerpt_separator: "\n\n"
 incremental: false
@@ -171,6 +171,8 @@ kramdown:
   toc_levels: 1..6
   smart_quotes: lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
+  syntax_highlighter_opts:
+      disable : true
 
 
 # Sass/SCSS
