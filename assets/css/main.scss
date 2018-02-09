@@ -15,6 +15,10 @@ $type-size-8 : 0.75em;
 
 $text-color : #383838;
 
+$link-color : #ab131c;
+$link-color-visited : #ab131c;
+$link-color-hover : #ef7a7a;
+
 $intro-transition  : none;
 $global-transition : none;
 
@@ -100,16 +104,21 @@ html {
   text-transform: uppercase;
 }
 
+/*
+Fixing a bug in 'a' styles order in minimal-mistakes.
+Hover must always be last. Plus disabling special color for visited.
+*/
+.nav__list .nav__items a, .nav__list .nav__items a:visited {
+  color: inherit;
+}
+
 .page__content a:not(.btn):visited {
   color: $link-color;
 }
 
-/*
-Fixing a bug in 'a' styles order in minimal-mistakes.
-Hover must always be last.
-*/
-.page__content a:not(.btn):hover {
-  color: #3e8296;
+.page__content a:not(.btn):hover, .nav__list .nav__items a:hover {
+  color: $link-color-hover;
+  text-decoration: none;
 }
 
 .page__content p
