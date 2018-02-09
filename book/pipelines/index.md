@@ -1,5 +1,5 @@
 ---
-title: "GPU and rendering pipelines"
+title: "GPU and Rendering Pipelines"
 excerpt: ""
 permalink: "/book/pipelines/"
 ---
@@ -29,7 +29,7 @@ _Note:_ Every chapter of this book is extended compared with the original video.
 
 # Anatomy of a frame
 
-To display a frame, both calculations on the CPU and the GPU have to be finished. So all the game code has to be computed, all the pixels have to be shaded and so on, and only then we can dispatch a frame to the screen. That's why the cost of a frame, the time it takes to show a frame, is the bigger number of either CPU or the GPU. If the GPU finished first, then it would wait for the CPU to dispatch new commands for the GPU. While, if the GPU is taking too long, the CPU has to wait for it. If you press [~] and enter: STAT UNIT you'll be shown these values you can see here.
+To display a frame, both calculations on the CPU and the GPU have to be finished. So all the game code has to be computed, all the pixels have to be shaded and so on, and only then we can dispatch a frame to the screen. That's why the cost of a frame, the time it takes to show a frame, is the bigger number of either CPU or the GPU. If the GPU finished first, then it would wait for the CPU to dispatch new commands for the GPU. While, if the GPU is taking too long, the CPU has to wait for it. If you press `~` and enter: STAT UNIT you'll be shown these values you can see here.
 
 # Parallelism and pipeline
 
@@ -39,6 +39,6 @@ Now, pipeline is like an assembly line. So the frame is pided into steps and for
 
 # Draw calls
 
-An important thing, that can really affect your framerate are the draw calls. So draw calls are the commands sent by the CPU to control the GPU. So, for example, commands like: "change my mesh" or: "change my material" because if you want to draw a triangle set with a different material, different shader, you have to dispatch a command from the CPU first, which then goes through the driver, only then is translated and only then is submitted to the GPU. So having a lot of materials, a lot of different, separate objects, is a lot of work for the CPU. You can check your amount of draw calls by pressing [~] (tilde) and entering: STAT SceneRendering.
+An important thing, that can really affect your framerate are the draw calls. So draw calls are the commands sent by the CPU to control the GPU. So, for example, commands like: "change my mesh" or: "change my material" because if you want to draw a triangle set with a different material, different shader, you have to dispatch a command from the CPU first, which then goes through the driver, only then is translated and only then is submitted to the GPU. So having a lot of materials, a lot of different, separate objects, is a lot of work for the CPU. You can check your amount of draw calls by pressing `~` (tilde) and entering: STAT SceneRendering.
 
 Are draw calls batched in UE4? No. There was a tweet about "fast path" https://twitter.com/joatski/status/679302537393119232
