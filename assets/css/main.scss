@@ -15,25 +15,40 @@ $type-size-8 : 0.75em;
 
 $text-color : #383838;
 
+$intro-transition  : none;
+$global-transition : none;
+
 @import "minimal-mistakes";
 
 html {
   /* apply a natural box layout model to all elements */
   box-sizing: border-box;
   background-color: $background-color;
-  font-size: 17px; // default: 16px
+  font-size: 17px;
 
   @include breakpoint($medium) {
-    font-size: 18px; // default: 18px
+    font-size: 18px;
   }
 
   @include breakpoint($large) {
-    font-size: 17px; // default: 20px
+    font-size: 17px;
   }
 
   @include breakpoint($x-large) {
-    font-size: 16px; // default: 22px
+    font-size: 16px;
   }
+}
+
+.page__content a:not(.btn):visited {
+  color: $link-color;
+}
+
+/*
+Fixing a bug in 'a' styles order in minimal-mistakes.
+Hover must always be last.
+*/
+.page__content a:not(.btn):hover {
+  color: #3e8296;
 }
 
 .page__content p
@@ -73,5 +88,3 @@ html {
     line-height: 1.2;
   }
 }
-
-@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
