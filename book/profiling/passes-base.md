@@ -1,5 +1,5 @@
 ---
-title: "Base pass"
+title: "Base Pass"
 excerpt: ""
 permalink: "/book/profiling/passes-base/"
 ---

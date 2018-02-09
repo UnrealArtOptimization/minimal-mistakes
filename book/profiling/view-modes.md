@@ -1,5 +1,5 @@
 ---
-title: "Optimization view modes"
+title: "Optimization View Modes"
 excerpt: ""
 permalink: "/book/profiling/view-modes/"
 ---

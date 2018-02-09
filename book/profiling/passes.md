@@ -1,5 +1,5 @@
 ---
-title: "Unreal's rendering passes"
+title: "Unreal's Rendering Passes"
 excerpt: ""
 permalink: "/book/profiling/passes/"
 ---

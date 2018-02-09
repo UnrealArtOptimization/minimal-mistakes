@@ -1,5 +1,5 @@
 ---
-title: "GPU and rendering pipelines"
+title: "Vertex Costs"
 excerpt: ""
 permalink: "/book/pipelines/vertex/"
 ---

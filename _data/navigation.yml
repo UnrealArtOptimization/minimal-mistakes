@@ -8,6 +8,8 @@ main:
     url: /book/pipelines/
   - title: "Profiling"
     url: /book/profiling/
+  - title: "Optimization"
+    url: /book/optimization/
   - title: "About"
     url: /book/about/
 
@@ -35,7 +37,7 @@ book:
   - title: "Profiling"
     url: /book/profiling/
     children:
-      - title: "Optimization view modes"
+      - title: "View modes"
         url: /book/profiling/view-modes/
       - title: "Built-in GPU Visualizer"
         url: /book/profiling/gpu-visualizer/
@@ -52,10 +54,25 @@ book:
           url: /book/profiling/passes-postprocess/
       - title: "External profilers"
         url: /book/profiling/external/
-  - title: "Resources"
+  - title: "Optimization"
+    url: /book/optimization/
     children:
-      - title: "Learning on your own"
-        url: /book/resources/learning/
+      - title: "Static meshes"
+        url: /book/optimization/static-meshes/
+      - title: "Animated meshes"
+        url: /book/optimization/animated-meshes/
+      - title: "Lighting"
+        url: /book/optimization/lighting/
+      - title: "Textures"
+        url: /book/optimization/textures/
+      - title: "Landscape"
+        url: /book/optimization/landscape/
+      - title: "Foliage"
+        url: /book/optimization/foliage/
+      - title: "Virtual reality (VR)"
+        url: /book/optimization/vr/
+  - title: "Resources"
+    url: /book/resources/
   - title: "About"
     url: /book/about/
     children:

@@ -1,5 +1,5 @@
 ---
-title: "Pixel costs"
+title: "Pixel Costs"
 excerpt: ""
 permalink: "/book/pipelines/pixel/"
 ---

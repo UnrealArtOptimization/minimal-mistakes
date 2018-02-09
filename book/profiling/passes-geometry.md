@@ -1,5 +1,5 @@
 ---
-title: "Geometry passes"
+title: "Geometry Passes"
 excerpt: ""
 permalink: "/book/profiling/passes-geometry/"
 ---

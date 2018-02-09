@@ -1,5 +1,5 @@
 ---
-title: "Lighting passes"
+title: "Lighting Passes"
 excerpt: ""
 permalink: "/book/profiling/passes-lighting/"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "Introduction to profiling"
+title: "Introduction to Profiling"
 excerpt: ""
 permalink: "/book/profiling/"
 ---

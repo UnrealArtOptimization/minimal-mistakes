@@ -1,5 +1,5 @@
 ---
-title: "Post processing pass"
+title: "Post Processing Pass"
 excerpt: ""
 permalink: "/book/profiling/passes-postprocess/"
 ---

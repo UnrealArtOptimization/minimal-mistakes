@@ -1,5 +1,5 @@
 ---
-title: "About the book"
+title: "About The Book"
 excerpt: ""
 permalink: "/book/about/"
 ---

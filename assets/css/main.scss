@@ -39,6 +39,67 @@ html {
   }
 }
 
+.masthead, .greedy-nav {
+  background: $lighter-gray;
+}
+
+.greedy-nav .hidden-links {
+  background: #fff;
+  border-color: $light-gray transparent;
+}
+
+.greedy-nav .hidden-links a:hover {
+  background: transparent;
+}
+
+.greedy-nav .hidden-links::after {
+  border-color: $light-gray transparent;
+}
+
+.greedy-nav .hidden-links::before {
+  border-color: $light-gray transparent;
+}
+
+.greedy-nav .hidden-links li {
+  border-color: $light-gray;
+}
+
+.greedy-nav__toggle {
+  background: $light-gray;
+}
+
+.greedy-nav a:not(.site-title):not(.masthead__menu-item), .greedy-nav a:not(.site-title):not(.masthead__menu-item):hover {
+  color: $taa-main;
+  font-weight: 600;
+}
+
+.greedy-nav a:not(.site-title):not(.masthead__menu-item):active, .greedy-nav a:not(.site-title):not(.masthead__menu-item):hover {
+  color: $taa-bright;
+  border-color: $taa-bright;
+  border-width: 2px;
+  font-weight: 600;
+}
+
+.greedy-nav .visible-links a:before {
+  background: $taa-bright;
+  height: 2px;
+}
+
+.greedy-nav a.site-title, .greedy-nav a.site-title:visited {
+  color: $taa-main;
+  font-weight: 600;
+  font-size: 1.3em;
+  text-transform: uppercase;
+}
+
+.greedy-nav a.site-title:active, .greedy-nav a.site-title:hover {
+  color: $taa-bright;
+  border-color: $taa-bright;
+  font-weight: 600;
+  font-size: 1.3em;
+  text-transform: uppercase;
+}
+
 .page__content a:not(.btn):visited {
   color: $link-color;
 }
@@ -77,6 +138,10 @@ Hover must always be last.
   @include breakpoint($large) {
     top: -70px;
   }
+}
+
+.toc .nav__title {
+  background: $taa-light;
 }
 
 .toc__menu {

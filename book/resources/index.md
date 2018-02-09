@@ -1,7 +1,7 @@
 ---
-title: "Learning on your own"
+title: "Resources"
 excerpt: ""
-permalink: "/book/resources/learning/"
+permalink: "/book/resources/"
 ---
 
 {% include toc icon="columns" title=page.title %}

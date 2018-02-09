@@ -1,5 +1,5 @@
 ---
-title: "External profiling tools"
+title: "External Profiling Tools"
 excerpt: ""
 permalink: "/book/profiling/external/"
 ---

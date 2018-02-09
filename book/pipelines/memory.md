@@ -1,5 +1,5 @@
 ---
-title: "Memory costs"
+title: "Memory Costs"
 excerpt: ""
 permalink: "/book/pipelines/memory/"
 ---
