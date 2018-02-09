@@ -5,7 +5,7 @@ I&nbsp;started this book right after finishing my Tech&nbsp;Art&nbsp;Aid [video 
 
 The book is a work-in-progress. I'd be grateful for any ideas, mistakes encountered and feedback you send to oskar{at}oskarswierad.com.
 
-The license for using and modifying the book can be found in the [License page]({{ site.baseurl }}{% link book/about/license.md %}).
+The license for using and modifying the book can be found in the LICENSE file.
 
 # Project status
 
