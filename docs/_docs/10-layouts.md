@@ -7,10 +7,11 @@ single_layout_gallery:
     alt: "single layout with header example"
   - image_path: /assets/images/mm-layout-single-meta.png
     alt: "single layout with comments and related posts"
-last_modified_at: 2017-07-05T15:41:36-04:00
+last_modified_at: 2018-01-03T11:22:31-05:00
+toc: true
+toc_label: "Included Layouts"
+toc_icon: "columns"
 ---
-
-{% include toc icon="columns" title="Included Layouts" %}
 
 The bread and butter of any theme. Below you'll find the layouts included with Minimal Mistakes, what they look like and the type of content they've been built for.
 
@@ -35,6 +36,7 @@ Class names corresponding to each layout are automatically added to the `<body>`
 | ---------------- | --------------------------- |
 | archive          | `.layout--archive`          |
 | archive-taxonomy | `.layout--archive-taxonomy` |
+| search           | `.layout--search`           |
 | single           | `.layout--single`           |
 | splash           | `.layout--splash`           |
 | home             | `.layout--home`             |
@@ -78,10 +80,44 @@ The layout you'll likely use the most --- sidebar and main content combo.
 * Optional social sharing links module
 * Optional comments module
 * Optional related posts module
+* Wide page variant
 
 {% include gallery id="single_layout_gallery" caption="Image header and meta info examples for `single` layout" %}
 
 Assign with `layout: single`, or better yet apply as a [Front Matter default]({{ "/docs/configuration/#front-matter-defaults" | absolute_url }}) in `_config.yml`.
+
+### Wide Page
+
+To expand the main content to the right, filling the space of what is normally occupied by the table of contents. Add the following to a post or page's YAML Front Matter:
+
+```yaml
+classes: wide
+```
+
+**Note:** If the page contains a table of contents, it will no longer appear to the right. Instead it will be forced into the main content container directly following the page's title.
+{: .notice--info}
+
+### Table of Contents
+
+Auto-generated table of contents list for your posts and pages can be enabled by adding `toc: true` to the YAML Front Matter.
+
+![table of contents example]({{ "/assets/images/mm-toc-helper-example.jpg" | absolute_url }})
+
+| Parameter   | Required | Description | Default |
+| ---------   | -------- | ----------- | ------- |
+| **toc**     | Optional | Show table of contents. (boolean) | `false` |
+| **toc_label** | Optional | Table of contents title. (string) | `toc_label` in UI Text data file. |
+| **toc_icon**  | Optional | Table of contents icon, displays before the title. (string) | [Font Awesome](https://fontawesome.com/icons?d=gallery&s=solid&m=free) <i class="fas fa-file-alt"></i> **file-alt** icon. Other FA icons can be used instead. |
+
+**TOC example with custom title and icon**
+
+```yaml
+---
+toc: true
+toc_label: "My Table of Contents"
+toc_icon: "cog"
+---
+```
 
 ## Archive Layout
 
@@ -194,7 +230,7 @@ author_profile: true
 {% endfor %}{% endraw %}
 ```
 
-### Home Page
+## Home Page Layout
 
 A derivative archive page layout to be used as a simple home page. It is built to show a paginated list of recent posts based off of the [pagination settings]({{ "/docs/configuration/#paginate" | absolute_url }}) in `_config.yml`.
 
@@ -245,6 +281,25 @@ For full-width landing pages that need a little something extra add `layout: spl
 
 Feature blocks can be assigned and aligned to the `left`, `right`, or `center` with a sprinkling of YAML. For full details on how to use the `feature_row` helper check the [**Content**]({{ "/docs/helpers/" | absolute_url }}) section or review a [sample splash page](https://github.com/{{ site.repository }}/blob/master/docs/_pages/splash-page.md).
 
+## Search Page Layout
+
+A page with a search form. Add `layout: search` to the YAML Front Matter similar to [this example](https://github.com/mmistakes/minimal-mistakes/blob/master/docs/_pages/search.md) on the demo site.
+
+![search page layout example]({{ "/assets/images/search-layout-example.png" | absolute_url }})
+
+**Note:** A page using the `layout: search` isn't compatible with the new [site search feature]({{ "/docs/configuration/#site-search" | absolute_url }}) incorporated in the masthead.
+{: .notice--warning}
+
+### Exclusions
+
+If you would like to exclude specific pages/posts from the search index set the search flag to `false` in the YAML Front Matter for the page/post.
+
+```yaml
+search: false
+```
+
+**ProTip:** Add a link to this page in the masthead navigation.
+{: .notice--info}
 
 ---
 
@@ -296,13 +351,14 @@ header:
 
 To overlay text on top of a header image you have a few more options:
 
-| Name               | Description | Default |
-| ----               | ----------- | ------- |
-| **overlay_image**  | Header image you'd like to overlay. Same rules as `header.image` from above. | |
-| **overlay_filter** | Color/opacity to overlay on top of the header image eg: `0.5` or `rgba(255, 0, 0, 0.5)`. |
-| **excerpt**        | Auto-generated page excerpt is added to the overlay text or can be overridden. | |
-| **cta_label**      | Call to action button text label. | `more_label` in UI Text data file |
-| **cta_url**        | Call to action button URL. | |
+| Name                     | Description | Default |
+| ----                     | ----------- | ------- |
+| **overlay_image**        | Header image you'd like to overlay. Same rules as `header.image` from above. | |
+| **overlay_filter**       | Color/opacity to overlay on top of the header image eg: `0.5` or `rgba(255, 0, 0, 0.5)`. |
+| **show_overlay_excerpt** | Display excerpt in the overlay text | true |
+| **excerpt**              | Auto-generated page excerpt is added to the overlay text or can be overridden. | |
+| **cta_label**            | Call to action button text label. | `more_label` in UI Text data file |
+| **cta_url**              | Call to action button URL. | |
 
 With this YAML Front Matter:
 
@@ -357,6 +413,19 @@ header:
   cta_url: "https://unsplash.com"
 ```
 
+### OpenGraph & Twitter Card Images
+
+By default the large page header or overlay images are used for sharing previews. If you'd like to set this image to something else use `page.header.og_image` like:
+
+```yaml
+header:
+  image: /assets/images/your-page-image.jpg
+  og_image: /assets/images/your-og-image.jpg
+```
+
+**ProTip:** `og_image` is useful for setting OpenGraph images on pages that don't have a header or overlay image.
+{: .notice--info}
+
 ---
 
 ## Sidebars
@@ -396,7 +465,7 @@ To add more links you'll need to crack open [`_includes/author-profile-custom-li
 ```html
 <li>
   <a href="https://whatever-social-network.com/username">
-    <i class="fa fa-fw" aria-hidden="true"></i> Awesome Social Network
+    <i class="fab fa-fw" aria-hidden="true"></i> Awesome Social Network
   </a>
 </li>
 ```
@@ -404,7 +473,7 @@ To add more links you'll need to crack open [`_includes/author-profile-custom-li
 To add a new link you'll need three things:
 
 1. Destination URL
-2. [Font Awesome icon](http://fontawesome.io/icons/) (`fa-` class)
+2. [Font Awesome icon](https://fontawesome.com/icons?d=gallery) (`fa-` class)
 3. Label for the link
 
 It's up to you if you want to wrap it in a `{% raw %}{% if %} ... {% endif %}{% endraw %}`conditional and add a variable to `_config.yml`. If you don't plan to change it then hard-coding the string is perfectly acceptable.
@@ -420,7 +489,7 @@ And plug them into the appropriate locations:
 ```html
 <li>
   <a href="[1]">
-    <i class="fa fa-fw [2]" aria-hidden="true"></i> [3]
+    <i class="fab fa-fw [2]" aria-hidden="true"></i> [3]
   </a>
 </li>
 ```
@@ -430,7 +499,7 @@ To end up with:
 ```html
 <li>
   <a href="https://www.reddit.com/user/username">
-    <i class="fa fa-fw fa-reddit" aria-hidden="true"></i> Reddit
+    <i class="fab fa-fw fa-reddit" aria-hidden="true"></i> Reddit
   </a>
 </li>
 ```
@@ -439,7 +508,7 @@ To end up with:
 
 To add a touch of color to the default black (`#000`) icon a few more steps are necessary.
 
-Start by copying [`_utilities.scss`](https://github.com/mmistakes/minimal-mistakes/blob/master/_sass/_utilities.scss) `<site root>/_sass`. Open it up to the icon section (it's near the bottom) and nest a new class beneath `.social-icons` that matches the one used to declare the Font Awesome icon. In our case `.fa-reddit`.
+Start by copying [`_utilities.scss`](https://github.com/mmistakes/minimal-mistakes/blob/master/_sass/minimal-mistakes/_utilities.scss) `<site root>/_sass`. Open it up to the icon section (it's near the bottom) and nest a new class beneath `.social-icons` that matches the one used to declare the Font Awesome icon. In our case `.fa-reddit`.
 
 Simply add a `color` declaration and the corresponding hex code.
 
@@ -454,7 +523,7 @@ Simply add a `color` declaration and the corresponding hex code.
 
 ![Reddit link in author profile with color]({{ "/assets/images/mm-author-profile-reddit-color.png" | absolute_url }})
 
-**ProTip:** For bonus points you can add it as a Sass `$variable` that you set in [`_variables.scss`](https://github.com/mmistakes/minimal-mistakes/blob/master/_sass/_variables.scss) like the other ["brand" colors](http://brandcolors.net/). You'll need to add this file to `/_sass/` as well if you're using the Ruby Gem version of the theme.
+**ProTip:** For bonus points you can add it as a Sass `$variable` that you set in [`_variables.scss`](https://github.com/mmistakes/minimal-mistakes/blob/master/_sass/minimal-mistakes/_variables.scss) like the other ["brand" colors](http://brandcolors.net/). You'll need to add this file to `/_sass/` as well if you're using the Ruby Gem version of the theme.
 {: .notice--info}
 
 **Please please please** don't submit [pull requests]({{ "/docs/contributing/" | absolute_url }}) adding in support for "missing" social media links. I'm trying to keep things down to the minimum (hence the theme's name) and have no interest in merging such PRs :expressionless:.
@@ -593,7 +662,7 @@ If you'd like to add, remove, or change the order of these default links you can
 Let's say you wanted to replace the Google+ button with a Reddit one. Simply replace the HTML with the following:
 
 ```html
-{% raw %}<a href="https://www.reddit.com/submit?url={{ page.url | absolute_url }}&title={{ page.title }}" class="btn" title="{{ site.data.ui-text[site.locale].share_on_label }} Reddit"><i class="fa fa-fw fa-reddit" aria-hidden="true"></i><span> Reddit</span></a>{% endraw %}
+{% raw %}<a href="https://www.reddit.com/submit?url={{ page.url | absolute_url }}&title={{ page.title }}" class="btn" title="{{ site.data.ui-text[site.locale].share_on_label }} Reddit"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i><span> Reddit</span></a>{% endraw %}
 ```
 
 The important parts to change are:
@@ -624,7 +693,7 @@ $social:
 Add the new `.btn--reddit` class to the `<a>` element from earlier, [compile `main.css`]({{ "/docs/stylesheets/" | absolute_url }}) and away you go.
 
 ```html
-{% raw %}<a href="https://www.reddit.com/submit?url={{ page.url | absolute_url }}&title={{ page.title }}" class="btn btn--reddit" title="{{ site.data.ui-text[site.locale].share_on_label }} Reddit"><i class="fa fa-fw fa-reddit" aria-hidden="true"></i><span> Reddit</span></a>{% endraw %}
+{% raw %}<a href="https://www.reddit.com/submit?url={{ page.url | absolute_url }}&title={{ page.title }}" class="btn btn--reddit" title="{{ site.data.ui-text[site.locale].share_on_label }} Reddit"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i><span> Reddit</span></a>{% endraw %}
 ```
 
 ![Reddit social share link button]({{ "/assets/images/mm-social-share-links-reddit-color.png" | absolute_url }})

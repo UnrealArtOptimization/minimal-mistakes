@@ -5,7 +5,7 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # `jekyll serve`. If you change this file, please restart the server process.
 
-minimal_mistakes_skin    : "default" # "air", "contrast", "dark", "dirt", "mint", "sunrise"
+minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
 locale                   : "en"
@@ -13,7 +13,7 @@ title                    : "Unreal Art Optimization"
 title_separator          : "-"
 name                     : "Oskar Świerad"
 description              : "Guide to graphics performance and profiling in Unreal Engine"
-url                      : "https://unrealartoptimization.github.io/"
+url                      : "https://unrealartoptimization.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "UnrealArtOptimization/unrealartoptimization.github.io"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
@@ -51,13 +51,14 @@ reCaptcha:
   secret                 :
 atom_feed:
   path                   : # blank (default) uses feed.xml
+search                   : # true, false (default)
+search_full_content      : # true, false (default)
 
 # SEO Related
 google_site_verification :
 bing_site_verification   :
-alexa_site_verification  :
 yandex_site_verification :
-naver-site-verification  :
+naver_site_verification  :
 
 # Social Sharing
 twitter:
@@ -187,7 +188,6 @@ plugins:
   - jekyll-gist
   - jekyll-feed
   - jemoji
-
 
 # mimic GitHub Pages with --safe
 whitelist:

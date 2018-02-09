@@ -1,7 +1,7 @@
 
 Book content (except for original files from "Minimal Mistakes" layout) is licensed under CC Attribution-NonCommercial-ShareAlike 4.0 International (https://creativecommons.org/licenses/by-nc-sa/4.0/). Copyright (c) 2017 Oskar Świerad
 
-Original "Minimal Mistakes" layout code (forked from https://github.com/mmistakes/minimal-mistakes) is licensed under The MIT License. Copyright (c) 2017 Michael Rose
+Original "Minimal Mistakes" layout code (forked from https://github.com/mmistakes/minimal-mistakes) is licensed under The MIT License. Copyright (c) 2018 Michael Rose and contributors.
 
 The MIT License (MIT)
 
@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Minimal Mistakes incorporates icons from [The Noun Project](https://thenounproject.com/)
-creators Garrett Knoll, Arthur Shlain, and tracy tam.
+creators Garrett Knoll, Arthur Shlain, and Tracy Tam.
 Icons are distributed under Creative Commons Attribution 3.0 United States (CC BY 3.0 US).
 
 Minimal Mistakes incorporates [Font Awesome](http://fontawesome.io/),
@@ -60,3 +60,7 @@ GreedyNav.js is distributed under the terms of the [MIT License](http://opensour
 Minimal Mistakes incorporates [Jekyll Group-By-Array](https://github.com/mushishi78/jekyll-group-by-array),
 Copyright (c) 2015 Max White <mushishi78@gmail.com>.
 Jekyll Group-By-Array is distributed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+Minimal Mistakes incorporates [Lunr](http://lunrjs.com),
+Copyright (c) 2017 Oliver Nightingale.
+Lunr is distributed under the terms of the [MIT License](http://opensource.org/licenses/MIT).

@@ -2,12 +2,12 @@
 title: "License"
 permalink: /docs/license/
 excerpt: "License for Minimal Mistakes Jekyll Theme."
-last_modified_at: 2017-10-16T15:51:24-04:00
+last_modified_at: 2018-01-10T11:22:01-05:00
 ---
 
 The MIT License (MIT)
 
-Copyright (c) {{ site.time | date: '%Y' }} Michael Rose
+Copyright (c) 2013-{{ site.time | date: '%Y' }} Michael Rose and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -64,3 +64,11 @@ GreedyNav.js is distributed under the terms of the [MIT License](http://opensour
 Minimal Mistakes incorporates [Jekyll Group-By-Array](https://github.com/mushishi78/jekyll-group-by-array),
 Copyright (c) 2015 Max White <mushishi78@gmail.com>.
 Jekyll Group-By-Array is distributed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+Minimal Mistakes incorporates [@allejo's Pure Liquid Jekyll Table of Contents](https://allejo.io/blog/a-jekyll-toc-in-liquid-only/),
+Copyright (c) 2017 Vladimir Jimenez.
+Pure Liquid Jekyll Table of Contents is distributed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+Minimal Mistakes incorporates [Lunr](http://lunrjs.com),
+Copyright (c) 2017 Oliver Nightingale.
+Lunr is distributed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
