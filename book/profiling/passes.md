@@ -24,7 +24,7 @@ If you prefer a video version of this lesson, you can [{{ icon_link }} watch it 
 _Note:_ Every chapter of this book is extended compared with the original video. It's also regularly updated, while videos stay unchanged since their upload.
 {: .notice--info}
 
-# Table of contents
+# Passes: Table of contents
 
 * [__1. Base pass__]({{ site.baseurl }}{% link book/profiling/passes-base.md %})
 * [__2. Geometry__]({{ site.baseurl }}{% link book/profiling/passes-geometry.md %})
@@ -75,15 +75,13 @@ If some passes take in just the G-Buffer, but not any 3D meshes - like post proc
 
 {% include figure image_path="/assets/images/passes_gbuffer_all.jpg" alt="" caption="__Figure:__ The final image and various components of the G-Buffer which were used to render it" %}
 
-# Using information from this chapter
+# Guide to passes and categories
 
 The major part of this chapter is a guide to every significant rendering pass in Unreal. You don't have to read the entire thing. Treat it more as a handbook, which you use to understand the output of the ["Stat GPU" command]({{ site.baseurl }}{% link book/process/measuring-performance.md %}) or with [GPU Visualizer]({{ site.baseurl }}{% link book/profiling/gpu-visualizer.md %}). Both of them show you the cost of each rendering pass. This allows you to precisely locate issues in a scene, like too many shadowed lights or too many translucent materials.
 
-This chapter also provides extensive information about dependencies of each pass. It allows you to address the most probable sources of trouble first. Much of this information was gathered by reading the engine's source code and from practical tests. Be aware of potential mistakes here. Sources are provided in the footnotes, so you can fact-check it yourself.
+The subchapters provides extensive information about dependencies of each pass. It allows you to address the most probable sources of trouble first. Much of this information was gathered by reading the engine's source code and from practical tests. Be aware of potential mistakes here. Sources are provided in the footnotes, so you can fact-check it yourself.
 
-# Guide to passes and categories
-
-Below begins an extensive description of almost all rendering passes that you can find in a profiler. Every position in the list is laid out in the following format:
+Every pass' description is laid out in the following format:
 
 * _Responsible for_ ...
 * _Cost affected by_ ...
@@ -92,9 +90,9 @@ Below begins an extensive description of almost all rendering passes that you ca
 
 Some passes are much more important or customizable than others. Many of them react to changes in the scene, while others -- most notably post processes -- stay dependent on the resolution only. That's why the amount of information dedicated to each category varies greatly.
 
-Don't feel forced to read the entire chapter at once. Jump straight to the pass you want read about from the [table of contents](#table-of-contents).
+Don't feel forced to read the entire chapter at once. Jump straight to the pass you want read about from the [table of contents](#passes-table-of-contents).
 
-[↑ Back to table of contents](#table-of-contents){: .btn .btn--next}
+[↑ Back to table of contents](#passes-table-of-contents){: .btn .btn--next}
 
 
 

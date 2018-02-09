@@ -5,6 +5,7 @@
 @charset "utf-8";
 
 $sans-serif : -apple-system, "Nunito Sans", ".SFNSText-Regular", "San Francisco", "Droid Sans", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+$sans-serif-narrow : -apple-system, "Nunito Sans", ".SFNSText-Regular", "San Francisco", "Droid Sans", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 $monospace  : Consolas, Monaco, "Lucida Console", monospace;
 
 $type-size-5 : 1.1em;
@@ -46,20 +47,31 @@ html {
   line-height: 1.9em;
 }
 
-.toc
-{
-  @include breakpoint($x-large) {
-    top: 100px;
+.nav__sub-title {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0;
+  font-family: $sans-serif-narrow;
+  font-size: $type-size-6;
+  font-weight: bold;
+  text-transform: none;
+  border-bottom: none;
+}
+
+.sidebar__right {
+  @include breakpoint($large) {
+    top: -70px;
   }
 }
 
-/* MOVING TABLE OF CONTENTS */
-/*.toc
-{
-  @include breakpoint($x-large) {
-    position: fixed;
-    top: 100px;
+.toc__menu {
+  font-size: 1.0rem;
+  text-transform: none;
+
+  a {
+    font-weight: 600;
+    line-height: 1.2;
   }
-}*/
+}
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
