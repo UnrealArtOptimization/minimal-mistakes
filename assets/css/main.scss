@@ -24,6 +24,16 @@ $global-transition : none;
 
 @import "minimal-mistakes";
 
+::-moz-selection {
+  color: #fff;
+  background: $gray;
+}
+
+::selection {
+  color: #fff;
+  background: $gray;
+}
+
 html {
   /* apply a natural box layout model to all elements */
   box-sizing: border-box;
