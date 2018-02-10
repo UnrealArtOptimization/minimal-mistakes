@@ -15,7 +15,7 @@ In this chapter you'll learn about:
 
 # Take a scientific approach
 
-You and your team just gave the scene another test run. The frame rate was a random mess. An average frame time have rarely stayed below your desired limit of [16 ms for a competitive multiplayer game]({{ site.baseurl }}{% link book/process/measuring-performance.md %}#common-fps-rates-in-milliseconds). You noticed, however, that fragments of the playthrough where you had travelled through a dark underground maze performed much better than well-lit palace rooms. The worst case was a detailed golden throne hall.
+You and your team just gave the scene another test run. The frame rate was a random mess. An average frame time have rarely stayed below your desired limit of 16 ms for a competitive multiplayer game. You noticed, however, that fragments of the playthrough where you had travelled through a dark underground maze performed much better than well-lit palace rooms. The worst case was a detailed golden throne hall.
 
 You have a clue and some numbers that you scribbled in a notebook. Or maybe you're already past the chapter about measuring performance? Then you have some hard data to work with. What do you do?
 
