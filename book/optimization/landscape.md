@@ -1,5 +1,5 @@
 ---
-title: "Optimization of Landscapes"
+title: "Landscapes"
 excerpt: ""
 permalink: "/book/optimization/landscape"
 ---

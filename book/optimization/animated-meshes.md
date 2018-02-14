@@ -1,5 +1,5 @@
 ---
-title: "Optimization of Animated Meshes"
+title: "Animated Meshes"
 excerpt: ""
 permalink: "/book/optimization/animated-meshes"
 ---

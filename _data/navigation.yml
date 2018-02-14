@@ -61,14 +61,14 @@ book:
         url: /book/optimization/static-meshes/
       - title: "Animated meshes"
         url: /book/optimization/animated-meshes/
-      - title: "Lighting"
-        url: /book/optimization/lighting/
-      - title: "Textures"
-        url: /book/optimization/textures/
+      - title: "Materials and textures"
+        url: /book/optimization/materials-textures/
       - title: "Landscape"
         url: /book/optimization/landscape/
-      - title: "Foliage"
-        url: /book/optimization/foliage/
+      - title: "Lighting"
+        url: /book/optimization/lighting/
+      - title: "Visual effects"
+        url: /book/optimization/vfx/
       - title: "Virtual reality (VR)"
         url: /book/optimization/vr/
   - title: "Resources"

@@ -1,5 +1,5 @@
 ---
-title: "Optimization of Lighting"
+title: "Lighting"
 excerpt: ""
 permalink: "/book/optimization/lighting"
 ---

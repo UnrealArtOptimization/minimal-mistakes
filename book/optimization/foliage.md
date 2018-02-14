@@ -1,5 +1,5 @@
 ---
-title: "Optimization of Foliage"
+title: "Foliage"
 excerpt: ""
 permalink: "/book/optimization/foliage"
 ---

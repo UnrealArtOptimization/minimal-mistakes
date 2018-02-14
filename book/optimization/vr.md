@@ -1,5 +1,5 @@
 ---
-title: "Optimization for Virtual Reality (VR)"
+title: "Virtual Reality (VR)"
 excerpt: ""
 permalink: "/book/optimization/vr"
 ---

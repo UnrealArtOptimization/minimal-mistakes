@@ -1,5 +1,5 @@
 ---
-title: "Optimization of Static Meshes"
+title: "Static Meshes"
 excerpt: ""
 permalink: "/book/optimization/static-meshes"
 ---
