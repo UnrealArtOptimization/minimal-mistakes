@@ -1,7 +1,7 @@
 ---
 title: "Forward vs Deferred Shading"
 excerpt: ""
-permalink: "/book/pipelines/forward-vs-deferred"
+permalink: "/book/pipelines/forward-vs-deferred/"
 ---
 
 {% include toc icon="columns" title=page.title %}

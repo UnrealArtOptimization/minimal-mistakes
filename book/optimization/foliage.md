@@ -1,7 +1,7 @@
 ---
 title: "Foliage"
 excerpt: ""
-permalink: "/book/optimization/foliage"
+permalink: "/book/optimization/foliage/"
 ---
 
 {% include custom/wip-warning.md %}

@@ -1,7 +1,7 @@
 ---
 title: "Static Meshes"
 excerpt: ""
-permalink: "/book/optimization/static-meshes"
+permalink: "/book/optimization/static-meshes/"
 ---
 
 {% include custom/wip-warning.md %}

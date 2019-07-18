@@ -1,7 +1,7 @@
 ---
 title: "Lighting"
 excerpt: ""
-permalink: "/book/optimization/lighting"
+permalink: "/book/optimization/lighting/"
 ---
 
 {% include custom/wip-warning.md %}

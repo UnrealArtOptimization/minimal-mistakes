@@ -1,7 +1,7 @@
 ---
 title: "Materials and Textures"
 excerpt: ""
-permalink: "/book/optimization/materials-textures"
+permalink: "/book/optimization/materials-textures/"
 ---
 
 {% include custom/wip-warning.md %}

@@ -27,7 +27,7 @@ book:
     url: /book/pipelines/
     children:
       - title: "Forward vs Deferred"
-        url: /book/pipelines/forward-vs-deferred
+        url: /book/pipelines/forward-vs-deferred/
       - title: "Vertex costs"
         url: /book/pipelines/vertex/
       - title: "Pixel costs"
