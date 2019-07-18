@@ -10,7 +10,7 @@ In this chapter you'll learn about:
 
 * -
 
-Intro TODO.
+{% include custom/wip-warning.md %}
 
 # Deferred
 

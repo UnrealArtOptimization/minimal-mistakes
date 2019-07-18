@@ -4,7 +4,7 @@ excerpt: ""
 permalink: "/book/optimization/static-meshes"
 ---
 
-Static meshes.
+{% include custom/wip-warning.md %}
 
 # LOD
 

@@ -4,7 +4,7 @@ excerpt: ""
 permalink: "/book/optimization/lighting"
 ---
 
-Lighting.
+{% include custom/wip-warning.md %}
 
 # Modes
 

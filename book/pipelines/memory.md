@@ -7,6 +7,8 @@ permalink: "/book/pipelines/memory/"
 {% include custom/inline-icons.md %}
 {% include toc icon="columns" title=page.title %}
 
+{% include custom/wip-warning.md %}
+
 # Bandwidth
 
 What issues can we encounter when dealing with the memory? The first thing is that too many texture samples in a material use up the bandwidth. And the bandwith is the amount of data than can that can be transferred between memory and the actual cores that perform the calculations. So compression helps a lot. Compression is supported directly on the GPU, so don't disable it in your textures, unless you need it. And the so-called "texture packing" helps too. It helps you to save on the amount of texture samplers and to optimize when it comes to memory. It means that you take, for example, 3 grayscale textures like roughness, metalness and ambient occlusion and pack them into specific channels of a single RGB texture. So each one occupies only a single channel then you can store them like a single texture.

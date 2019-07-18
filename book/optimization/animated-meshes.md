@@ -4,4 +4,4 @@ excerpt: ""
 permalink: "/book/optimization/animated-meshes"
 ---
 
-Animated meshes.
+{% include custom/wip-warning.md %}

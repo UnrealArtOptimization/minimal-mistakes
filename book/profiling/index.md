@@ -6,6 +6,8 @@ permalink: "/book/profiling/"
 
 {% include toc icon="columns" title=page.title %}
 
+{% include custom/wip-warning.md %}
+
 {% include figure image_path="/assets/images/viewmode_quad_overdraw.jpg" alt="" caption="__Figure:__ Quad Overdraw view mode" %}
 
 Since at least two generation of consoles, real-time graphics performance is no longer just a matter of pure polygon count. Features that are fundamental to physically based rendering - from specular reflections, through diffuse lighting to ambient occlusion - are largely decoupled from the cost of geometry, being dependent on the amount of pixels instead. Other issues - like quad overshading or texture bandwidth - need more attention now, as graphics chips became great at processing polygons, causing the bottlenecks to appear elsewhere.

@@ -7,6 +7,8 @@ permalink: "/book/pipelines/pixel/"
 {% include custom/inline-icons.md %}
 {% include toc icon="columns" title=page.title %}
 
+{% include custom/wip-warning.md %}
+
 # Is a scene pixel-bound?
 
 Pixels are most probably the slowest part in your pipeline. The bigger the resolution, the more pixels we have to be shaded! Unsurprisingly, I think... So heavy lighting, which is done per pixel heavy shaders and also post process effects depend on the resolution of the screen. And given the current FullHD and 4K resolutions, this can really mean a lot. So how to check if we're pixel-bound? While running our game, we can press `~` and enter: r.ScreenPercentage (for example) 25 or r.SetRes 480x270, for example. Then if your framerate improved a lot, then it means you're pixel-bound. Not for example vertex- bound or memory-bound. The pixels are the problem.

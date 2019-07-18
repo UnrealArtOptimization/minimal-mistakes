@@ -4,4 +4,4 @@ excerpt: ""
 permalink: "/book/optimization/vr"
 ---
 
-VR.
+{% include custom/wip-warning.md %}

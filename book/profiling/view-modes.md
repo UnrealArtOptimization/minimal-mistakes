@@ -6,7 +6,9 @@ permalink: "/book/profiling/view-modes/"
 
 {% include toc icon="columns" title=page.title %}
 
-Now let me show you some optimization view modes. Okay. So this is our test scene again. In the upper left corner, press "Lit" go to "Optimization Viewmodes" and here we have them. These are our basic tools to check some performance issues before we proceed with the actual profiling.
+{% include custom/wip-warning.md %}
+
+Let me show you some optimization view modes. In the upper left corner, press "Lit" go to "Optimization Viewmodes" and here we have them. These are our basic tools to check some performance issues before we proceed with the actual profiling.
 
 # Light Complexity
 

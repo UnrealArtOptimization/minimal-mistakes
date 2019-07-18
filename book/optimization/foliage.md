@@ -4,7 +4,7 @@ excerpt: ""
 permalink: "/book/optimization/foliage"
 ---
 
-Foliage.
+{% include custom/wip-warning.md %}
 
 # Grass tool
 

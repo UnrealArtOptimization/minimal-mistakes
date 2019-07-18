@@ -6,6 +6,8 @@ permalink: "/book/pipelines/vertex/"
 
 {% include toc icon="columns" title=page.title %}
 
+{% include custom/wip-warning.md %}
+
 # Triangle count
 
 The nightmare of game artists since time immemorial -- the _triangle count_. Is it still a real problem? Does it remain an important factor? Most of the time, it's overshadowed by troubles with bandwidth and the cost of pixel shaders. However, keep in mind that it can explode after tessallation. When you don't control tessallation too well or assign too big values, you can end up with a lot of quad overdraw. And the amount of vertices matters for shadow casting. Because a lamp that has some meshes on its way needs to, sort of, make a copy of the mesh to draw a shadow map. Shadow casting basically multiplies the amount of vertices that fall into shadowed light's range.

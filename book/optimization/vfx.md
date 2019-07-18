@@ -4,4 +4,4 @@ excerpt: ""
 permalink: "/book/optimization/vfx"
 ---
 
-VFX.
+{% include custom/wip-warning.md %}

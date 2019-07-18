@@ -79,6 +79,8 @@ Now, pipeline is like an assembly line. So the frame is pided into steps and for
 
 # Draw calls
 
+{% include custom/wip-warning.md %}
+
 An important thing, that can really affect your framerate are the draw calls. So draw calls are the commands sent by the CPU to control the GPU. So, for example, commands like: "change my mesh" or: "change my material" because if you want to draw a triangle set with a different material, different shader, you have to dispatch a command from the CPU first, which then goes through the driver, only then is translated and only then is submitted to the GPU. So having a lot of materials, a lot of different, separate objects, is a lot of work for the CPU. You can check your amount of draw calls by pressing `~` (tilde) and entering: STAT SceneRendering.
 
 Are draw calls batched in UE4? No. There was a tweet about "fast path" https://twitter.com/joatski/status/679302537393119232
