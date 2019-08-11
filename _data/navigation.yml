@@ -19,10 +19,10 @@ book:
   - title: "Diagnostics"
     url: /book/process/
     children:
-      - title: "The diagnostic process"
-        url: /book/process/diagnosis/
       - title: "Measuring performance"
         url: /book/process/measuring-performance/
+      - title: "The diagnostic process"
+        url: /book/process/diagnosis/
   - title: "Graphics Pipelines"
     url: /book/pipelines/
     children:
@@ -43,15 +43,6 @@ book:
         url: /book/profiling/gpu-visualizer/
       - title: "Unreal's rendering passes"
         url: /book/profiling/passes/
-        children:
-        - title: "Base pass"
-          url: /book/profiling/passes-base/
-        - title: "Geometry passes"
-          url: /book/profiling/passes-geometry/
-        - title: "Lighting passes"
-          url: /book/profiling/passes-lighting/
-        - title: "Post process pass"
-          url: /book/profiling/passes-postprocess/
       - title: "External profilers"
         url: /book/profiling/external/
   - title: "Optimization"
@@ -67,7 +58,7 @@ book:
         url: /book/optimization/landscape/
       - title: "Lighting"
         url: /book/optimization/lighting/
-      - title: "Visual effects"
+      - title: "Particle effects"
         url: /book/optimization/vfx/
       - title: "Virtual reality (VR)"
         url: /book/optimization/vr/

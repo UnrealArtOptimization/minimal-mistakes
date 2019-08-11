@@ -6,4 +6,6 @@
 {% capture icon_overdraw %}<i class="fa fa-database fa-fw" style="color: #ddbd3b" aria-hidden="true"></i>{% endcapture %}
 {% capture icon_complexity %}<i class="fas fa-cogs fa-fw" style="color: #bb72d6" aria-hidden="true"></i>{% endcapture %}
 
-{% capture icon_link %}<i class="fas fa-external-link-alt"  aria-hidden="true"></i>{% endcapture %}
+{% capture icon_link %}<i class="fas fa-external-link-alt fa-fw" aria-hidden="true"></i>{% endcapture %}
+{% capture icon_wiki %}<i class="fab fa-wikipedia-w fa-fw fa-xs" aria-hidden="true"></i>{% endcapture %}
+{% capture btn_top %}[↑ Back to top](#){: .btn .btn--info}{% endcapture %}

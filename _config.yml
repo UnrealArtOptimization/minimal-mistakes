@@ -102,7 +102,7 @@ author:
   bio              : Technical artist, game developer. Creator of <a href="https://youtube.com/c/TechArtAid">Tech Art Aid</a> video tutorials
   location         : 
   email            : 
-  uri              : 
+  uri              : "https://techartaid.com"
   bitbucket        :
   codepen          :
   dribbble         :
@@ -260,7 +260,7 @@ defaults:
       author_profile: true
       read_time: true
       comments: false
-      share: true
+      share: false
       related: true
   # _pages
   - scope:
@@ -271,7 +271,7 @@ defaults:
       author_profile: true
       read_time: true
       comments: false
-      share: true
+      share: false
       related: false
   # _pages
   - scope:
@@ -282,7 +282,7 @@ defaults:
       author_profile: false
       read_time: true
       comments: false
-      share: true
+      share: false
       related: false
       sidebar:
         nav: "book"

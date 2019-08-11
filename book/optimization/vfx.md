@@ -1,5 +1,5 @@
 ---
-title: "Visual Effects"
+title: "Particle Effects"
 excerpt: ""
 permalink: "/book/optimization/vfx/"
 ---
