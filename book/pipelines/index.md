@@ -9,9 +9,10 @@ permalink: "/book/pipelines/"
 
 In this chapter you'll learn about:
 
-* How to become best buddies with the GPU, working arm-in-arm towards a common goal
-* How to stop pushing the content through a bottleneck and try alternative approaches
-* Why you won't (likely) become best buddies with the graphics card driver
+* How to become best buddies with the graphics card
+* Why you won't (likely) become best buddies with the graphics driver
+* How to overcome the inevitable bottlenecks
+* What are the draw calls and how to minimize their number
 
 # Video
 
@@ -23,9 +24,9 @@ If you prefer a video version of this lesson, you can [{{ icon_link }} watch it 
 _Note:_ Every chapter of this book is extended compared with the original video. It's also regularly updated, while videos stay unchanged since their upload.
 {: .notice--info}
 
-# Anatomy of a frame
+# The anatomy of a frame
 
-Every frame rendered by a real-time engine is a result of work done both by the _CPU_ and the _GPU (aka graphics card)_. In simplification, the CPU prepares the data and issues commands for the GPU to process.
+Every frame rendered by a real-time engine is a result of work done both by the CPU and the GPU (aka the graphics card). In simplification, the CPU prepares the data and issues commands (_draw calls_) for the GPU to process.
 
 The engine code can't control the GPU directly. Instead, it has to send the commands using an _API: application programming interface_. OpenGL, DirectX, Vulkan or Metal are examples of most popular APIs, though it may also be a game console's proprietary interface, like Playstation 4's GNM. In the case of PC and mobile, these API function calls must be further translated by a graphics _driver_. 
 
@@ -40,14 +41,51 @@ What it all means is that the graphics unit has to wait. It can only start drawi
 
 When this is ready, the graphics card can start doing its job.
 
-# The GPU pipeline
+# Draw calls
 
-When the GPU receives a draw call, triangles are transformed by projection matrices to follow a correct perspective for the current point of view. This is a work of a _vertex shader_. Then the GPU begins to _rasterize_ them by executing a _fragment shader_. This distinction between different kinds of shaders is an important backbone of the entire GPU _pipeline_.
+The goal of the graphics code is to draw what was requested. In an ideal situation, polygons would be transformed, shaded and displayed on the screen. Things are nowhere that simple, though, especially on the PC and mobile. While it's true that the GPU handles the majority of the graphics-related computations, it still needs to be controlled by the CPU. The commands what to draw -- aka the _draw calls_ -- are submitted by the engine code. Even the most powerful graphics card can be bottlenecked by an overworked central unit. To make things worse, draw calls (before Vulkan and DX12) had to be submitted through the graphics card driver -- itself a piece of software, adding another heavy layer of indirection.
 
-In a simplified way, a DirectX 11 / OpenGL 4 pipeline can be depicted as these steps:
+For people experienced with object-oriented code, it may be surprising that the classic graphics APIs hold just a single global state of what to render. To render another mesh or to switch the material means to issue a draw call, changing the globally binded resource. It includes situations like:
+
+* A different mesh is to be rendered
+* A different shader (material) is to be applied
+* Parameters for the shader change
+* A switch to another [rendering pass]({{ site.baseurl }}{% link book/profiling/passes.md %}) happens
+* A full-screen (post-process) shader is applied
+* A render target's content is to be read by the CPU (for example particle simulations)
+
+All of these would typically require a draw call. A realistic amount of draw calls that a mid-range DX11-era PC could handle in 16 ms was between hundreds and thousands. The games usually feature dozens of thousands of meshes in the visible scene. In a physically-based pipeline, each of those meshes probably uses at least 3 textures. Dispatching this many commands would be lethal to performance.
+
+To mitigate this issue, programmers have came up with a lot of clever solutions over the years. The most important is _batching_, or at least _sorting_, the requests. The point is to combine the calls if the mesh and all its parameters are identical. A building may consist of thousands of pieces, but probably a lot of those are just instances of the same mesh. If these meshes were merged into a single object, it would require only 1 draw call.
+
+It's especially effective for the static parts of a scene, for objects that are guaranteed not to change or move. Such a process of scanning the scene for the candidates is called static batching. Unity is among the engines that employ this method. When pushed too far, though, it can negatively affect systems like culling (hiding objects out of sight), as now the engine is dealing with huge monolithic objects, instead of smaller pieces.
+
+Unreal Engine devs have preferred a lighter variant -- just sorting the list of objects to be drawn by their mesh and shader parameters. This allows to render a multitude of objects before switching the parameters with another draw call. While not as effective in reducing the number of commands as batching, such approach retains more flexibility.
+
+The effectiveness of both techniques depends on the number of unique meshes and materials in the scene. A building may consist of thousands of pieces. However, if the most of them would be just instances of the same reusable fragments -- the engine would be able to greatly reduce the number of necessary draw calls. In 3D modelling workflows such approach is called a _modular_ environment art.
+
+You can check the amount of draw calls in the running game by pressing `~` key (tilde) and typing: `stat SceneRendering`.
+
+<div class="notice--info" markdown="1">
+Did I say instances? A technique called _GPU instancing_ is the ultimate form of batching. It allows to load a single mesh, then simply stamp copies with almost zero CPU-related overhead.
+
+There are a lot of limitations though. Almost nothing can change between instances, except for the position, rotation and scale (what is exposed per instance depends on the engine). All copies have to use the same material and properties. It's still perfectly valid for a belt of asteroid, for example, as I show in [{{ icon_link }} my tutorial about instancing](https://www.youtube.com/watch?v=oMIbV2rQO4k).
+
+It has been available as a manual solution in UE4, but since version 4.23, Unreal also tries to find the exact copies automatically. Then it converts them into instances if possible.
+</div>
+
+# Parallelism and pipeline
+
+GPUs are massively parallel. It means they use hundreds or thousands of cores, working on the same task simultaneously. Compare that to the x86 CPU realm, where 4 to 16 cores is a standard. All cores assigned to the same wavefront (task) on the GPU will follow the same lines of code, synchronized. They will be just handling a different vertex/pixel. That's why branching is harder than on the CPU, making some algorithm inefficient or impossible. For dealing with graphics, however, such tiny yet abundant cores are a perfect match -- think of all the neighboring pixels using the same shader and textures.
+
+The GPU is not a huge single workshop, though. It's rather a network of several dedicated factories -- pipeline _stages_. Those facilities cooperate, but one has to finish its production before the second one can process the payload further. The vertex shaders need to transform the polygons first, so that the fragment shaders can shade these triangles, computing the pixels' final color. This means that the pixel shader has to wait until it's fed with data.
+
+In a simplified way, a DirectX 11 / OpenGL 4 pipeline can be depicted like that:
 
 __Vertex Shader → Tessellation → Geometry Shader → Rasterization → Fragment Shader__
 {: .notice--info}
+
+When the GPU receives a draw call, triangles are transformed by projection matrices to follow a correct perspective for the current point of view. This is a work of a _vertex shader_. Then the GPU begins to _rasterize_ them by executing a _fragment shader_. This distinction between different kinds of shaders is an important backbone of the entire GPU _pipeline_.
 
 There's also a piece of hardware responsible for clipping triangles outside the screen. Only vertex shading, fragment shading and tessellation can be utilized from within Unreal's standard tools, so I'll leave looking for other steps' definition to the curious.
 
@@ -57,7 +95,7 @@ The order of these steps is pre-determined on a hardware level. Back in the days
 
 Rasterization is currently the prevalent method of real-time shading. For the sake of making the explanation easier, let me describe the steps of triangle rasterization and shading of their fragments (which means screen pixels) as a single "rasterization" concept.
 
-In its idea, rasterization is closer to the rendering algorithms of early CG movies, rather than to ray tracing-based solutions that became dominant in Hollywood and architecture visualization since 2010s. While ray tracing and path tracing are simulating the path of light emitted from the camera and colliding with surfaces, rasterization only deals with drawing the immediately visible surface. If multiple triangles occupy a single pixel, all of them will be drawn, one after another. (However, game engines use a depth buffer to cut the unnecessary work in the case of fully opaque meshes).
+In its idea, rasterization is closer to the rendering algorithms of early CG movies, rather than to the path tracing-based solutions that became dominant in Hollywood and architecture visualization since 2010s. While ray tracing and path tracing are simulating the path of light emitted from the camera and colliding with surfaces, rasterization only deals with drawing the immediately visible surface. If multiple triangles occupy a single pixel, all of them will be drawn, one after another. (However, game engines use a depth buffer to cut the unnecessary work in the case of fully opaque meshes).
 
 The area belonging to a given triangle in screen space is filled pixel by pixel. The resulting _color_ (though please think of it as a value: a vector) is a direct output of the _fragment shader_ program. It doesn't any knowledge about other triangles in the scene. All it can work with are the data from the vertex shader - and textures, provided as its input.
 
@@ -70,17 +108,3 @@ The engine's pipeline includes both CPU and GPU-based operations. It includes th
 There's much more to Unreal's pipeline, though. For example, occlusion takes care of discarding meshes which are not visible from camera's perspective. It's done an early stage of the pipeline, before they're even sent to be processed by shaders. Position and properties of light sources are provided to appropriate passes - depending on the choice between [deferred and forward]({{ site.baseurl }}{% link book/pipelines/forward-vs-deferred.md %}) shading.
 
 Only after the last pass is finished the image can be displayed on the screen. If the vertical sync (VSync) is enabled, the image may also be delayed or discarded to achieve a required frame rate (for example 60 frames per second).
-
-# Parallelism and pipeline
-
-On the GPU we have concepts of parallelism and the pipeline. If something is parallel, it means that multiple cores, hundreds or thousands of cores, work on the same task simultaneously. So obviously, cores are best utilized when they are working on the same task. For example, the same big triangle, that is shaded with a single material. This is important because all cores assigned for a specific task on the GPU have to be exactly in the same place, for example: exactly the same moment in the shader.
-
-Now, pipeline is like an assembly line. So the frame is pided into steps and for example, the vertex shader passes the data further to the pixel shader where the pixels are computed. and only then it's passed onto the screen. So this means that the pixel shader can't continue before it's fed with data from the vertex shader. Now, the simplified pipeline in OpenGL and DirectX 11 looks like that: We start with providing vertices to the vertex shader, it does it's transformations, then comes the tessallation phase, the geometry shader - which is the only one we have direct access to as an artist in Unreal Engine - and last comes the pixel shader which is responsible for materials, lighting and postprocess.
-
-# Draw calls
-
-{% include custom/wip-warning.md %}
-
-An important thing, that can really affect your framerate are the draw calls. So draw calls are the commands sent by the CPU to control the GPU. So, for example, commands like: "change my mesh" or: "change my material" because if you want to draw a triangle set with a different material, different shader, you have to dispatch a command from the CPU first, which then goes through the driver, only then is translated and only then is submitted to the GPU. So having a lot of materials, a lot of different, separate objects, is a lot of work for the CPU. You can check your amount of draw calls by pressing `~` (tilde) and entering: STAT SceneRendering.
-
-Are draw calls batched in UE4? No. There was a tweet about "fast path" https://twitter.com/joatski/status/679302537393119232
